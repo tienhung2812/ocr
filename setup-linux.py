@@ -37,7 +37,7 @@ if INSTALL_PYTHON3_PACKAGE:
     os.system('pip3 install pillow')
     os.system('pip3 install pytesseract')
     os.system('pip3 install wand')
-    os.system('pip3 install pyslibtesseract')
+    # os.system('pip3 install pyslibtesseract')
 
 if INSTALL_IMAGEMAGICK:
     print('Install ImageMagick')
