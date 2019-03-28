@@ -43,7 +43,28 @@ else:
         print(output)
     else:
         text_file = open(outputfile, "wb")
-        output = a.execute()
+        # output = a.execute()
         # print(output)
         text_file.write(output)
         text_file.close()
+        if '--html' in sys.argv:
+            f = open(outputfile, "r")
+            temp = f.read().replace('</body>','<script src="https://unpkg.com/hocrjs"></script></body>')
+            f.close()
+            f = open(outputfile, "w")
+            f.write(temp)
+            f.close()
+        if '--nocolor' in sys.argv:
+            f = open(outputfile, "r")
+            rpstr = """
+            <head>
+            <style>
+            div,span,p {border-style: none !important;}
+            </style>
+            
+            """
+            temp = f.read().replace('<head>',rpstr)
+            f.close()
+            f = open(outputfile, "w")
+            f.write(temp)
+            f.close()
