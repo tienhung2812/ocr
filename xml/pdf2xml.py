@@ -59,7 +59,7 @@ else:
             rpstr = """
             <head>
             <style>
-            div,span,p {border-style: none !important;}
+            * {border-style: none !important;}
             </style>
             
             """
