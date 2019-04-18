@@ -1,4 +1,0 @@
-pillow
-pytesseract
-wand
-beautifulsoup4

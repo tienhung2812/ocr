@@ -1,0 +1,8 @@
+version: '3.1'
+
+services:
+  ocr:
+    build: ./main
+    container_name: ocr
+    volumes:
+      - .:/app

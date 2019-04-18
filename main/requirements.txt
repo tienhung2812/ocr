@@ -1,0 +1,6 @@
+pillow
+pytesseract
+wand
+beautifulsoup4
+imutils
+opencv-python

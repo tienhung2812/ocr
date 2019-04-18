@@ -23,6 +23,11 @@ sudo apt-get install tesseract-ocr-vie
 pip3 install -r requirements.txt
 ```
 
+## Run with docker
+```
+docker-compose up
+```
+
 ## Step 1: Convert Scanned PDF to xml
 
 Folder: ```xml``` 
