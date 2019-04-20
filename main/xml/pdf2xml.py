@@ -25,10 +25,10 @@ class Pdf2Xml:
                 return self.runtesseract(img)
                 # return pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang=self.lang)
     def runtesseract(self,img):
-        eng = pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang='eng')
-        vie = pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang='vie')
-
-        return self.compareConf(vie,eng)
+        # eng = pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang='eng',config=' --oem 1')
+        vie = pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang='vie',config=' --oem 1')
+        return vie
+        # return self.compareConf(vie,eng)
     
     def extractAttr(self,data):
         info = data['title'].split("x_wconf ")
@@ -94,7 +94,7 @@ else:
     if outputfile is None:
         print(output)
     else:
-        text_file = open(outputfile, "w")
+        text_file = open(outputfile, "wb")
         # output = a.execute()
         # print(output)
         text_file.write(output)
