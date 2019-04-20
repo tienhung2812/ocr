@@ -8,6 +8,6 @@ deploy:
   environment:
     name: prod
   script:
-    - pip3 install -r main/requirements.txt && python3 main/converter.py
+    - pip3 install -r main/requirements.txt 
   only:
     - master
