@@ -1,13 +1,13 @@
 before_script:
   - apt-get update -qq
   - apt-get install -qq git
-  - apt-get install python3 pip3
+  - apt-get install python3 python3-pip -y
     
 deploy:
   type: deploy
   environment:
     name: prod
   script:
-    - pip3 install -r main/requirements.txt && python3 main/xml/pdf2xml.py 
+    - pip3 install -r main/requirements.txt && python3 main/converter.py
   only:
     - master
