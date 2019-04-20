@@ -1,0 +1,13 @@
+before_script:
+  - apt-get update -qq
+  - apt-get install -qq git
+  - apt-get install python3
+    
+deploy:
+  type: deploy
+  environment:
+    name: prod
+  script:
+    - python3 main/xml/pdf2xml.py 
+  only:
+    - master
