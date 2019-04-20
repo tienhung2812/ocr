@@ -29,9 +29,13 @@ docker-compose up
 ```
 
 ## **Step 1:** Convert Scanned PDF to xml
-[Folder](main/converter)
-[Document](main/converter/README.md)
+[Folder](main/converter)  
+[Document](main/converter/README.md)  
 Usage:
 ```
-python3 main/converter.py 
+python3 main/converter.py -m 1 -i ../stock/don-thuoc.png -o test.html
+```
+or to have more setting:  
+```
+python3 main/converter.py -h
 ```
