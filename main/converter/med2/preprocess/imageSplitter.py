@@ -3,8 +3,9 @@ import numpy as np
 import pytesseract
 import argparse
 import cv2
+import os
 
-def decode_predictions(scores, geometry):
+def decode_predictions(scores, geometry, min_confidence):
 	# grab the number of rows and columns from the scores volume, then
 	# initialize our set of bounding box rectangles and corresponding
 	# confidence scores
@@ -28,7 +29,7 @@ def decode_predictions(scores, geometry):
 		for x in range(0, numCols):
 			# if our score does not have sufficient probability,
 			# ignore it
-			if scoresData[x] < args["min_confidence"]:
+			if scoresData[x] < min_confidence:
 				continue
 
 			# compute the offset factor as our resulting feature
@@ -63,16 +64,21 @@ def decode_predictions(scores, geometry):
 
 class ImageSplitter:
     def __init__(self,image_src):
+        #Configuration 
+        self.padding = 0.05
+        self.min_conf = 0.5
+
         self.layerNames = [
             "feature_fusion/Conv_7/Sigmoid",
             "feature_fusion/concat_3"]
 
         print("[INFO] loading EAST text detector...")
+         
+        self.eastpath = 'converter/med2/preprocess/frozen_east_text_detection.pb'
+        net = cv2.dnn.readNet(os.path.abspath(self.eastpath))
 
-        self.eastpath = './frozen_east_text_detection.pb'
-        net = cv2.dnn.readNet(self.eastpath)
+        self.image = cv2.cvtColor(np.asarray(image_src), cv2.COLOR_RGB2BGR)
 
-        self.image = cv2.imread(image_src)
         self.orig = self.image.copy()
         (self.origH, self.origW) = self.image.shape[:2]
         # set the new width and height and then determine the ratio in change
@@ -81,8 +87,8 @@ class ImageSplitter:
         self.argH = 320
 
         (newW, newH) = (self.argW, self.argH)
-        rW = self.origW / float(newW)
-        rH = self.origH / float(newH)
+        self.rW = self.origW / float(newW)
+        self.rH = self.origH / float(newH)
 
         # resize the image and grab the new image dimensions
         self.image = cv2.resize(self.image, (newW, newH))
@@ -91,11 +97,11 @@ class ImageSplitter:
         blob = cv2.dnn.blobFromImage(self.image, 1.0, (self.W, self.H),
             (123.68, 116.78, 103.94), swapRB=True, crop=False)
         net.setInput(blob)
-        (scores, geometry) = net.forward(layerNames)
+        (scores, geometry) = net.forward(self.layerNames)
 
         # decode the predictions, then  apply non-maxima suppression to
         # suppress weak, overlapping bounding boxes
-        (rects, confidences) = decode_predictions(scores, geometry)
+        (rects, confidences) = decode_predictions(scores, geometry, self.min_conf)
         self.boxes = non_max_suppression(np.array(rects), probs=confidences)
 
         # initialize the list of results
@@ -104,46 +110,47 @@ class ImageSplitter:
     def execute(self):
         # loop over the bounding boxes
         for (startX, startY, endX, endY) in self.boxes:
-        # scale the bounding box coordinates based on the respective
-        # ratios
-        startX = int(startX * rW)
-        startY = int(startY * rH)
-        endX = int(endX * rW)
-        endY = int(endY * rH)
+            # scale the bounding box coordinates based on the respective
+            # ratios
+            startX = int(startX * self.rW)
+            startY = int(startY * self.rH)
+            endX = int(endX * self.rW)
+            endY = int(endY * self.rH)
 
-        # in order to obtain a better OCR of the text we can potentially
-        # apply a bit of padding surrounding the bounding box -- here we
-        # are computing the deltas in both the x and y directions
-        dX = int((endX - startX) * args["padding"])
-        dY = int((endY - startY) * args["padding"])
+            # in order to obtain a better OCR of the text we can potentially
+            # apply a bit of padding surrounding the bounding box -- here we
+            # are computing the deltas in both the x and y directions
+            dX = int((endX - startX) * self.padding)
+            dY = int((endY - startY) * self.padding)
 
-        # apply padding to each side of the bounding box, respectively
-        startX = max(0, startX - dX)
-        startY = max(0, startY - dY)
-        endX = min(origW, endX + (dX * 2))
-        endY = min(origH, endY + (dY * 2))
+            # apply padding to each side of the bounding box, respectively
+            startX = max(0, startX - dX)
+            startY = max(0, startY - dY)
+            endX = min(self.origW, endX + (dX * 2))
+            endY = min(self.origH, endY + (dY * 2))
 
-        # extract the actual padded ROI
-        roi = orig[startY:endY, startX:endX]
+            # extract the actual padded ROI
+            roi = self.orig[startY:endY, startX:endX]
 
-        # in order to apply Tesseract v4 to OCR text we must supply
-        # (1) a language, (2) an OEM flag of 4, indicating that the we
-        # wish to use the LSTM neural net model for OCR, and finally
-        # (3) an OEM value, in this case, 7 which implies that we are
-        # treating the ROI as a single line of text
-        config = ("-l eng --oem 1 --psm 7")
-        text = pytesseract.image_to_string(roi, config=config)
+            # in order to apply Tesseract v4 to OCR text we must supply
+            # (1) a language, (2) an OEM flag of 4, indicating that the we
+            # wish to use the LSTM neural net model for OCR, and finally
+            # (3) an OEM value, in this case, 7 which implies that we are
+            # treating the ROI as a single line of text
+            config = ("-l eng --oem 1 --psm 7")
+            text = pytesseract.image_to_string(roi, config=config)
 
-        # add the bounding box coordinates and OCR'd text to the list
-        # of results
-        results.append(((startX, startY, endX, endY), text))
+            # add the bounding box coordinates and OCR'd text to the list
+            # of results
+            self.results.append(((startX, startY, endX, endY), text))
 
-        # sort the results bounding box coordinates from top to bottom
-        results = sorted(results, key=lambda r:r[0][1])
+            # sort the results bounding box coordinates from top to bottom
+            self.results = sorted(self.results, key=lambda r:r[0][1])
+        return self.results
 
     def display(self):
         # loop over the results
-        for ((startX, startY, endX, endY), text) in results:
+        for ((startX, startY, endX, endY), text) in self.results:
             # display the text OCR'd by Tesseract
             print("OCR TEXT")
             print("========")
@@ -153,7 +160,7 @@ class ImageSplitter:
             # using OpenCV, then draw the text and a bounding box surrounding
             # the text region of the input image
             text = "".join([c if ord(c) < 128 else "" for c in text]).strip()
-            output = orig.copy()
+            output = self.orig.copy()
             cv2.rectangle(output, (startX, startY), (endX, endY),
                 (0, 0, 255), 2)
             cv2.putText(output, text, (startX, startY - 20),

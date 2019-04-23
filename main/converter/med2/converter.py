@@ -7,11 +7,12 @@ import io
 import pytesseract
 import sys
 from bs4 import BeautifulSoup
+from .preprocess.imageSplitter import ImageSplitter
 
 CONFIG={
     'low_conf':90
 }
-class Pdf2Xml:
+class Converter:
     def __init__(self,file, lang='eng'):
         self.pdfPath = file
         self.lang = lang
@@ -25,10 +26,8 @@ class Pdf2Xml:
                 return self.runtesseract(img)
                 # return pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang=self.lang)
     def runtesseract(self,img):
-        # eng = pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang='eng',config=' --oem 1')
-        vie = pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang='vie',config=' --oem 1')
-        return vie
-        # return self.compareConf(vie,eng)
+        return self.imageSpliter(img)
+        
     
     def extractAttr(self,data):
         info = data['title'].split("x_wconf ")
@@ -70,53 +69,14 @@ class Pdf2Xml:
                     
 
         return viesoup.prettify()
-        
+
+    def imageSpliter(self,image):
+        spliter = ImageSplitter(image)
+        spliter.execute()
+        spliter.display()
+        # eng = pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang='eng',config=' --oem 1')
+        # vie = pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang='vie',config=' --oem 1')
+        # return self.compareConf(vie,eng)
 
 
-if len(sys.argv) <= 1:
-    a = Pdf2Xml(file = 'stock/don-thuoc.png',lang='vie')
-    text_file = open("Output.hocr", "wb")
-    output = a.execute()
-    print(output)
-    text_file.write(output)
-    text_file.close()
-else:
-    filename = None
-    outputfile = None
-    try:
-        filename = sys.argv[1]
-        outputfile = sys.argv[2]
 
-    except:
-        pass
-    a = Pdf2Xml(file = filename,lang='vie')
-    output = a.execute()
-    if outputfile is None:
-        print(output)
-    else:
-        text_file = open(outputfile, "wb")
-        # output = a.execute()
-        # print(output)
-        text_file.write(output)
-        text_file.close()
-        if '--html' in sys.argv:
-            f = open(outputfile, "r")
-            temp = f.read().replace('</body>','<script src="https://unpkg.com/hocrjs"></script></body>')
-            f.close()
-            f = open(outputfile, "w")
-            f.write(temp)
-            f.close()
-        if '--nocolor' in sys.argv:
-            f = open(outputfile, "r")
-            rpstr = """
-            <head>
-            <style>
-            * {border-style: none !important;}
-            </style>
-            
-            """
-            temp = f.read().replace('<head>',rpstr)
-            f.close()
-            f = open(outputfile, "w")
-            f.write(temp)
-            f.close()
