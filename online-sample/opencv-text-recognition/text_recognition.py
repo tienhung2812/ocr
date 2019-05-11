@@ -66,7 +66,17 @@ def decode_predictions(scores, geometry):
 	# return a tuple of the bounding boxes and associated confidences
 	return (rects, confidences)
 
-def extract(sstartX, sstartY, sendX, sendY,rH,rW, origH, origW, orig, padding = 0):
+def checkPaddingLR(paddingL,paddingR, text):
+	# [pos for pos, char in enumerate(text) if char == ' ']
+	print('pos: %s, middle: %s'%(text.find(' '),int(len(text)/2)))
+
+	if text.find(' ') >= int(len(text)/2):
+		paddingR+=1
+	else:
+		paddingL+=1
+	return paddingL,paddingR
+
+def extract(sstartX, sstartY, sendX, sendY,rH,rW, origH, origW, orig, paddingL = 0, paddingR = 0):
 	# scale the bounding box coordinates based on the respective
 	# ratios
 	startX = int(sstartX * rW)
@@ -77,13 +87,13 @@ def extract(sstartX, sstartY, sendX, sendY,rH,rW, origH, origW, orig, padding = 
 	# in order to obtain a better OCR of the text we can potentially
 	# apply a bit of padding surrounding the bounding box -- here we
 	# are computing the deltas in both the x and y directions
-	dX = int( padding)
-	dY = int( padding)
+	paddingL = int( paddingL)
+	paddingR = int( paddingR)
 	
 	# apply padding to each side of the bounding box, respectively
-	startX = min(max(0, startX + dX),origW)
+	startX = min(max(0, startX + paddingL),origW)
 	startY = min(max(0, startY),origH)
-	endX = max(min(origW, endX - dX),0)
+	endX = max(min(origW, endX - paddingR),0)
 	endY = max(min(origH, endY),0)
 
 	if endX<=startX:
@@ -124,9 +134,9 @@ def extract(sstartX, sstartY, sendX, sendY,rH,rW, origH, origW, orig, padding = 
 	# of results
 
 	if ' ' in text:
-		padding+=1
+		paddingL,paddingR = checkPaddingLR(paddingL,paddingR, text)
 		print("Rextract")
-		extract(sstartX, sstartY, sendX, sendY,rH,rW, origH, origW, orig, padding)
+		extract(sstartX, sstartY, sendX, sendY,rH,rW, origH, origW, orig, paddingL,paddingR)
 	else:
 		results.append(((startX, startY, endX, endY), text))
 
@@ -189,7 +199,7 @@ results = []
 
 # loop over the bounding boxes
 for (startX, startY, endX, endY) in boxes:
-	extract(startX, startY, endX, endY,rH,rW, origH, origW, orig, args["padding"])
+	extract(startX, startY, endX, endY,rH,rW, origH, origW, orig, args["padding"],args["padding"])
 
 # sort the results bounding box coordinates from top to bottom
 results = sorted(results, key=lambda r:r[0][1])
