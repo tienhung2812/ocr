@@ -66,6 +66,70 @@ def decode_predictions(scores, geometry):
 	# return a tuple of the bounding boxes and associated confidences
 	return (rects, confidences)
 
+def extract(sstartX, sstartY, sendX, sendY,rH,rW, origH, origW, orig, padding = 0):
+	# scale the bounding box coordinates based on the respective
+	# ratios
+	startX = int(sstartX * rW)
+	startY = int(sstartY * rH)
+	endX = int(sendX * rW)
+	endY = int(sendY * rH)
+
+	# in order to obtain a better OCR of the text we can potentially
+	# apply a bit of padding surrounding the bounding box -- here we
+	# are computing the deltas in both the x and y directions
+	dX = int( padding)
+	dY = int( padding)
+	
+	# apply padding to each side of the bounding box, respectively
+	startX = min(max(0, startX + dX),origW)
+	startY = min(max(0, startY),origH)
+	endX = max(min(origW, endX - dX),0)
+	endY = max(min(origH, endY),0)
+
+	if endX<=startX:
+		endX+=1
+	print('orgW:%s orgH:%s'%(origW,origH))
+	print('startX:%s startY:%s endX:%s endY:%s'%(startX,startY,endX,endY))
+	# extract the actual padded ROI
+	roi = orig[startY:endY, startX:endX]
+	# output = roi.copy()
+	# cv2.imshow("Text Detection", output)
+	# key = cv2.waitKey()
+
+	# #Press Q to exit
+	# if key == 113:
+	# 	exit()
+	# in order to apply Tesseract v4 to OCR text we must supply
+	# (1) a language, (2) an OEM flag of 4, indicating that the we
+	# wish to use the LSTM neural net model for OCR, and finally
+	# (3) an OEM value, in this case, 7 which implies that we are
+	# treating the ROI as a single line of text
+	
+	config = ("-l vie --oem 1 --psm 7")
+	text = pytesseract.image_to_string(roi, config=config)
+
+	print(text)
+	output = orig.copy()
+	cv2.rectangle(output, (startX, startY), (endX, endY),
+		(0, 0, 255), 2)
+
+	# show the output image
+	cv2.imshow("Text Detection", output)
+	key = cv2.waitKey()
+
+	#Press Q to exit
+	if key == 113:
+		exit()
+	# add the bounding box coordinates and OCR'd text to the list
+	# of results
+
+	if ' ' in text:
+		padding+=1
+		print("Rextract")
+		extract(sstartX, sstartY, sendX, sendY,rH,rW, origH, origW, orig, padding)
+	else:
+		results.append(((startX, startY, endX, endY), text))
+
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", type=str,
@@ -125,39 +189,7 @@ results = []
 
 # loop over the bounding boxes
 for (startX, startY, endX, endY) in boxes:
-	# scale the bounding box coordinates based on the respective
-	# ratios
-	startX = int(startX * rW)
-	startY = int(startY * rH)
-	endX = int(endX * rW)
-	endY = int(endY * rH)
-
-	# in order to obtain a better OCR of the text we can potentially
-	# apply a bit of padding surrounding the bounding box -- here we
-	# are computing the deltas in both the x and y directions
-	dX = int((endX - startX) * args["padding"])
-	dY = int((endY - startY) * args["padding"])
-
-	# apply padding to each side of the bounding box, respectively
-	startX = max(0, startX - dX)
-	startY = max(0, startY - dY)
-	endX = min(origW, endX + (dX * 2))
-	endY = min(origH, endY + (dY * 2))
-
-	# extract the actual padded ROI
-	roi = orig[startY:endY, startX:endX]
-
-	# in order to apply Tesseract v4 to OCR text we must supply
-	# (1) a language, (2) an OEM flag of 4, indicating that the we
-	# wish to use the LSTM neural net model for OCR, and finally
-	# (3) an OEM value, in this case, 7 which implies that we are
-	# treating the ROI as a single line of text
-	config = ("-l eng --oem 1 --psm 7")
-	text = pytesseract.image_to_string(roi, config=config)
-
-	# add the bounding box coordinates and OCR'd text to the list
-	# of results
-	results.append(((startX, startY, endX, endY), text))
+	extract(startX, startY, endX, endY,rH,rW, origH, origW, orig, args["padding"])
 
 # sort the results bounding box coordinates from top to bottom
 results = sorted(results, key=lambda r:r[0][1])
