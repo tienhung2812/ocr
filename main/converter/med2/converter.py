@@ -13,7 +13,7 @@ CONFIG={
     'low_conf':90
 }
 class Converter:
-    def __init__(self,file, lang='eng'):
+    def __init__(self,file, lang='eng', output_type='xml',full_table=False):
         self.pdfPath = file
         self.lang = lang
 
@@ -26,9 +26,18 @@ class Converter:
                 return self.runtesseract(img)
                 # return pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang=self.lang)
     def runtesseract(self,img):
-        return self.imageSpliter(img)
+        df = pytesseract.image_to_data(img, lang=self.lang,config=' --oem 1', output_type='data.frame')
+        return self.imageSpliter(img), self.format_pandas(df)
         
-    
+    def format_pandas(self,df):
+        for index, row in df.iterrows():
+            if row['conf'] < 0:
+                df.drop(index, inplace=True)
+        if self.full_table:
+            return df
+        return  df[['word_num','conf','text']]
+        
+        
     def extractAttr(self,data):
         info = data['title'].split("x_wconf ")
         box = info[0]

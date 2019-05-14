@@ -1,6 +1,9 @@
 # OCR
 Vietnamese ocr for convert Scanned PDF to data
 
+# Online Server
+https://hung-ocr.herokuapp.com
+
 ## Installation
 You can run ```python3 setup-linux.py``` or follow instruction below:
 

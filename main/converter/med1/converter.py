@@ -12,7 +12,7 @@ CONFIG={
     'low_conf':90
 }
 class Converter:
-    def __init__(self,file, lang='eng', output_type='xml'):
+    def __init__(self,file, lang='eng', output_type='xml',full_table=False):
         self.pdfPath = file
         self.lang = lang
 
@@ -24,10 +24,25 @@ class Converter:
             with pilImg.open(transfer) as img:
                 return self.runtesseract(img)
                 # return pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang=self.lang)
+
+    def format_pandas(self,df):
+        for index, row in df.iterrows():
+            if row['conf'] < 0:
+                df.drop(index, inplace=True)
+        if self.full_table:
+            return df
+        return  df[['word_num','conf','text']]
+
+
     def runtesseract(self,img):
+        # eng = pytesseract.image_to_data(img, lang='eng',config=' --oem 1', output_type='data.frame')
+        viedf = pytesseract.image_to_data(img, lang='vie',config=' --oem 1', output_type='data.frame')
+        # return 
+        df = self.format_pandas(viedf)
+
         eng = pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang='eng',config=' --oem 1')
         vie = pytesseract.image_to_pdf_or_hocr(img, extension='hocr',lang='vie',config=' --oem 1')
-        return self.compareConf(vie,eng)
+        return self.compareConf(vie,eng),df
     
     def extractAttr(self,data):
         info = data['title'].split("x_wconf ")
