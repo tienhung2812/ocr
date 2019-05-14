@@ -12,7 +12,7 @@ CONFIG={
     'low_conf':90
 }
 class Converter:
-    def __init__(self,file, lang='eng'):
+    def __init__(self,file, lang='eng', output_type='xml'):
         self.pdfPath = file
         self.lang = lang
 

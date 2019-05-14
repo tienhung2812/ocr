@@ -1,7 +1,9 @@
 # Conver PDF to XML
 
+### **Method 0:** Using Tessearct to convert from Image to XML
+- Using LSTM from tesseract
 
-### **Method 1:** Using Tessearct to convert from Image to XML
+### **Method 1:** Using Tessearct to convert from Image to XML and replace string between eng and vie
 
 #### Step to proceduce:
 - Using LSTM from tesseract

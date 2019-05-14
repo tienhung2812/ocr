@@ -15,15 +15,20 @@ ap.add_argument("--noboder",  action='store_true',
     help="remove html bolder")
 ap.add_argument("-m", "--method", type=int, default=1,
 	help="method")
+ap.add_argument("-ot", "--output-type", type=str, default="xml",
+	help="output-type xml or string")
+
 args = vars(ap.parse_args())
 
 #Import Method
-if args["method"] == 1:
+if args["method"] == 0:
+	from converter.med0.converter import Converter
+elif args["method"] == 1:
 	from converter.med1.converter import Converter
 elif  args["method"] == 2:
 	from converter.med2.converter import Converter
 
-con = Converter(file = args['image'], lang = 'vie')
+con = Converter(file = args['image'], lang = 'vie', output_type=args['output_type'])
 output = con.execute()
 
 

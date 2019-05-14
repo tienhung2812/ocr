@@ -1,3 +1,6 @@
 *.html
 *.xml
 *.jpg
+.vscode
+__init__*.py
+*.pyc

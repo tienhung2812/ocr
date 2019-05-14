@@ -32,9 +32,24 @@ docker-compose up
 [Folder](main/converter)  
 [Document](main/converter/README.md)  
 Usage:
+`-m` : Method
+`-i` : Image Source
+`-o` : Ouput Path (Print out if None)
+`-ot`: Output type: xml or str 
+
+Method 0:
 ```
-python3 main/converter.py -m 1 -i ../stock/don-thuoc.png -o test.html
+python3 main/converter.py -m 0 -i ../stock/don-thuoc.png -ot str
 ```
+Method 1:
+```
+python3 main/converter.py -m 1 -i ../stock/don-thuoc.png -o test.html -ot xml
+```
+Method 2:
+```
+python3 main/converter.py -m 2 -i ../stock/don-thuoc.png -o test.html -ot xml
+```
+
 or to have more setting:  
 ```
 python3 main/converter.py -h
