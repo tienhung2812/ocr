@@ -15,11 +15,13 @@ CONFIG={
     'low_conf':90
 }
 class Converter:
-    def __init__(self,file, lang='eng', output_type='xml',full_table=False):
+    def __init__(self,file, lang='eng', output_type='xml',full_table=False, config='--oem 1 --psm 7'):
         self.pdfPath = file
         self.lang = lang
         self.output_type = output_type
         self.full_table = full_table
+        self.config = config
+        self.configlang ='-l '+lang +' '+ config
 
     def execute(self):
         with io.BytesIO() as transfer:
@@ -40,13 +42,13 @@ class Converter:
         
 
     def runtesseract(self,img):
-        df = pytesseract.image_to_data(img, lang=self.lang,config=' --oem 1', output_type='data.frame')
+        df = pytesseract.image_to_data(img, lang=self.lang, config=self.config, output_type='data.frame')
         df = self.format_pandas(df)
 
 
         if self.output_type == 'xml':
-            vie = pytesseract.image_to_pdf_or_hocr(img, extension='hocr',config='-l vie --oem 1')
+            vie = pytesseract.image_to_pdf_or_hocr(img, extension='hocr',config=self.configlang)
         else:
-            vie = pytesseract.image_to_string(img, lang=self.lang,config=' --oem 1')
+            vie = pytesseract.image_to_string(img, lang=self.lang,config=self.config)
         return vie,df
     

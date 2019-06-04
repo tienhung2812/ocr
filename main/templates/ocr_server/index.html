@@ -49,6 +49,36 @@
 								<option>eng+vie</option>
 							</select>
 						</div>
+						<p>For OEM and PSM config: <a href="https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc">Tessearct Config</a></p>
+						<div class="form-group">
+							<label for="exampleFormControlSelect2">OEM</label>
+							<select class="form-control" id="exampleFormControlSelect2" name="oem">
+								<option>0</option>
+								<option>1</option selected="selected">
+								<option>2</option>
+								<option>3</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="exampleFormControlSelect2">PSM</label>
+							<select class="form-control" id="exampleFormControlSelect2" name="psm">
+								<option>None</option  selected="selected">
+								<option>0</option>
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+								<option>6</option>
+								<option>7</option>
+								<option>8</option>
+								<option>9</option>
+								<option>10</option>
+								<option>11</option>
+								<option>12</option>
+								<option>13</option>
+							</select>
+						</div>
 						<div class="form-group">
 							<label for="exampleFormControlSelect2">Output type</label>
 							<select class="form-control" id="exampleFormControlSelect2" name="output">
@@ -102,6 +132,7 @@
 					<p><b>Conf mean:</b> {{stat.mean}}</p>
 					<p><b>Method:</b> {{stat.method}}</p>
 					<p><b>Lang:</b> {{stat.lang}}</p>
+					<p><b>Config:</b> {{stat.conf}}</p>
 					<p><b>Output:</b> {{stat.output_type}}</p>
 				</div>
 			</div>

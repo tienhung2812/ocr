@@ -10,19 +10,20 @@ from converter.med1.converter import Converter as M1
 from converter.med2.converter import Converter as M2
 
 
-def processImage(file, method = 0, lang='vie', output_type = 'str', full_table = False):
+def processImage(file, method = 0, lang='vie', output_type = 'str', full_table = False, config='--oem 1'):
     if method == 1:
-        con = M1(file = file, lang=lang , output_type=output_type, full_table=full_table)
+        con = M1(file = file, lang=lang , output_type=output_type, full_table=full_table ,config = config)
     elif method == 2:
-        con = M2(file = file, lang=lang , output_type=output_type, full_table=full_table)
+        con = M2(file = file, lang=lang , output_type=output_type, full_table=full_table,config = config)
     else:
-        con = M0(file = file, lang=lang , output_type=output_type, full_table=full_table)
+        con = M0(file = file, lang=lang , output_type=output_type, full_table=full_table,config = config)
     output,data = con.execute()
     stat = {}
     stat['mean'] = data['conf'].mean()
     stat['lang'] = lang
     stat['method'] = method
     stat['output_type'] = output_type
+    stat['conf'] = config
     # print(output)
     return output,data,stat
 
@@ -36,7 +37,6 @@ def index(request):
         uploaded_file_url = fs.url(filename)
 
         
-
         method = request.POST['method']
         output_type = request.POST['output']
         lang = request.POST['lang']
@@ -44,8 +44,15 @@ def index(request):
         if full_table != False:
             full_table = True
             col_data='col-12'
-            
-        result,data,stat = processImage(os.path.abspath(uploaded_file_url[1:]),method,lang,output_type,full_table)
+
+        oem = request.POST['oem']
+        conf = '--oem '+ oem
+        psm = request.POST['psm']
+        if psm != ' None':
+            conf += ' --psm '+ psm
+
+
+        result,data,stat = processImage(os.path.abspath(uploaded_file_url[1:]),method,lang,output_type,full_table, conf)
         return render(request, 'ocr_server/index.html', {
             'uploaded_file_url': uploaded_file_url,
             'result': result,
