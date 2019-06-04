@@ -1,4 +1,3 @@
-import urllib.request
 import time
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -39,10 +38,52 @@ class General(WebConfig):
             'lang':self.driver.find_element_by_css_selector('html').get_attribute("lang"),
             'font':ele.value_of_css_property('font-family')
         }
+
+    def isHaveText(self,ele):
+        if len(ele.text)>0:
+            return True
+        return False
+
+    def getAllChild(self,ele):
+        return ele.find_elements_by_css_selector("*")
     
+    def findContain(self,text, tag='*'):
+        try:
+            return self.driver.find_element_by_xpath("//{}[contains(text(), {})]".format(tag,text))
+        except Exception as e: 
+            print(e)
+            print("AT: {}".format('Contain: '+text))
+            time.sleep(1)
+            self.findContain(text)
+
+    def findAtt(self,equation, tag='*'):
+        try:
+            return self.driver.find_element_by_xpath('//{}[@{}]'.format(tag,equation))
+        except Exception as e: 
+            print(e)
+            print("AT: {}".format('Contain: '+text))
+            time.sleep(1)
+            self.findContain(text)
+
+    def find(self,css, repeat = 100):
+        try:
+            return self.driver.find_element_by_css_selector(css)
+        except Exception as e: 
+            print(e)
+            if 'HTTP' in e:
+                self.restart()
+            print("AT: {}".format(css))
+            time.sleep(1)
+            self.find(css)
+
     def extractText(self,ele):
         return
 
 def getFileName(filenum,meta,extenstion):
     # eng.arial.exp2.png
     return meta['lang']+'.'+meta['font']+'.exp'+str(filenum)+'.'+extenstion
+
+def getFileNum(DIR=None):
+    if not DIR:
+        DIR = '../dataset/images/'
+    return len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))])

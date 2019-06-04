@@ -14,10 +14,16 @@ from random import *
 from general import *
 from PIL import Image
 import io 
+from enum import Enum
 class News(General):
     def __init__(self ,url,browser='chrome'):
         self.url = url
         self.WebDriverManager(browser)
+
+class VnExpress(Enum):
+    textSelector = 'article.content_detail'
+    min_height = 30
+    min_width = 500
 
 class Screenshot:
     def __init__(self,driver,metadata={}):
@@ -26,7 +32,7 @@ class Screenshot:
         self.extenstion = 'png'
         self.metadata = metadata
 
-    def takePartialScreenshot(self,ele,filenum=0):
+    def takePartialScreenshot(self,ele,filenum=0,enum=None):
         element = ele
 
         location = element.location
@@ -40,12 +46,21 @@ class Screenshot:
         right = location['x'] + size['width']
         bottom = location['y'] + size['height']
 
+        print(size)
+        if enum:
+            if int(size['width']) <= enum.min_width.value:
+                return False
+            if int(size['height'])  <= enum.min_height.value:
+                return False
+        if size['width'] <= 0 or size['height'] <= 0:
+            return False
 
         im = im.crop((left, top, right, bottom)) # defines crop points
         if not filenum:
             filenum = len([name for name in os.listdir(self.imageDir) if os.path.isfile(os.path.join(self.imageDir, name))])
         im.save(self.imageDir+getFileName(filenum,self.metadata,self.extenstion))
         # im.save('screenshot.png')
+        return True
 
     def takeScreenShot(self,div,filenum=0):
         #Get current file num

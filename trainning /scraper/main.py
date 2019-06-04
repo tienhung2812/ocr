@@ -12,13 +12,21 @@ class News(General):
     def execute(self):
         self.driver.get(self.url)
 
-        ele = self.driver.find_element_by_css_selector('article.content_detail')
+        text_wrapper = self.find(VnExpress.textSelector.value)
+        elements = self.getAllChild(text_wrapper)
+        sc = Screenshot(self.driver,self.getMetaData(text_wrapper))
+        for ele in elements:
+            if self.isHaveText(ele):
+                filenum = getFileNum()
+                meta = self.getMetaData(ele)
+                
+                print(filenum)
+                
+                if sc.takePartialScreenshot(ele,filenum,VnExpress) :
+                    filename = getFileName(filenum,meta,'text')
+                    with open('../dataset/texts/'+filename, "w") as file:
+                        file.write(ele.text)
 
-        print(self.getMetaData(ele))
-
-        print(ele.text)
-        # sc = Screenshot(self.driver,self.getMetaData())
-        # sc.takePartialScreenshot('#lga')
 
         self.teardown()
     

@@ -222,3 +222,140 @@ console.error: BroadcastService:
 1559630384647	Marionette	INFO	Stopped listening on port 33163
 [Parent 14046, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 357
 JavaScript error: resource://gre/modules/WebProgressChild.jsm, line 61: TypeError: this.mm.content is null
+1559631882569	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.pTnP2XL403qx"
+1559631882793	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1559631882793	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1559631882793	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1559631885132	Marionette	INFO	Listening on port 32999
+1559631885178	Marionette	WARN	TLS certificate errors will be ignored for this session
+[Parent 17543, Gecko_IOThread] WARNING: pipe error: Broken pipe: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 726
+JavaScript warning: https://s.vnecdn.net/vnexpress/restruct/j/v387/v2/helper/general.js, line 63: unreachable code after return statement
+JavaScript error: resource:///actors/NetErrorChild.jsm, line 749: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIStringBundle.GetStringFromName]
+1559631901494	Marionette	INFO	Stopped listening on port 32999
+[Parent 17543, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 357
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x610027,name=PNecko::Msg_RemoveRequestContext) Channel closing: too late to send/recv, messages will be lost
+
+[Child 17736, Chrome_ChildThread] WARNING: pipe error (3): Connection reset by peer: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 357
+1559632405067	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.ESLSqmTxTaW2"
+1559632405295	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1559632405296	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1559632405296	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1559632407871	Marionette	INFO	Listening on port 41457
+1559632407906	Marionette	WARN	TLS certificate errors will be ignored for this session
+[Parent 18695, Gecko_IOThread] WARNING: pipe error: Broken pipe: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 726
+JavaScript warning: https://s.vnecdn.net/vnexpress/restruct/j/v387/v2/helper/general.js, line 63: unreachable code after return statement
+JavaScript error: resource:///actors/NetErrorChild.jsm, line 749: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIStringBundle.GetStringFromName]
+1559632421067	Marionette	INFO	Stopped listening on port 41457
+[Parent 18695, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 357
+JavaScript error: resource://gre/modules/WebProgressChild.jsm, line 61: TypeError: this.mm.content is null
+1559632439857	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.21cpYcVO4Bum"
+1559632440085	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1559632440085	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1559632440085	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1559632442921	Marionette	INFO	Listening on port 41891
+1559632442971	Marionette	WARN	TLS certificate errors will be ignored for this session
+[Parent 19084, Gecko_IOThread] WARNING: pipe error: Broken pipe: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 726
+JavaScript warning: https://s.vnecdn.net/vnexpress/restruct/j/v387/v2/helper/general.js, line 63: unreachable code after return statement
+JavaScript error: resource:///actors/NetErrorChild.jsm, line 749: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIStringBundle.GetStringFromName]
+console.error: BroadcastService: 
+  receivedBroadcastMessage: handler for
+  remote-settings/monitor_changes
+  threw error:
+  Message: Error: Polling for changes failed: http://%(server)s/dummy/blocklist//buckets/monitor/collections/changes/records?_expected=%221559618092506%22 is not a valid URL..
+  Stack:
+    remoteSettingsFunction/remoteSettings.pollChanges@resource://services-settings/remote-settings.js:203:13
+
+1559632470128	Marionette	INFO	Stopped listening on port 41891
+[Parent 19084, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 357
+1559632573215	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.q6QedI7EbRqe"
+1559632573447	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1559632573447	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1559632573447	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1559632575790	Marionette	INFO	Listening on port 40793
+1559632575823	Marionette	WARN	TLS certificate errors will be ignored for this session
+[Parent 19676, Gecko_IOThread] WARNING: pipe error: Broken pipe: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 726
+JavaScript warning: https://s.vnecdn.net/vnexpress/restruct/j/v387/v2/helper/general.js, line 63: unreachable code after return statement
+JavaScript error: resource:///actors/NetErrorChild.jsm, line 749: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIStringBundle.GetStringFromName]
+1559632589069	Marionette	INFO	Stopped listening on port 40793
+JavaScript error: resource://gre/modules/WebProgressChild.jsm, line 61: TypeError: this.mm.content is null
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x530005,name=PHttpChannel::Msg_Cancel) Closed channel: cannot send/recv
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x530005,name=PHttpChannel::Msg_Cancel) Closed channel: cannot send/recv
+
+1559632626574	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.xsPqLkMd6v9p"
+1559632626802	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1559632626802	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1559632626803	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1559632629072	Marionette	INFO	Listening on port 43275
+1559632629083	Marionette	WARN	TLS certificate errors will be ignored for this session
+[Parent 20073, Gecko_IOThread] WARNING: pipe error: Broken pipe: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 726
+JavaScript warning: https://s.vnecdn.net/vnexpress/restruct/j/v387/v2/helper/general.js, line 63: unreachable code after return statement
+JavaScript error: resource:///actors/NetErrorChild.jsm, line 749: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIStringBundle.GetStringFromName]
+1559632646780	Marionette	INFO	Stopped listening on port 43275
+[Parent 20073, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 357
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1559632775135	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.nnmmbeAozZRH"
+1559632775361	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1559632775362	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1559632775362	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1559632777794	Marionette	INFO	Listening on port 34485
+1559632777853	Marionette	WARN	TLS certificate errors will be ignored for this session
+[Parent 20627, Gecko_IOThread] WARNING: pipe error: Broken pipe: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 726
+JavaScript warning: https://s.vnecdn.net/vnexpress/restruct/j/v387/v2/helper/general.js, line 63: unreachable code after return statement
+JavaScript error: resource:///actors/NetErrorChild.jsm, line 749: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIStringBundle.GetStringFromName]
+1559632792924	Marionette	INFO	Stopped listening on port 34485
+[Parent 20627, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 357
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x610027,name=PNecko::Msg_RemoveRequestContext) Channel closing: too late to send/recv, messages will be lost
+
+1559632824580	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.RIXKtvAXBTMP"
+1559632824818	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1559632824818	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1559632824819	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1559632827118	Marionette	INFO	Listening on port 40005
+1559632827193	Marionette	WARN	TLS certificate errors will be ignored for this session
+[Parent 21069, Gecko_IOThread] WARNING: pipe error: Broken pipe: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 726
+JavaScript warning: https://s.vnecdn.net/vnexpress/restruct/j/v387/v2/helper/general.js, line 63: unreachable code after return statement
+JavaScript error: resource:///actors/NetErrorChild.jsm, line 749: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIStringBundle.GetStringFromName]
+1559632842438	Marionette	INFO	Stopped listening on port 40005
+[Parent 21069, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 357
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+[Child 21260, Chrome_ChildThread] WARNING: pipe error (3): Connection reset by peer: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 357
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1559633013093	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.nrrp8paVL1ON"
+1559633013320	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1559633013320	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1559633013320	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1559633015476	Marionette	INFO	Listening on port 34557
+1559633015500	Marionette	WARN	TLS certificate errors will be ignored for this session
+[Parent 21671, Gecko_IOThread] WARNING: pipe error: Broken pipe: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 726
+JavaScript warning: https://s.vnecdn.net/vnexpress/restruct/j/v387/v2/helper/general.js, line 63: unreachable code after return statement
+JavaScript error: resource:///actors/NetErrorChild.jsm, line 749: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIStringBundle.GetStringFromName]
+1559633033218	Marionette	INFO	Stopped listening on port 34557
+[Parent 21671, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 357
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1559633089777	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.C8Irp5iR8TwI"
+1559633090004	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1559633090004	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1559633090004	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1559633092475	Marionette	INFO	Listening on port 46333
+1559633092508	Marionette	WARN	TLS certificate errors will be ignored for this session
+[Parent 22142, Gecko_IOThread] WARNING: pipe error: Broken pipe: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 726
+JavaScript warning: https://s.vnecdn.net/vnexpress/restruct/j/v387/v2/helper/general.js, line 63: unreachable code after return statement
+JavaScript error: resource:///actors/NetErrorChild.jsm, line 749: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIStringBundle.GetStringFromName]
+1559633107528	Marionette	INFO	Stopped listening on port 46333
+[Parent 22142, Gecko_IOThread] WARNING: pipe error (79): Connection reset by peer: file /build/firefox-xkwMhH/firefox-67.0+build2/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 357
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
