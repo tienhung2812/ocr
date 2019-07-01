@@ -1,11 +1,17 @@
 version: "3.3"
 
 services:     
-  backend:
-    container_name: ocr_server
-    build: main
-    command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
+  # backend:
+  #   container_name: ocr_server
+  #   build: main
+  #   command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
+  #   volumes:
+  #     - ./main:/code
+  #   ports:
+  #     - "8000:8000"
+  rnn:
+    container_name: rnn
+    build: online-sample/rnn-tutorial-rnnlm
+    command: bash -c "python server.py"
     volumes:
-      - ./main:/code
-    ports:
-      - "8000:8000"
+      - ./online-sample/rnn-tutorial-rnnlm:/code
