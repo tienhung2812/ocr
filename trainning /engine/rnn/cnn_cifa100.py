@@ -1,6 +1,6 @@
-from keras.datasets import cifar100
+from keras.datasets import cifar10
 
-(train_X, train_Y), (test_X, test_Y) = cifar100.load_data(label_mode='fine')
+(train_X, train_Y), (test_X, test_Y) = cifar10.load_data()
 
 import numpy as np
 from keras.utils import to_categorical
@@ -63,7 +63,7 @@ from keras.layers.advanced_activations import LeakyReLU
 
 batch_size = 64
 epochs = 25
-num_classes = 100
+num_classes = 10
 
 cifa_model = Sequential()
 cifa_model.add(Conv2D(32, kernel_size=(3, 3),input_shape=(32,32,3),padding='same'))
