@@ -1,5 +1,6 @@
 import numpy as np
 import cv2 as cv
+import imutils
 
 IMAGE_STOCK = '../../stock/receipt/'
 
@@ -84,9 +85,70 @@ class ReceiptImage:
                 break
 
 
-ri = ReceiptImage('46.png')
+ri = ReceiptImage('3.jpeg')
 img = ri.readImage(image_type = cv.IMREAD_GRAYSCALE)
 ri.showImage(img)
+gray = cv.GaussianBlur(img, (5, 5), 0)
+can = cv.Canny(img, 75, 200)
+ri.showImage(can)
+cnts = cv.findContours(can.copy(), cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+cnts = imutils.grab_contours(cnts)
+cnts = sorted(cnts, key = cv.contourArea, reverse = True)[:5]
+
+# loop over the contours
+for c in cnts:
+    # approximate the contour
+    peri = cv.arcLength(c, True)
+    approx = cv.approxPolyDP(c, 0.02 * peri, True)
+
+    t = cv.drawContours(img.copy(),c, -1, (0, 255, 0), 2)
+    cv.imshow("utp",t)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+    # if our approximated contour has four points, then we
+    # can assume that we have found our screen
+    if len(approx) == 4:
+        screenCnt = approx
+        break
+
+# show the contour (outline) of the piece of paper
+print("STEP 2: Find contours of paper")
+cv.drawContours(img, [screenCnt], -1, (0, 255, 0), 2)
+cv.imshow("Outline", image)
+cv.waitKey(0)
+cv.destroyAllWindows()
+
+# th = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,\
+#                 cv.THRESH_BINARY,25,8)
+# ri.showImage(th)
+
+c = 0
+
+for x in range(1,20):
+    x*=10
+    print(x)
+    gray = cv.GaussianBlur(img, (5, 5), 0)
+    th1 = cv.Canny(gray, 75, x)
+    while True:
+        cv.imshow(str(x),th1)
+        key = cv.waitKey(10) & 0xFF
+
+        if key == ord('q'):
+            # Press key `q` to quit the program
+            cv.destroyAllWindows()
+            exit() 
+
+        elif key == ord('n'):
+            cv.destroyAllWindows()
+            break
+
+        elif key == ord('s'):
+            c=x
+            cv.destroyAllWindows()
+            break
+    
+    if c>0:
+        break
 c = 0
 for x in range(2,20):
     print(x)
