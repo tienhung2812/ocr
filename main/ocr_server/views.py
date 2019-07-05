@@ -5,10 +5,8 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import pandas
 import os
-from converter.med0.converter import Converter as M0
-from converter.med1.converter import Converter as M1
-from converter.med2.converter import Converter as M2
-
+from image.process import ReceiptImage
+ 
 
 def processImage(file, method = 0, lang='vie', output_type = 'str', full_table = False, config='--oem 1'):
     if method == 1:
@@ -65,5 +63,35 @@ def index(request):
     context = {
         'uploaded_file_url': "http://www.tourniagara.com/wp-content/uploads/2014/10/default-img.gif",
         'col_data':col_data
+    }
+    return HttpResponse(template.render(context, request))
+
+def image_process(request):
+    col_data='col-6'
+    if request.method == 'POST' and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+
+        filename = os.path.basename(uploaded_file_url)
+        ri = ReceiptImage(uploaded_file_url, filename)
+        ri.processImage()
+
+
+
+        # result,data,stat = processImage(os.path.abspath(uploaded_file_url[1:]),method,lang,output_type,full_table, conf)
+        return render(request, 'ocr_server/index.html', {
+            'uploaded_file_url': uploaded_file_url,
+            'dilated_file_url':ri.dilated_url,
+            'drawed_file_url': ri.drawed_url,
+            'cropped_file_url': ri.wraped_url,
+            'status':ri.status 
+        })
+
+    template = loader.get_template('ocr_server/image_process.html')
+    context = {
+        'uploaded_file_url': "http://www.tourniagara.com/wp-content/uploads/2014/10/default-img.gif",
+ 
     }
     return HttpResponse(template.render(context, request))
