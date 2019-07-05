@@ -1,12 +1,13 @@
 import cv2
 import numpy as np 
-import transform
+import image.transform
 import yaml
 
 class ImageCroper:
     def __init__(self,image):
         # load parameters
-        with open('../config.yml', 'rb') as f:
+        import os
+        with open('config.yml', 'rb') as f:
             self.conf = yaml.load(f.read())
 
         # load image

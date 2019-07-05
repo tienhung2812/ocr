@@ -1,16 +1,31 @@
 import numpy as np
 import cv2 as cv
 import imutils
-from crop import ImageCroper
+import os
+import image.transform
+from image.crop import ImageCroper
 IMAGE_STOCK = '../../stock/receipt/'
 
 class ReceiptImage:
-    def __init__(self,filename):
-        self.url = IMAGE_STOCK+filename
+    def __init__(self,url,filename):
+        self.url = url
         self.c = 2
         self.blocksize = 11
 
+        self.dilated = None
+        self.drawed = None
+        self.warped = None 
+
+        self.status = False
+
         self.image = self.readImage()
+
+        path = os.path.dirname(url)
+        # Save url
+        self.dilated_url = path+'dilated_'+filename
+        self.drawed_url = path+'drawed_'+filename
+        self.wraped_url = path + 'wraped_'+filename
+        
 
     def showImage(self, image=None, image_type = cv.IMREAD_UNCHANGED):
         """[Show image with custom configuration]
@@ -87,19 +102,58 @@ class ReceiptImage:
                 break
 
     def processImage(self):
+        """[Process Image]
+        """
+        # print(self.url)
+        import os
+        print(self.url)
+        print(os.path.isfile(self.url))
+        self.image = cv.imread(self.url, 0)
+        print(self.image)
         ic = ImageCroper(self.image)
         rect = ic.findPaper()
 
+        self.dilated = ic.dilated
+        self.drawed = ic.drawed
+
+        # Transform
+        if rect is None:
+            self.status = False
+            rect = self.getFullImageConner()
+        else:
+            self.status = True
+
+        self.warped = transform.four_point_transform(self.image, rect.reshape(4, 2))
+        self.saveImage()
+
+    def saveImage(self):
+        
+
+        cv.imwrite(self.dilated_url, self.dilated)
+        cv.imwrite(self.drawed_url, self.drawed)
+        cv.imwrite(self.wraped_url, self.warped)
 
 
-ri = ReceiptImage('26.jpg')
-img = ri.readImage(image_type = cv.IMREAD_GRAYSCALE)
-ri.showImage(img)
+    def getFullImageConner(self):
+        return np.array([
+            [0, 0], 
+            [0,self.image.shape[0]],
+            [self.image.shape[1], self.image.shape[0]],
+            [self.image.shape[1],0]            
+            ]
+            )
+    
 
-ic = ImageCroper(img)
-ic.findPaper()
+# ri = ReceiptImage('1.jpeg')
+# ri.processImage()
 
-ri.showImage(ic.drawed)
+# img = ri.readImage(image_type = cv.IMREAD_GRAYSCALE)
+# ri.showImage(img)
+
+# ic = ImageCroper(img)
+# ic.findPaper()
+
+# ri.showImage(ic.drawed)
 # gray = cv.GaussianBlur(img, (5, 5), 0)
 
 # kernel = np.ones((3, 3), 'uint8')

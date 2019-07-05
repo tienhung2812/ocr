@@ -19,4 +19,5 @@ from . import views
 
 urlpatterns = [
     path('', views.index),
+    path('image_process', views.image_process),
 ]
