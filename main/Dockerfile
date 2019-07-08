@@ -1,7 +1,5 @@
 FROM ubuntu
-RUN apt-get update 
-RUN apt-get install python3 -y
-RUN apt-get install python3-pip -y
+RUN apt-get update && apt-get install python3 python3-pip -y
 ENV PYTHONUNBUFFERED 1
 # Set the locale
 ENV LANG C.UTF-8

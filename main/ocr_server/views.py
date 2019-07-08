@@ -34,7 +34,6 @@ def index(request):
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
 
-        
         method = request.POST['method']
         output_type = request.POST['output']
         lang = request.POST['lang']
@@ -73,19 +72,19 @@ def image_process(request):
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-
+        path = '/code'+ uploaded_file_url
         filename = os.path.basename(uploaded_file_url)
-        ri = ReceiptImage(uploaded_file_url, filename)
+        ri = ReceiptImage(path, filename)
         ri.processImage()
 
 
 
         # result,data,stat = processImage(os.path.abspath(uploaded_file_url[1:]),method,lang,output_type,full_table, conf)
-        return render(request, 'ocr_server/index.html', {
+        return render(request, 'ocr_server/image_process.html', {
             'uploaded_file_url': uploaded_file_url,
-            'dilated_file_url':ri.dilated_url,
-            'drawed_file_url': ri.drawed_url,
-            'cropped_file_url': ri.wraped_url,
+            'dilated_file_url':ri.dilated_url.replace("/code", ""),
+            'drawed_file_url': ri.drawed_url.replace("/code", ""),
+            'cropped_file_url': ri.wraped_url.replace("/code", ""),
             'status':ri.status 
         })
 

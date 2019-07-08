@@ -52,7 +52,7 @@ class ImageCroper:
                             (255,0,0), 2, 8)
 
         # finding contours
-        image, contours, _ = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_TC89_KCOS)
+        contours,_ = cv2.findContours(edges.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_TC89_KCOS)
         contours = filter(lambda cont: cv2.arcLength(cont, False) > 100, contours)
         contours = filter(lambda cont: cv2.contourArea(cont) > 10000, contours)
 

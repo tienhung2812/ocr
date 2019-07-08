@@ -2,7 +2,7 @@ import numpy as np
 import cv2 as cv
 import imutils
 import os
-import image.transform
+from image.transform import *
 from image.crop import ImageCroper
 IMAGE_STOCK = '../../stock/receipt/'
 
@@ -21,10 +21,11 @@ class ReceiptImage:
         self.image = self.readImage()
 
         path = os.path.dirname(url)
+        print(path)
         # Save url
-        self.dilated_url = path+'dilated_'+filename
-        self.drawed_url = path+'drawed_'+filename
-        self.wraped_url = path + 'wraped_'+filename
+        self.dilated_url = path+'/'+'dilated_'+filename
+        self.drawed_url = path+'/'+'drawed_'+filename
+        self.wraped_url = path +'/'+ 'wraped_'+filename
         
 
     def showImage(self, image=None, image_type = cv.IMREAD_UNCHANGED):
@@ -123,7 +124,7 @@ class ReceiptImage:
         else:
             self.status = True
 
-        self.warped = transform.four_point_transform(self.image, rect.reshape(4, 2))
+        self.warped = four_point_transform(self.image, rect.reshape(4, 2))
         self.saveImage()
 
     def saveImage(self):
