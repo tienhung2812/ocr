@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+	<title>Hung -ocr</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</head>
+<style>
+	.col-6,.col,.col-12 {
+		padding-top: 40px;
+		max-width: 570px;
+	}
+</style>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-6">
+				<h3>Input</h3>
+				<div class="form">
+					<form method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="form-group">
+							<label for="exampleFormControlSelect2">Method</label>
+							<select class="form-control" id="exampleFormControlSelect2" name="method">
+								<option>0</option selected="selected">
+								<option>1</option>
+								<option>2</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="exampleFormControlSelect2">Language</label>
+							<select class="form-control" id="exampleFormControlSelect2" name="lang">
+								<option>vie</option selected="selected">
+								<option>eng</option>
+								<option>eng+vie</option>
+							</select>
+						</div>
+						<p>For OEM and PSM config: <a href="https://github.com/tesseract-ocr/tesseract/blob/master/doc/tesseract.1.asc">Tessearct Config</a></p>
+						<div class="form-group">
+							<label for="exampleFormControlSelect2">OEM</label>
+							<select class="form-control" id="exampleFormControlSelect2" name="oem">
+								<option>0</option>
+								<option>1</option selected="selected">
+								<option>2</option>
+								<option>3</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="exampleFormControlSelect2">PSM</label>
+							<select class="form-control" id="exampleFormControlSelect2" name="psm">
+								<option>None</option  selected="selected">
+								<option>0</option>
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+								<option>6</option>
+								<option>7</option>
+								<option>8</option>
+								<option>9</option>
+								<option>10</option>
+								<option>11</option>
+								<option>12</option>
+								<option>13</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="exampleFormControlSelect2">Output type</label>
+							<select class="form-control" id="exampleFormControlSelect2" name="output">
+								<option>str</option selected="selected">
+								<option>xml</option>
+							</select>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="defaultCheck1"
+								name="fulltable">
+							<label class="form-check-label" for="defaultCheck1">
+								Full data table
+							</label>
+						</div>
+
+						<div class="form-group">
+							<label for="exampleFormControlFile1">Image Input</label>
+							<input type="file" class="form-control-file" id="exampleFormControlFile1" name="myfile">
+						</div>
+
+						<button type="submit">Process</button>
+					</form>
+
+					<br>
+					<h3>Note</h3>
+					<div class="note">
+						Only Method 0 is fully support<br>
+						Result of Method 1,2 is not correct, I am working on it
+					</div>
+
+				</div>
+			</div>
+
+			<div class="col-6">
+				<h3>Uploaded Image</h3>
+				<div class="image">
+					<img style="max-width: 570px;" src="{{ uploaded_file_url }}" />
+				</div>
+
+			</div>
+
+			<div class="col">
+				<h3>Raw Result</h3>
+				<div class="result">
+					{{result}}
+				</div>
+			</div>
+			<div class="col-6">
+				<h3>Stat</h3>
+				<div class="stat">
+					<p><b>Conf mean:</b> {{stat.mean}}</p>
+					<p><b>Method:</b> {{stat.method}}</p>
+					<p><b>Lang:</b> {{stat.lang}}</p>
+					<p><b>Config:</b> {{stat.conf}}</p>
+					<p><b>Output:</b> {{stat.output_type}}</p>
+				</div>
+			</div>
+			<div class="{{col_data}}">
+				<h3>Data Table</h3>
+				<div class="data-result">
+					{{data_result  | safe}}
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+</body>
+
+</html>
