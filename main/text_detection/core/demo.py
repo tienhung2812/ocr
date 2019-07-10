@@ -117,5 +117,6 @@ def main(argv=None):
                         f.writelines(line)
 
 
-if __name__ == '__main__':
-    tf.app.run()
+# if __name__ == '__main__':
+#     tf.app.run()
+print(get_images())

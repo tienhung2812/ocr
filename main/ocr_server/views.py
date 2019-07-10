@@ -6,7 +6,7 @@ from django.core.files.storage import FileSystemStorage
 import pandas
 import os
 from image.process import ReceiptImage
- 
+from text_detection.core.detector import TextDetection
 
 def processImage(file, method = 0, lang='vie', output_type = 'str', full_table = False, config='--oem 1'):
     if method == 1:
@@ -77,6 +77,9 @@ def image_process(request):
         ri = ReceiptImage(path, filename)
         ri.processImage()
 
+        # Detect line
+        td = TextDetection(ri.wraped_url)
+        text_line_file_url = td.find()
 
 
         # result,data,stat = processImage(os.path.abspath(uploaded_file_url[1:]),method,lang,output_type,full_table, conf)
@@ -85,6 +88,7 @@ def image_process(request):
             'dilated_file_url':ri.dilated_url.replace("/code", ""),
             'drawed_file_url': ri.drawed_url.replace("/code", ""),
             'cropped_file_url': ri.wraped_url.replace("/code", ""),
+            'text_line_file_url':text_line_file_url,
             'status':ri.status 
         })
 

@@ -19,7 +19,7 @@ class ReceiptImage:
         self.status = False
 
         self.image = self.readImage()
-
+        self.orig = self.image.copy()
         path = os.path.dirname(url)
         print(path)
         # Save url
@@ -124,7 +124,7 @@ class ReceiptImage:
         else:
             self.status = True
 
-        self.warped = four_point_transform(self.image, rect.reshape(4, 2))
+        self.warped = four_point_transform(self.orig, rect.reshape(4, 2))
         self.saveImage()
 
     def saveImage(self):
