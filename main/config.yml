@@ -1,0 +1,5 @@
+IMAGE_CROPER:
+  MORPH: 9
+  CANNY: 84
+  HOUGH: 25
+  BLUR: 3

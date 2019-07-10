@@ -1,4 +1,4 @@
-Django==2.1.9
+Django==2.1.10
 django-cors-headers==2.4.0
 django-jet==1.0.8
 django-rest-auth==0.9.3
@@ -24,3 +24,6 @@ imutils
 opencv-python
 pandas
 Jinja2
+pyaml
+Cython
+tensorflow
