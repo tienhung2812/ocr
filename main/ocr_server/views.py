@@ -8,6 +8,7 @@ import os
 from image.process import ReceiptImage
 from text_detection.core.detector import TextDetection
 
+
 def processImage(file, method = 0, lang='vie', output_type = 'str', full_table = False, config='--oem 1'):
     if method == 1:
         con = M1(file = file, lang=lang , output_type=output_type, full_table=full_table ,config = config)
@@ -79,16 +80,18 @@ def image_process(request):
 
         # Detect line
         td = TextDetection(ri.wraped_url)
-        text_line_file_url = td.find()
-
-
+        text_line_file_image_url,text_line_file_box_url = td.find()
+        
+        # Croper image
+        cropped_image_array = ri.transformImage(text_line_file_box_url)
         # result,data,stat = processImage(os.path.abspath(uploaded_file_url[1:]),method,lang,output_type,full_table, conf)
         return render(request, 'ocr_server/image_process.html', {
             'uploaded_file_url': uploaded_file_url,
             'dilated_file_url':ri.dilated_url.replace("/code", ""),
             'drawed_file_url': ri.drawed_url.replace("/code", ""),
             'cropped_file_url': ri.wraped_url.replace("/code", ""),
-            'text_line_file_url':text_line_file_url,
+            'cropped_image_array': cropped_image_array,
+            'text_line_file_url':text_line_file_image_url,
             'status':ri.status 
         })
 

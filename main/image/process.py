@@ -2,6 +2,7 @@ import numpy as np
 import cv2 as cv
 import imutils
 import os
+import yaml
 from image.transform import *
 from image.crop import ImageCroper
 IMAGE_STOCK = '../../stock/receipt/'
@@ -17,7 +18,7 @@ class ReceiptImage:
         self.warped = None 
 
         self.status = False
-
+        self.filename = filename
         self.image = self.readImage()
         self.orig = self.image.copy()
         path = os.path.dirname(url)
@@ -26,6 +27,9 @@ class ReceiptImage:
         self.dilated_url = path+'/'+'dilated_'+filename
         self.drawed_url = path+'/'+'drawed_'+filename
         self.wraped_url = path +'/'+ 'wraped_'+filename
+
+        with open('config.yml', 'rb') as f:
+            self.conf = yaml.load(f.read())        
         
 
     def showImage(self, image=None, image_type = cv.IMREAD_UNCHANGED):
@@ -143,6 +147,79 @@ class ReceiptImage:
             [self.image.shape[1],0]            
             ]
             )
+
+    def rectCalibrate(self,nparray):
+        height, width, channels = self.orig.shape 
+        
+        CALIBRATE = self.conf['CALIBRATION']['RATE']
+        print("OLD %s",nparray)
+        # result = []
+        if self.conf['CALIBRATION']['ENABLE']:
+            for i in range(0,len(nparray)):
+                if i%2 == 0 :
+                    cont = width
+                else:
+                    cont = height
+
+                if (int(i/2)) == 0:
+                    newvalue = nparray[i] - int(cont*CALIBRATE)
+                elif (int(i/2)) == 1:
+                    if i%2==0:
+                        newvalue = nparray[i] + int(cont*CALIBRATE)
+                    else:
+                        newvalue = nparray[i] - int(cont*CALIBRATE)
+                elif (int(i/2)) == 3:
+                    if i%2==0:
+                        newvalue = nparray[i] - int(cont*CALIBRATE)
+                    else:
+                        newvalue = nparray[i] + int(cont*CALIBRATE)
+                else:
+                    newvalue = nparray[i] + int(cont*CALIBRATE)
+
+                if (i%2) == 0:
+                    # x
+                    if newvalue <= 0 or newvalue >= width:
+                        continue
+                else:
+                    # y
+                    if newvalue <= 0 or newvalue >= height:
+                        continue
+                nparray[i] = newvalue
+            # for j in range(0,len(nparray[i])):
+            #     print(nparray[i][j])
+        print("NEW %s",nparray)
+        return nparray
+
+    def getNumPyfromConner(self,array):
+        return np.array([
+            [array[0], array[1]], 
+            [array[2],array[3]],
+            [array[4], array[5]],
+            [array[6],array[7]]            
+            ]
+            )
+
+    def transformImage(self,text_file):
+        result = []
+        path = os.path.dirname(self.url)
+        file = open(text_file, "r") 
+        i = 0
+        for line in file: 
+            filename = path+'/'+'croped_'+str(i)+'_'+self.filename
+            array = line.split(',')[:-1]
+            array = list(map(int, array))
+            
+            array = self.rectCalibrate(array)
+            rect = self.getNumPyfromConner(array)
+            image = four_point_transform(self.orig, rect.reshape(4, 2))
+            cv.imwrite(filename, image)
+            replace_filename= filename.replace("/code", "")
+            result.append(replace_filename)
+
+            i+=1
+
+        return result
+        # saved_path = 
     
 
 # ri = ReceiptImage('1.jpeg')

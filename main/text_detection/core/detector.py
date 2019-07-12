@@ -108,13 +108,13 @@ class TextDetection:
                                 thickness=2)
                 img = cv2.resize(img, None, None, fx=1.0 / rh, fy=1.0 / rw, interpolation=cv2.INTER_LINEAR)
 
-                result_path = os.path.join(FLAGS.output_path, os.path.basename(im_fn))
-                cv2.imwrite(result_path, img[:, :, ::-1])
+                image_result_path = os.path.join(FLAGS.output_path, os.path.basename(im_fn))
+                box_result_path = os.path.join(FLAGS.output_path, os.path.splitext(os.path.basename(im_fn))[0]) + ".txt"
+                cv2.imwrite(image_result_path, img[:, :, ::-1])
 
-                with open(os.path.join(FLAGS.output_path, os.path.splitext(os.path.basename(im_fn))[0]) + ".txt",
-                        "w") as f:
+                with open(box_result_path, "w") as f:
                     for i, box in enumerate(boxes):
                         line = ",".join(str(box[k]) for k in range(8))
                         line += "," + str(scores[i]) + "\r\n"
                         f.writelines(line)
-                return result_path
+                return image_result_path,  box_result_path

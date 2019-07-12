@@ -84,6 +84,18 @@
 				</div>
 
 			</div>
+			<div class="col-12">
+				<h3>6. Cropped Image</h3>
+				<div class="image">
+					{% if cropped_image_array %}
+						{% for e in cropped_image_array %}
+						   <img style="max-width: 570px;" src="{{e}}" />
+						{% endfor %}
+					 {% endif %}
+				</div>
+
+			</div>
+
 
 			
 		</div>
