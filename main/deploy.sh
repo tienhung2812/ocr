@@ -1,6 +1,6 @@
 #! /bin/bash
 
-cd main
+# cd main
 
 # docker build --tag web_image .
 

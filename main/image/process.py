@@ -209,7 +209,7 @@ class ReceiptImage:
             array = line.split(',')[:-1]
             array = list(map(int, array))
             
-            array = self.rectCalibrate(array)
+            # array = self.rectCalibrate(array)
             rect = self.getNumPyfromConner(array)
             image = four_point_transform(self.orig, rect.reshape(4, 2))
             cv.imwrite(filename, image)
