@@ -86,10 +86,10 @@
 			</div>
 			<div class="col-12" style="width: 100% !important">
 				<h3>6. Cropped Image</h3>
-				<div class="image" style="display: inline-block;">
+				<div class="image" style="display: inline-block; ">
 					{% if cropped_image_array %}
 						{% for e in groupResult %}
-							<div style="max-width: 570px; border-style: solid; margin: 2px; display: inline-block;">						
+							<div style="max-width: 570px; border-style: solid; margin: 2px; display: inline-block; padding: 0 5px">						
 								<img style="max-width: 570px; border-style: solid; margin: 2px; border-color: lawngreen" src="{{e.image}}" />
 								<p>
 									<p><b>Text: </b>{{e.text}}</p>
