@@ -26,7 +26,10 @@ class TextDetection:
     def __init__(self,image_path):
         self.image_path = image_path
         self.global_step = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
-
+        readimage = cv2.imread(self.image_path,0)
+        img, (rh, rw) = self.resize_image(readimage)
+        kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
+        self.orig = cv2.filter2D(img, -1, kernel)
 
     def resize_image(self,img):
         img_size = img.shape
@@ -49,6 +52,8 @@ class TextDetection:
         with tf.variable_scope("get_global_step", reuse=tf.AUTO_REUSE):
             v = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
         return v
+
+    
 
 
     def find(self):
@@ -114,7 +119,7 @@ class TextDetection:
 
                     filename ='/code/media/'+'croped_'+str(i)+'_'+str(ts)+'.png'
 
-                    image = four_point_transform(img, box[:8].reshape(4, 2))
+                    image = four_point_transform(self.orig, box[:8].reshape(4, 2))
                     cv2.imwrite(filename, image)
                     replace_filename= filename.replace("/code", "")
                     cropped_image_file_list.append(replace_filename)
