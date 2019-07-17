@@ -114,7 +114,7 @@ class ReceiptImage:
         print(self.url)
         print(os.path.isfile(self.url))
         self.image = cv.imread(self.url, 0)
-        print(self.image)
+        # print(self.image)
         ic = ImageCroper(self.image)
         rect = ic.findPaper()
 
@@ -208,7 +208,20 @@ class ReceiptImage:
             filename = path+'/'+'croped_'+str(i)+'_'+self.filename
             array = line.split(',')[:-1]
             array = list(map(int, array))
-            
+
+            filetest = path+'/'+'croped_tested'+str(i)+'_'+self.filename
+            imagetest = self.orig.copy()
+
+            pts = np.array(array[:8], np.int32)
+            pts = pts.reshape((-1,1,2))
+
+            cv2.polylines(imagetest, [pts], True, color=(0, 255, 0),
+                                thickness=2)
+            cv.imwrite(filetest, imagetest)
+            replace_filename= filetest.replace("/code", "")
+            result.append(replace_filename)
+
+
             # array = self.rectCalibrate(array)
             rect = self.getNumPyfromConner(array)
             image = four_point_transform(self.orig, rect.reshape(4, 2))
@@ -219,6 +232,31 @@ class ReceiptImage:
             i+=1
 
         return result
+
+    def transformImageByBoxes(self,boxes):
+        result = []
+        path = os.path.dirname(self.url)
+
+        for i, box in enumerate(boxes):
+            filename = path+'/'+'croped_'+str(i)+'_'+self.filename
+
+            filetest = path+'/'+'croped_tested'+str(i)+'_'+self.filename
+            imagetest = self.orig.copy()
+            cv2.polylines(imagetest, [box[:8].astype(np.int32).reshape((-1, 1, 2))], True, color=(0, 255, 0),
+                            thickness=2)
+            # imagetest = cv2.resize(imagetest, None, None, fx=1.0 / rh, fy=1.0 / rw, interpolation=cv2.INTER_LINEAR)
+            cv.imwrite(filetest, imagetest)
+            replace_filename= filetest.replace("/code", "")
+            result.append(replace_filename)
+
+
+            image = four_point_transform(self.orig, box[:8].reshape(4, 2))
+            cv.imwrite(filename, image)
+            replace_filename= filename.replace("/code", "")
+            result.append(replace_filename)
+        
+        return result
+
         # saved_path = 
     
 

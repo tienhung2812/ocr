@@ -17,7 +17,6 @@ print('Total number of outputs : ', nClasses)
 print('Output classes : ', classes)
 
 plt.figure(figsize=[5,5])
-
 # Display the first image in training data
 plt.subplot(121)
 plt.imshow(train_X[0,:,:], cmap='gray')

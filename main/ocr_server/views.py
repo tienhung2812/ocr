@@ -80,10 +80,13 @@ def image_process(request):
 
         # Detect line
         td = TextDetection(ri.wraped_url)
-        text_line_file_image_url,text_line_file_box_url = td.find()
+        text_line_file_image_url,text_line_file_box_url, cropped_image_array = td.find()
         
-        # Croper image
-        cropped_image_array = ri.transformImage(text_line_file_box_url)
+        # # Croper image
+        # cropped_image_array = ri.transformImage(text_line_file_box_url)
+        
+        # cropped_image_array_by_box = ri.transformImageByBoxes(boxes)
+
         # result,data,stat = processImage(os.path.abspath(uploaded_file_url[1:]),method,lang,output_type,full_table, conf)
         return render(request, 'ocr_server/image_process.html', {
             'uploaded_file_url': uploaded_file_url,

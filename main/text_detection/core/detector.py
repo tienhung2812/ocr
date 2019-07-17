@@ -13,6 +13,10 @@ from text_detection.nets import model_train as model
 from text_detection.utils.rpn_msr.proposal_layer import proposal_layer
 from text_detection.utils.text_connector.detectors import TextDetector
 
+from image.transform import *
+import calendar;
+import time;
+
 tf.app.flags.DEFINE_string('output_path', 'media/res/', '')
 tf.app.flags.DEFINE_string('gpu', '0', '')
 tf.app.flags.DEFINE_string('checkpoint_path', 'text_detection/checkpoints_mlt/', '')
@@ -103,18 +107,31 @@ class TextDetection:
                 cost_time = (time.time() - start)
                 print("cost time: {:.2f}s".format(cost_time))
 
+                cropped_image_file_list = []
+                for i, box in enumerate(boxes):
+                    
+                    ts = calendar.timegm(time.gmtime())
+
+                    filename ='/code/media/'+'croped_'+str(i)+'_'+str(ts)+'.png'
+
+                    image = four_point_transform(img, box[:8].reshape(4, 2))
+                    cv2.imwrite(filename, image)
+                    replace_filename= filename.replace("/code", "")
+                    cropped_image_file_list.append(replace_filename)
+                    
                 for i, box in enumerate(boxes):
                     cv2.polylines(img, [box[:8].astype(np.int32).reshape((-1, 1, 2))], True, color=(0, 255, 0),
                                 thickness=2)
+
                 img = cv2.resize(img, None, None, fx=1.0 / rh, fy=1.0 / rw, interpolation=cv2.INTER_LINEAR)
 
                 image_result_path = os.path.join(FLAGS.output_path, os.path.basename(im_fn))
                 box_result_path = os.path.join(FLAGS.output_path, os.path.splitext(os.path.basename(im_fn))[0]) + ".txt"
                 cv2.imwrite(image_result_path, img[:, :, ::-1])
-
+                print(box_result_path)
                 with open(box_result_path, "w") as f:
                     for i, box in enumerate(boxes):
                         line = ",".join(str(box[k]) for k in range(8))
                         line += "," + str(scores[i]) + "\r\n"
                         f.writelines(line)
-                return image_result_path,  box_result_path
+                return image_result_path,  box_result_path, cropped_image_file_list
