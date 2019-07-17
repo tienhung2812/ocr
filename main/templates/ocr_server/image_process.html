@@ -19,7 +19,7 @@
 		crossorigin="anonymous"></script>
 </head>
 <style>
-	.col-6,.col,.col-12 {
+	.col-6,.col{
 		padding-top: 40px;
 		max-width: 570px;
 	}
@@ -84,12 +84,18 @@
 				</div>
 
 			</div>
-			<div class="col-12">
+			<div class="col-12" style="width: 100% !important">
 				<h3>6. Cropped Image</h3>
-				<div class="image">
+				<div class="image" style="display: inline-block; ">
 					{% if cropped_image_array %}
-						{% for e in cropped_image_array %}
-						   <img style="max-width: 570px; border-style: solid; margin: 2px;" src="{{e}}" />
+						{% for e in groupResult %}
+							<div style="max-width: 570px; border-style: solid; margin: 2px; display: inline-block; padding: 0 5px">						
+								<img style="max-width: 570px; border-style: solid; margin: 2px; border-color: lawngreen" src="{{e.image}}" />
+								<p>
+									<p><b>Text: </b>{{e.text}}</p>
+									<p><b>Conf: </b>{{e.conf}}</p>
+								</p>
+							</div>
 						{% endfor %}
 					 {% endif %}
 				</div>

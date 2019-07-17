@@ -7,7 +7,7 @@ import pandas
 import os
 from image.process import ReceiptImage
 from text_detection.core.detector import TextDetection
-
+from text_recognization.text_recognizance import TextRecognizance
 
 def processImage(file, method = 0, lang='vie', output_type = 'str', full_table = False, config='--oem 1'):
     if method == 1:
@@ -82,6 +82,17 @@ def image_process(request):
         td = TextDetection(ri.wraped_url)
         text_line_file_image_url,text_line_file_box_url, cropped_image_array = td.find()
         
+        tr = TextRecognizance(cropped_image_array)
+
+        text_result = tr.detect_array()
+        
+        groupResult = []
+        for i in range(0,len(cropped_image_array)):
+            groupResult.append({
+                "image":cropped_image_array[i],
+                "text":text_result[i]['text'],
+                "conf": text_result[i]['conf'],
+            })
         # # Croper image
         # cropped_image_array = ri.transformImage(text_line_file_box_url)
         
@@ -95,6 +106,7 @@ def image_process(request):
             'cropped_file_url': ri.wraped_url.replace("/code", ""),
             'cropped_image_array': cropped_image_array,
             'text_line_file_url':text_line_file_image_url,
+            'groupResult':groupResult,
             'status':ri.status 
         })
 
