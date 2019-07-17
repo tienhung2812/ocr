@@ -53,7 +53,38 @@ class TextDetection:
             v = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
         return v
 
-    
+    def apply_thresholding(self,img):
+        # img = cv2.imread('noisy2.png',0)
+        blur = cv2.GaussianBlur(img,(5,5),0)
+        ret, image = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)    
+        # ret, image = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
+        return image
+
+    def apply_brightness_contrast(self,input_img, brightness = 0, contrast = 30):
+
+        if brightness != 0:
+            if brightness > 0:
+                shadow = brightness
+                highlight = 255
+            else:
+                shadow = 0
+                highlight = 255 + brightness
+            alpha_b = (highlight - shadow)/255
+            gamma_b = shadow
+
+            buf = cv2.addWeighted(input_img, alpha_b, input_img, 0, gamma_b)
+        else:
+            buf = input_img.copy()
+
+        if contrast != 0:
+            f = 131*(contrast + 127)/(127*(131-contrast))
+            alpha_c = f
+            gamma_c = 127*(1-f)
+
+            buf = cv2.addWeighted(buf, alpha_c, buf, 0, gamma_c)
+
+        return buf
+
 
 
     def find(self):
@@ -120,6 +151,8 @@ class TextDetection:
                     filename ='/code/media/'+'croped_'+str(i)+'_'+str(ts)+'.png'
 
                     image = four_point_transform(self.orig, box[:8].reshape(4, 2))
+                    # image = self.apply_thresholding(image)
+                    image = self.apply_brightness_contrast(image)
                     cv2.imwrite(filename, image)
                     replace_filename= filename.replace("/code", "")
                     cropped_image_file_list.append(replace_filename)

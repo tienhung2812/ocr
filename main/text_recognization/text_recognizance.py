@@ -32,6 +32,9 @@ class TextRecognizance:
             "conf":conf
         }
 
+
+        # print thresh,ret
+
     def detect_array(self):
         print('====== TEXT RECOGNIZE =====')
         result = []
