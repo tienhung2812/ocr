@@ -7,6 +7,7 @@ import time
 import cv2
 import numpy as np
 import tensorflow as tf
+import pandas as pd
 
 sys.path.append(os.getcwd())
 from text_detection.nets import model_train as model
@@ -85,7 +86,24 @@ class TextDetection:
 
         return buf
 
+    def box_sort(self,boxes):
+        numpy_array = np.array(boxes)
+        df = pd.DataFrame(data=numpy_array, dtype=np.int)
+        df = df.sort_values(by=[1,0])
+        return df.to_numpy()
 
+    def image_skewer(self, img, angle=1):
+        if angle < -45:
+            angle = -(90 + angle)
+        else:
+            angle = -angle
+        (h, w) = img.shape[:2]
+        center = (w // 2, h // 2)
+        M = cv2.getRotationMatrix2D(center, angle, 1.0)
+        rotated = cv2.warpAffine(img, M, (w, h),
+            flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+
+        return rotated
 
     def find(self):
         if os.path.exists(FLAGS.output_path):
@@ -126,6 +144,10 @@ class TextDetection:
                     return None
 
                 img, (rh, rw) = self.resize_image(im)
+                
+                # Skew image
+                img = self.image_skewer(img)
+
                 h, w, c = img.shape
                 im_info = np.array([h, w, c]).reshape([1, 3])
                 bbox_pred_val, cls_prob_val = sess.run([bbox_pred, cls_prob],
@@ -139,10 +161,10 @@ class TextDetection:
                 textdetector = TextDetector(DETECT_MODE='H')
                 boxes = textdetector.detect(textsegs, scores[:, np.newaxis], img.shape[:2])
                 boxes = np.array(boxes, dtype=np.int)
-
+                boxes = self.box_sort(boxes)
                 cost_time = (time.time() - start)
                 print("cost time: {:.2f}s".format(cost_time))
-
+                cv2.imwrite('/code/media/original_image.png', self.orig)
                 cropped_image_file_list = []
                 for i, box in enumerate(boxes):
                     
@@ -158,6 +180,7 @@ class TextDetection:
                     cropped_image_file_list.append(replace_filename)
                     
                 for i, box in enumerate(boxes):
+                    cv2.putText(img,str(i),(box[6],box[7]), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,0,0),2,cv2.LINE_AA)
                     cv2.polylines(img, [box[:8].astype(np.int32).reshape((-1, 1, 2))], True, color=(0, 255, 0),
                                 thickness=2)
 
