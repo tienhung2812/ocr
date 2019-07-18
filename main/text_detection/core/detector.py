@@ -29,6 +29,8 @@ class TextDetection:
         self.global_step = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
         readimage = cv2.imread(self.image_path,0)
         img, (rh, rw) = self.resize_image(readimage)
+
+        #Sharpening image
         kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
         self.orig = cv2.filter2D(img, -1, kernel)
 
@@ -61,7 +63,7 @@ class TextDetection:
         # ret, image = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
         return image
 
-    def apply_brightness_contrast(self,input_img, brightness = 0, contrast = 30):
+    def apply_brightness_contrast(self,input_img, brightness = 0, contrast = 35):
 
         if brightness != 0:
             if brightness > 0:

@@ -35,7 +35,7 @@ gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 gray = cv2.bitwise_not(gray)
 thresh = cv2.threshold(gray, 0, 255,
 	cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-
+afterthresh = cv2.bitwise_not(thresh)
 coords = np.column_stack(np.where(thresh > 0))
 angle = 1
 
@@ -54,7 +54,7 @@ cv2.putText(rotated, "Angle: {:.2f} degrees".format(angle),
 # show the output image
 print("[INFO] angle: {:.3f}".format(angle))
 cv2.imshow("Input", img)
-cv2.imshow("thresh", thresh)
+cv2.imshow("thresh", afterthresh)
 cv2.imshow("Rotated", rotated)
 cv2.waitKey(0)
 
