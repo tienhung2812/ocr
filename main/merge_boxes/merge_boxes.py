@@ -1,26 +1,7 @@
 #starting here
 import pandas as pd
 import numpy as np
-
-
-
-def getBoxes():
-    file = open("sample.txt", "r") 
-    boxes = []
-    for line in file.readlines():
-        # print(line)
-        # print(line.split(','))
-        a = []
-        for thing in line.split(','):
-            if thing == '\n':
-                continue
-            else:
-                num = float(thing)
-                if round(num) == num:
-                    a.append(int(num))
-        
-        boxes.append(a)
-    return boxes
+import cv2
 
 def convertBoxesToPandas(boxes):
     numpy_array = np.array(boxes)
@@ -143,9 +124,9 @@ def mergeTwoBoxes(box1,box2):
     return left,top,right,top,right,bottom,left,bottom
 
 
-def mergeBoxes(img,boxes, printOut = True, deleteConflict = False):
+def mergeBoxes(img,boxes,HORIZONTAL_PERCENT = 0.52, printOut = True, deleteConflict = False):
     # PERCENT SETTING
-    HORIZONTAL_PERCENT = 0.52
+    # HORIZONTAL_PERCENT = 0.52
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     w,h = img.shape
@@ -197,89 +178,14 @@ def mergeBoxes(img,boxes, printOut = True, deleteConflict = False):
                             added_index.append(index_e)
 
     if deleteConflict:
+        result = []
         for index, row in df.iterrows():
             if index not in added_index:
-                a.append(row)
-    return np.array(a)
-
-def getCheckVar(i,box,merged_box):
-    return box[i],box[i+1],merged_box[i],merged_box[i+1]
-
-def checkIsInBoxes(box,merged_box):
-    """
-    a--b
-    |  |
-    d--c
-    
-    0--1
-    |  |
-    3--2
-
-    x1,y1: box pt
-    x2,y2: merged_box pt
-    """
-
-
-    # Init variable
-    a = False
-    b = False
-    c = False
-    d = False
-
-    # Top left: i = 0, a
-    x1, y1, x2, y2 = getCheckVar(0,box,merged_box)
-    a = (x2 <= x1) and (y2 <= y1)
-
-    # Top right: i = 1, b
-    x1, y1, x2, y2 = getCheckVar(1,box,merged_box)
-    b = (x2 >= x1) and (y2 <= y1)
-
-    # Bottom right: i = 2, c
-    x1, y1, x2, y2 = getCheckVar(2,box,merged_box)
-    c = (x2 >= x1) and (y2 >= y1)
-
-    # Bottom left: i = 3, d
-    x1, y1, x2, y2 = getCheckVar(3,box,merged_box)
-    d = (x2 <= x1) and (y2 >= y1)
-
-    return (a and b and c and d)
-
-def removeConflictBoxes(boxes,merged_boxes):
-    boxes = pd.DataFrame(data=boxes,dtype=np.int) 
-    # print(merged_boxes)
-    merged_boxes = pd.DataFrame(data=merged_boxes,dtype=np.int)  
-
-    result = []
-    added_index = []
-    for index, box in boxes.iterrows():
-        add_box = None
-        for index_e, merged_box in merged_boxes.iterrows():
-            if checkIsInBoxes(box.values,merged_box.values):
-                add_box = merged_box
-                added_index.append(index)
-            elif index not in added_index:
-                add_box = box
-
-            if add_box:
-                add_box = add_box.tolist()
-                if add_box not in result:
-                    result.append(add_box)
-    
+                result.append((row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
+        result.extend(a)
+    else:
+        result = a
     return np.array(result)
 
-import cv2
-boxes = getBoxes()
-boxes = sortBoxes(boxes)
-img = cv2.imread('original_image.png')
-img = drawBox(img,boxes)
-merge_box = mergeBoxes(img,boxes)
-img = drawBox(img,merge_box, color=(255,0,0), puttext = False)
-
-merge_box = mergeBoxes(img,boxes,deleteConflict=True)
-img = drawBox(img,merge_box, color=(255,0,0), puttext = False)
-
-
-
-cv2.imshow('image',img)
-cv2.waitKey(0)
+ 
 

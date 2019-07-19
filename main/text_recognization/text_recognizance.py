@@ -28,6 +28,8 @@ class TextRecognizance:
 
         text = ' '.join(str(e) for e in data[data.text.notnull()].text)
         conf = data[data.text.notnull()]['conf'].mean()
+        if type(conf)==float: 
+            conf = 0
         return {
             "text":text,
             "conf":conf

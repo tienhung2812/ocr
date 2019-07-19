@@ -83,7 +83,7 @@ def image_process(request):
 
         # Detect line
         td = TextDetection(ri.wraped_url)
-        text_line_file_image_url,text_line_file_box_url, cropped_image_array = td.find()
+        text_line_file_image_url,final_text_line_file_image_url,text_line_file_box_url, cropped_image_array = td.find()
         
         # tr = TextRecognizance(cropped_image_array)
 
@@ -107,6 +107,7 @@ def image_process(request):
             'dilated_file_url':ri.dilated_url.replace("/code", ""),
             'drawed_file_url': ri.drawed_url.replace("/code", ""),
             'cropped_file_url': ri.wraped_url.replace("/code", ""),
+            'final_text_line_file_image_url':final_text_line_file_image_url.replace("/code", ""),
             'cropped_image_array': cropped_image_array,
             'text_line_file_url':text_line_file_image_url,
             'status':ri.status 

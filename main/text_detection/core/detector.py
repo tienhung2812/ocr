@@ -3,7 +3,7 @@ import os
 import shutil
 import sys
 import time
-
+import yaml
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -13,7 +13,7 @@ sys.path.append(os.getcwd())
 from text_detection.nets import model_train as model
 from text_detection.utils.rpn_msr.proposal_layer import proposal_layer
 from text_detection.utils.text_connector.detectors import TextDetector
-
+from merge_boxes import merge_boxes
 from image.transform import *
 import calendar;
 import time;
@@ -24,15 +24,20 @@ tf.app.flags.DEFINE_string('checkpoint_path', 'text_detection/checkpoints_mlt/',
 FLAGS = tf.app.flags.FLAGS
 
 class TextDetection:
-    def __init__(self,image_path):
+    def __init__(self,image_path,cut_final_box=True):
         self.image_path = image_path
         self.global_step = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
         readimage = cv2.imread(self.image_path,0)
         img, (rh, rw) = self.resize_image(readimage)
 
+        self.cut_final_box = cut_final_box
+
         #Sharpening image
         kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
         self.orig = cv2.filter2D(img, -1, kernel)
+
+        with open('config.yml', 'rb') as f:
+            self.conf = yaml.load(f.read())
 
     def resize_image(self,img):
         img_size = img.shape
@@ -164,11 +169,21 @@ class TextDetection:
                 boxes = textdetector.detect(textsegs, scores[:, np.newaxis], img.shape[:2])
                 boxes = np.array(boxes, dtype=np.int)
                 boxes = self.box_sort(boxes)
+                merge_param = self.conf['HORIZONTAL_DETECT']['RATE']
+                merged_boxes = merge_boxes.mergeBoxes(img,boxes,HORIZONTAL_PERCENT = merge_param,printOut = False)
+
+                final_boxes = merge_boxes.mergeBoxes(img,boxes,HORIZONTAL_PERCENT = merge_param,printOut = False, deleteConflict=True)
+                # print(type(boxes[0]))
+                # print(type(merged_boxes[0]))
+                # print(type(final_boxes[0]))
                 cost_time = (time.time() - start)
                 print("cost time: {:.2f}s".format(cost_time))
                 cv2.imwrite('/code/media/original_image.png', self.orig)
                 cropped_image_file_list = []
-                for i, box in enumerate(boxes):
+                cut_boxes = boxes
+                if self.cut_final_box:
+                    cut_boxes = final_boxes
+                for i, box in enumerate(cut_boxes):
                     
                     ts = calendar.timegm(time.gmtime())
 
@@ -180,21 +195,40 @@ class TextDetection:
                     cv2.imwrite(filename, image)
                     replace_filename= filename.replace("/code", "")
                     cropped_image_file_list.append(replace_filename)
-                    
+
+                #print Box  
                 for i, box in enumerate(boxes):
                     cv2.putText(img,str(i),(box[6],box[7]), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,0,0),2,cv2.LINE_AA)
                     cv2.polylines(img, [box[:8].astype(np.int32).reshape((-1, 1, 2))], True, color=(0, 255, 0),
+                                thickness=2)
+                #print mergeBoxes
+                for i, box in enumerate(merged_boxes):
+                    # print(box)
+                    # cv2.putText(img,str(i),(box[6],box[7]), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,255),2,cv2.LINE_AA)
+                    cv2.polylines(img, [box[:8].astype(np.int32).reshape((-1, 1, 2))], True, color=(0, 0, 255),
+                                thickness=2)
+
+                #print mergeBoxes
+                final_img = self.orig.copy()
+                for i, box in enumerate(final_boxes):
+                    # print(box)
+                    # cv2.putText(img,str(i),(box[6],box[7]), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,255),2,cv2.LINE_AA)
+                    cv2.polylines(final_img, [box[:8].astype(np.int32).reshape((-1, 1, 2))], True, color=(0, 0, 255),
                                 thickness=2)
 
                 img = cv2.resize(img, None, None, fx=1.0 / rh, fy=1.0 / rw, interpolation=cv2.INTER_LINEAR)
 
                 image_result_path = os.path.join(FLAGS.output_path, os.path.basename(im_fn))
+                ts = calendar.timegm(time.gmtime())
+                final_image_result_path = '/code/media/final_'+str(ts)+ os.path.basename(im_fn)
+                
                 box_result_path = os.path.join(FLAGS.output_path, os.path.splitext(os.path.basename(im_fn))[0]) + ".txt"
                 cv2.imwrite(image_result_path, img[:, :, ::-1])
+                cv2.imwrite(final_image_result_path,final_img)
                 print(box_result_path)
                 with open(box_result_path, "w") as f:
                     for i, box in enumerate(boxes):
                         line = ",".join(str(box[k]) for k in range(8))
                         line += "," + str(scores[i]) + "\r\n"
                         f.writelines(line)
-                return image_result_path,  box_result_path, cropped_image_file_list
+                return image_result_path, final_image_result_path, box_result_path, cropped_image_file_list
