@@ -36,6 +36,9 @@ class TextDetection:
         kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
         self.orig = cv2.filter2D(img, -1, kernel)
 
+        colorReadimage = cv2.imread(self.image_path)
+        self.origcolor, (rh, rw) = self.resize_image(colorReadimage)
+
         with open('config.yml', 'rb') as f:
             self.conf = yaml.load(f.read())
 
@@ -170,9 +173,14 @@ class TextDetection:
                 boxes = np.array(boxes, dtype=np.int)
                 boxes = self.box_sort(boxes)
                 merge_param = self.conf['HORIZONTAL_DETECT']['RATE']
+                #Merged Box
                 merged_boxes = merge_boxes.mergeBoxes(img,boxes,HORIZONTAL_PERCENT = merge_param,printOut = False)
+                merged_boxes = self.box_sort(merged_boxes)
 
+                #Final merged box (add all)
                 final_boxes = merge_boxes.mergeBoxes(img,boxes,HORIZONTAL_PERCENT = merge_param,printOut = False, deleteConflict=True)
+                final_boxes = self.box_sort(final_boxes)
+
                 # print(type(boxes[0]))
                 # print(type(merged_boxes[0]))
                 # print(type(final_boxes[0]))
@@ -209,11 +217,10 @@ class TextDetection:
                                 thickness=2)
 
                 #print mergeBoxes
-                final_img = self.orig.copy()
                 for i, box in enumerate(final_boxes):
                     # print(box)
-                    # cv2.putText(img,str(i),(box[6],box[7]), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,255),2,cv2.LINE_AA)
-                    cv2.polylines(final_img, [box[:8].astype(np.int32).reshape((-1, 1, 2))], True, color=(0, 0, 255),
+                    cv2.putText(self.origcolor,str(i),(box[6],box[7]), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,255),2,cv2.LINE_AA)
+                    cv2.polylines(self.origcolor, [box[:8].astype(np.int32).reshape((-1, 1, 2))], True, color=(0, 255, 0),
                                 thickness=2)
 
                 img = cv2.resize(img, None, None, fx=1.0 / rh, fy=1.0 / rw, interpolation=cv2.INTER_LINEAR)
@@ -224,7 +231,7 @@ class TextDetection:
                 
                 box_result_path = os.path.join(FLAGS.output_path, os.path.splitext(os.path.basename(im_fn))[0]) + ".txt"
                 cv2.imwrite(image_result_path, img[:, :, ::-1])
-                cv2.imwrite(final_image_result_path,final_img)
+                cv2.imwrite(final_image_result_path,self.origcolor)
                 print(box_result_path)
                 with open(box_result_path, "w") as f:
                     for i, box in enumerate(boxes):

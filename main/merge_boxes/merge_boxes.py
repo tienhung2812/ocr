@@ -124,15 +124,15 @@ def mergeTwoBoxes(box1,box2):
     return left,top,right,top,right,bottom,left,bottom
 
 
-def mergeBoxes(img,boxes,HORIZONTAL_PERCENT = 0.52, printOut = True, deleteConflict = False):
+def mergeBoxes(img,boxes,HORIZONTAL_PERCENT = 0.52, printOut = True, deleteConflict = False, getArray = False, run_fully_merge = True):
     # PERCENT SETTING
     # HORIZONTAL_PERCENT = 0.52
-
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    if img.ndim >2:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     w,h = img.shape
 
     df = convertBoxesToPandas(boxes)
-    mergeBoxes = pd.DataFrame(None,columns=range(0,8))
+    # mergeBoxes = pd.DataFrame(None,columns=range(0,8))
     
     #SETTING MERGE COLUMN
     merge_column = 1,3
@@ -176,7 +176,6 @@ def mergeBoxes(img,boxes,HORIZONTAL_PERCENT = 0.52, printOut = True, deleteConfl
                             a.append(mergeTwoBoxes(row.values,row_e.values))   
                         if index_e not in added_index:
                             added_index.append(index_e)
-
     if deleteConflict:
         result = []
         for index, row in df.iterrows():
@@ -185,7 +184,38 @@ def mergeBoxes(img,boxes,HORIZONTAL_PERCENT = 0.52, printOut = True, deleteConfl
         result.extend(a)
     else:
         result = a
+
+    # Fully merge   
+    if run_fully_merge:
+        print("Merged box: %d"%len(a))
+        if len(a) > 0:
+            fully_merge = False
+            print("Boxes: %d"%len(boxes))
+            print("Result: %d"%len(result))
+            new_a = result
+            while not fully_merge:
+                old_a = np.array(new_a)
+                new_a = mergeBoxes(img,old_a,HORIZONTAL_PERCENT = HORIZONTAL_PERCENT,printOut = True, deleteConflict=True,getArray = True, run_fully_merge=False)
+                print("old_a: %d" %len(old_a))
+                print("new_a: %d" %len(new_a))
+                if len(old_a) == len(new_a):
+                    fully_merge = True
+                    result = new_a
+        
+        # while not fully_merge:
+        #     old_a = np.array(result)
+        #     new_a = mergeBoxes(img,old_a,HORIZONTAL_PERCENT = HORIZONTAL_PERCENT,printOut = False, deleteConflict=True,getArray = True)
+        #     print("Fully Merge")
+        #     print(len(old_a))
+        #     print(len(new_a))
+        #     if len(new_a) == len(old_a):
+        #         fully_merge = True
+
+
+    # if not getArray:
     return np.array(result)
+    # else:
+        # return result
 
  
 
