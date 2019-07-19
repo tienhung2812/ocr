@@ -1,13 +1,16 @@
-from django.shortcuts import render
-from django.template import loader
-from django.http import HttpResponse
+import os
+
+import pandas
+
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-import pandas
-import os
+from django.http import HttpResponse, JsonResponse,HttpResponseRedirect
+from django.shortcuts import render
+from django.template import loader
 from image.process import ReceiptImage
 from text_detection.core.detector import TextDetection
 from text_recognization.text_recognizance import TextRecognizance
+
 
 def processImage(file, method = 0, lang='vie', output_type = 'str', full_table = False, config='--oem 1'):
     if method == 1:
@@ -80,19 +83,19 @@ def image_process(request):
 
         # Detect line
         td = TextDetection(ri.wraped_url)
-        text_line_file_image_url,text_line_file_box_url, cropped_image_array = td.find()
+        text_line_file_image_url,final_text_line_file_image_url,text_line_file_box_url, cropped_image_array = td.find()
         
-        tr = TextRecognizance(cropped_image_array)
+        # tr = TextRecognizance(cropped_image_array)
 
-        text_result = tr.detect_array()
+        # text_result = tr.detect_array()
         
-        groupResult = []
-        for i in range(0,len(cropped_image_array)):
-            groupResult.append({
-                "image":cropped_image_array[i],
-                "text":text_result[i]['text'],
-                "conf": text_result[i]['conf'],
-            })
+        # groupResult = []
+        # for i in range(0,len(cropped_image_array)):
+        #     groupResult.append({
+        #         "image":cropped_image_array[i],
+        #         "text":text_result[i]['text'],
+        #         "conf": text_result[i]['conf'],
+        #     })
         # # Croper image
         # cropped_image_array = ri.transformImage(text_line_file_box_url)
         
@@ -104,9 +107,9 @@ def image_process(request):
             'dilated_file_url':ri.dilated_url.replace("/code", ""),
             'drawed_file_url': ri.drawed_url.replace("/code", ""),
             'cropped_file_url': ri.wraped_url.replace("/code", ""),
+            'final_text_line_file_image_url':final_text_line_file_image_url.replace("/code", ""),
             'cropped_image_array': cropped_image_array,
             'text_line_file_url':text_line_file_image_url,
-            'groupResult':groupResult,
             'status':ri.status 
         })
 
@@ -116,3 +119,13 @@ def image_process(request):
  
     }
     return HttpResponse(template.render(context, request))
+
+
+def text_recognization(request):
+    if request.method == 'POST':
+        tr = TextRecognizance(image_url=request.POST.get('url'))
+
+        text_result = tr.detect_image()
+        return JsonResponse(text_result)
+    else:
+        return HttpResponseRedirect("/")

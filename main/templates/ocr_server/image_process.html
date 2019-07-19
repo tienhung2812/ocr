@@ -17,6 +17,7 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 		crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <style>
 	.col-6,.col{
@@ -53,13 +54,13 @@
 
 			</div>
 
-			<div class="col-6">
+			<!-- <div class="col-6">
 				<h3>2. Dilated Image</h3>
 				<div class="image">
 					<img style="max-width: 570px;" src="{{ dilated_file_url }}" />
 				</div>
 
-			</div>
+			</div> -->
 
 			<div class="col-6">
 				<h3>3. Drawed Image</h3>
@@ -84,16 +85,22 @@
 				</div>
 
 			</div>
+			<div class="col-6">
+				<h3>6. Merged Text Line detection</h3>
+				<div class="image">
+					<img style="max-width: 570px;" src="{{ final_text_line_file_image_url }}" />
+				</div>
+
+			</div>
 			<div class="col-12" style="width: 100% !important">
-				<h3>6. Cropped Image</h3>
+				<h3>7. Cropped Image</h3>
 				<div class="image" style="display: inline-block; ">
 					{% if cropped_image_array %}
-						{% for e in groupResult %}
-							<div style="max-width: 570px; border-style: solid; margin: 2px; display: inline-block; padding: 0 5px">						
-								<img style="max-width: 570px; border-style: solid; margin: 2px; border-color: lawngreen" src="{{e.image}}" />
-								<p>
-									<p><b>Text: </b>{{e.text}}</p>
-									<p><b>Conf: </b>{{e.conf}}</p>
+						{% for e in cropped_image_array %}
+							<div style="max-width: 570px; border-style: solid; margin: 2px; display: inline-block; padding: 0 5px" class="cropped_result">						
+								<img class="image_inside" style="max-width: 570px; border-style: solid; margin: 2px; border-color: lawngreen" src="{{e}}" />
+								<p class="result">
+									
 								</p>
 							</div>
 						{% endfor %}
@@ -108,7 +115,77 @@
 	</div>
 
 
-
+	
 </body>
+<script type="text/javascript"> 
+	var cropped = document.getElementsByClassName("cropped_result");
 
+	var i = 0;
+
+	function next(i){
+		if(i < cropped.length){
+			obj = cropped[i]
+			var source = obj.getElementsByClassName('image_inside')[0].src.replace(window.location.href,"");
+			var resultdiv = obj.getElementsByClassName('result')[0];
+			resultdiv.style.textAlign = "center"
+			resultdiv.innerHTML = '<img style="max-width: 100%px"; src="http://smallenvelop.com/wp-content/uploads/2014/08/Preloader_41.gif" />'
+			$.post(window.location.href +"text_recognization",
+			{
+				url: source,
+				csrfmiddlewaretoken: '{{ csrf_token }}'
+			},
+			function(data, status){
+				console.log("Data: " + data.text + "\nStatus: " + status);
+				var resultdiv = obj.getElementsByClassName('result')[0];
+				if(!isNaN(data.conf))
+					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><b>Conf: </b>'+data.conf+'</p>';
+				else{
+					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><b>Conf: </b>'+0+'</p>';
+				}
+				i += 1;
+				next(i);
+			});
+		}
+	}
+
+	next(0);
+
+	// for (var i = 0; i < cropped.length; i++) { 
+	// 	obj = cropped[i]
+	// 	var source = obj.getElementsByClassName('image_inside')[0].src.replace(window.location.href,"");
+	// 	var resultdiv = obj.getElementsByClassName('result')[0];
+	// 	resultdiv.style.textAlign = "center"
+	// 	resultdiv.innerHTML = '<img style="max-width: 100%px"; src="http://smallenvelop.com/wp-content/uploads/2014/08/Preloader_41.gif" />'
+    // 	$.post(window.location.href +"text_recognization",
+	// 	{
+	// 		url: source,
+	// 		csrfmiddlewaretoken: '{{ csrf_token }}'
+	// 	},
+	// 	function(data, status){
+	// 		next(function(){
+	// 			console.log("Data: " + data.text + "\nStatus: " + status);
+	// 			var resultdiv = obj.getElementsByClassName('result')[0];
+	// 			resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><b>Conf: </b>'+data.conf+'</p>'
+	// 		});
+	// 	});
+	// }
+
+	$('.cropped_result').each(function(i, obj) {
+		var source = obj.getElementsByClassName('image_inside')[0].src.replace(window.location.href,"");
+		var resultdiv = obj.getElementsByClassName('result')[0];
+		resultdiv.style.textAlign = "center"
+		resultdiv.innerHTML = '<img style="max-width: 100%px"; src="http://smallenvelop.com/wp-content/uploads/2014/08/Preloader_41.gif" />'
+    	// $.post(window.location.href +"text_recognization",
+		// {
+		// 	url: source,
+		// 	csrfmiddlewaretoken: '{{ csrf_token }}'
+		// },
+		// function(data, status){
+		// 	console.log("Data: " + data.text + "\nStatus: " + status);
+		// 	var resultdiv = obj.getElementsByClassName('result')[0];
+		// 	resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p>\
+		// 							<p><b>Conf: </b>'+data.conf+'</p>'
+		// });
+	});
+ </script>
 </html>
