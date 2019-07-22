@@ -117,7 +117,7 @@ def image_process(request):
             'cropped_file_url': ri.wraped_url.replace("/code", ""),
             'final_text_line_file_image_url':final_text_line_file_image_url.replace("/code", ""),
             'cropped_image_array': cropped_image_array,
-            'text_line_file_url':text_line_file_image_url,
+            'text_line_file_url':text_line_file_image_url.replace("/code", ""),
             'status':ri.status 
         })
 

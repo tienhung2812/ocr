@@ -195,7 +195,7 @@ def mergeBoxes(img,boxes,HORIZONTAL_PERCENT = 0.52, printOut = True, deleteConfl
             new_a = result
             while not fully_merge:
                 old_a = np.array(new_a)
-                new_a = mergeBoxes(img,old_a,HORIZONTAL_PERCENT = HORIZONTAL_PERCENT,printOut = True, deleteConflict=True,getArray = True, run_fully_merge=False)
+                new_a = mergeBoxes(img,old_a,HORIZONTAL_PERCENT = HORIZONTAL_PERCENT,printOut = True, deleteConflict=True,getArray = True, run_fully_merge=True)
                 print("old_a: %d" %len(old_a))
                 print("new_a: %d" %len(new_a))
                 if len(old_a) == len(new_a):
