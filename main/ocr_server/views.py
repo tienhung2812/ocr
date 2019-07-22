@@ -1,10 +1,15 @@
+import calendar
 import os
+import time
 
 import pandas
 
+from converter.med0.converter import Converter as M0
+from converter.med1.converter import Converter as M1
+from converter.med2.converter import Converter as M2
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponse, JsonResponse,HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.template import loader
 from image.process import ReceiptImage
@@ -72,17 +77,20 @@ def index(request):
 def image_process(request):
     col_data='col-6'
     if request.method == 'POST' and request.FILES['myfile']:
+        #Create TRANSACTIONNUM
+        TRANSACTION_NUM = str(calendar.timegm(time.gmtime()))
+
         myfile = request.FILES['myfile']
         fs = FileSystemStorage()
-        filename = fs.save(myfile.name, myfile)
+        filename = fs.save(TRANSACTION_NUM+'/'+myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
         path = '/code'+ uploaded_file_url
         filename = os.path.basename(uploaded_file_url)
-        ri = ReceiptImage(path, filename)
+        ri = ReceiptImage(path, filename,TRANSACTION_NUM)
         ri.processImage()
 
         # Detect line
-        td = TextDetection(ri.wraped_url)
+        td = TextDetection(ri.wraped_url,TRANSACTION_NUM)
         text_line_file_image_url,final_text_line_file_image_url,text_line_file_box_url, cropped_image_array = td.find()
         
         # tr = TextRecognizance(cropped_image_array)

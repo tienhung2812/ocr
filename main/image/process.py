@@ -8,7 +8,7 @@ from image.crop import ImageCroper
 IMAGE_STOCK = '../../stock/receipt/'
 
 class ReceiptImage:
-    def __init__(self,url,filename):
+    def __init__(self,url,filename,TRANSACTION_NUM):
         self.url = url
         self.c = 2
         self.blocksize = 11
@@ -23,10 +23,14 @@ class ReceiptImage:
         self.orig = self.image.copy()
         path = os.path.dirname(url)
         print(path)
+
+        self.save_folder = '/image_processing/'
+        if not os.path.exists(path+self.save_folder):
+            os.makedirs(path+self.save_folder)
         # Save url
-        self.dilated_url = path+'/'+'dilated_'+filename
-        self.drawed_url = path+'/'+'drawed_'+filename
-        self.wraped_url = path +'/'+ 'wraped_'+filename
+        self.dilated_url = path+self.save_folder+'dilated_'+filename
+        self.drawed_url = path+self.save_folder+'drawed_'+filename
+        self.wraped_url = path +self.save_folder+ 'wraped_'+filename
 
         with open('config.yml', 'rb') as f:
             self.conf = yaml.load(f.read())        
@@ -111,10 +115,10 @@ class ReceiptImage:
         """
         # print(self.url)
         import os
+        print("PROCESS IMAGE")
         print(self.url)
         print(os.path.isfile(self.url))
         self.image = cv.imread(self.url, 0)
-        # print(self.image)
         ic = ImageCroper(self.image)
         rect = ic.findPaper()
 
@@ -204,12 +208,18 @@ class ReceiptImage:
         path = os.path.dirname(self.url)
         file = open(text_file, "r") 
         i = 0
+        save_folder = self.save_folder + 'croped/'
+
+        if not os.path.exists(path+save_folder):
+            os.makedirs(path+save_folder)
+        print("TRANSFORM IMAGE")
+        print(path+save_folder)
         for line in file: 
-            filename = path+'/'+'croped_'+str(i)+'_'+self.filename
+            filename = path+save_folder+str(i)+'_'+self.filename
             array = line.split(',')[:-1]
             array = list(map(int, array))
 
-            filetest = path+'/'+'croped_tested'+str(i)+'_'+self.filename
+            filetest = path+save_folder+'tested'+str(i)+'_'+self.filename
             imagetest = self.orig.copy()
 
             pts = np.array(array[:8], np.int32)
