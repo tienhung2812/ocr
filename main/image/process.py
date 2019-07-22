@@ -132,7 +132,10 @@ class ReceiptImage:
         else:
             self.status = True
 
-        self.warped = four_point_transform(self.orig, rect.reshape(4, 2))
+        if self.status:
+            self.warped = four_point_transform(self.orig, rect.reshape(4, 2))
+        else:
+            self.warped = self.drawed.copy()
         self.saveImage()
 
     def saveImage(self):

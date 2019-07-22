@@ -81,8 +81,8 @@ class TextDetection:
 
     def apply_thresholding(self,img):
         # img = cv2.imread('noisy2.png',0)
-        blur = cv2.GaussianBlur(img,(5,5),0)
-        ret, image = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)    
+        # blur = cv2.GaussianBlur(img,(3,3),0)
+        ret, image = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)    
         # ret, image = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
         return image
 
