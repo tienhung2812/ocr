@@ -5,6 +5,7 @@ import os
 import yaml
 from image.transform import *
 from image.crop import ImageCroper
+from utils.find_real_path import *
 IMAGE_STOCK = '../../stock/receipt/'
 
 class ReceiptImage:
@@ -231,7 +232,7 @@ class ReceiptImage:
             cv2.polylines(imagetest, [pts], True, color=(0, 255, 0),
                                 thickness=2)
             cv.imwrite(filetest, imagetest)
-            replace_filename= filetest.replace("/code", "")
+            replace_filename= get_url_path(filetest)
             result.append(replace_filename)
 
 
@@ -239,7 +240,7 @@ class ReceiptImage:
             rect = self.getNumPyfromConner(array)
             image = four_point_transform(self.orig, rect.reshape(4, 2))
             cv.imwrite(filename, image)
-            replace_filename= filename.replace("/code", "")
+            replace_filename= get_url_path(filename)
             result.append(replace_filename)
 
             i+=1
@@ -259,13 +260,13 @@ class ReceiptImage:
                             thickness=2)
             # imagetest = cv2.resize(imagetest, None, None, fx=1.0 / rh, fy=1.0 / rw, interpolation=cv2.INTER_LINEAR)
             cv.imwrite(filetest, imagetest)
-            replace_filename= filetest.replace("/code", "")
+            replace_filename= get_url_path(filetest)
             result.append(replace_filename)
 
 
             image = four_point_transform(self.orig, box[:8].reshape(4, 2))
             cv.imwrite(filename, image)
-            replace_filename= filename.replace("/code", "")
+            replace_filename= get_url_path(filename)
             result.append(replace_filename)
         
         return result

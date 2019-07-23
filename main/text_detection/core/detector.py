@@ -16,6 +16,7 @@ from merge_boxes import merge_boxes
 from text_detection.nets import model_train as model
 from text_detection.utils.rpn_msr.proposal_layer import proposal_layer
 from text_detection.utils.text_connector.detectors import TextDetector
+from utils.find_real_path import *
 
 sys.path.append(os.getcwd())
 
@@ -227,7 +228,7 @@ class TextDetection:
                     # image = self.apply_thresholding(image)
                     image = self.apply_brightness_contrast(image)
                     cv2.imwrite(filename, image)
-                    replace_filename= filename.replace("/code", "")
+                    replace_filename= get_url_path(filename)
                     cropped_image_file_list.append(
                         {
                             "url":replace_filename,

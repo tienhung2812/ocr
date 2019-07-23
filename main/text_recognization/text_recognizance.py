@@ -7,6 +7,7 @@ import pytesseract
 import sys
 import pandas
 import os
+from utils.find_real_path import *
 
 class TextRecognizance:
     def __init__(self,image_array=None,transaction_num = None, id_num = None,image_url = None, language = 'vie+eng',config='--oem 1 --psm 7'):
@@ -18,7 +19,7 @@ class TextRecognizance:
         self.transaction_num = transaction_num
         self.id_num = id_num
 
-        path = '/code/media/'+transaction_num
+        path = os.getcwd()+'/media/'+transaction_num
         save_folder = '/text_recognization/'
         self.save_path = path + save_folder
 
@@ -61,7 +62,7 @@ class TextRecognizance:
         # print thresh,ret
 
     def detect_image(self):
-        image_path = '/code/'+self.image_url
+        image_path = os.getcwd()+'/'+self.image_url
         df = self.runtesseract(Image.open(image_path))
         self.save_result(df)
         return self.get_str_conf(df,self.id_num)
@@ -70,7 +71,7 @@ class TextRecognizance:
         print('====== TEXT RECOGNIZE =====')
         result = []
         for image in self.image_array:
-            image_path = '/code'+image
+            image_path = os.getcwd()+image
             df = self.runtesseract(Image.open(image_path))
             
             result.append(self.get_str_conf(df))

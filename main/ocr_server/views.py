@@ -15,7 +15,7 @@ from django.template import loader
 from image.process import ReceiptImage
 from text_detection.core.detector import TextDetection
 from text_recognization.text_recognizance import TextRecognizance
-
+from utils.find_real_path import *
 
 def processImage(file, method = 0, lang='vie', output_type = 'str', full_table = False, config='--oem 1'):
     if method == 1:
@@ -84,7 +84,8 @@ def image_process(request):
         fs = FileSystemStorage()
         filename = fs.save(TRANSACTION_NUM+'/'+myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-        path = '/code'+ uploaded_file_url
+        path = get_real_path(uploaded_file_url)
+
         filename = os.path.basename(uploaded_file_url)
         ri = ReceiptImage(path, filename,TRANSACTION_NUM)
         ri.processImage()
@@ -112,13 +113,13 @@ def image_process(request):
         # result,data,stat = processImage(os.path.abspath(uploaded_file_url[1:]),method,lang,output_type,full_table, conf)
         return render(request, 'ocr_server/image_process.html', {
             'uploaded_file_url': uploaded_file_url,
-            'dilated_file_url':ri.dilated_url.replace("/code", ""),
-            'drawed_file_url': ri.drawed_url.replace("/code", ""),
-            'cropped_file_url': ri.wraped_url.replace("/code", ""),
-            'final_text_line_file_image_url':final_text_line_file_image_url.replace("/code", ""),
+            'dilated_file_url':get_url_path(ri.dilated_url),
+            'drawed_file_url': get_url_path(ri.drawed_url),
+            'cropped_file_url': get_url_path(ri.wraped_url),
+            'final_text_line_file_image_url':get_url_path(final_text_line_file_image_url),
             'cropped_image_array': cropped_image_array,
             'transaction_num': TRANSACTION_NUM,
-            'text_line_file_url':text_line_file_image_url.replace("/code", ""),
+            'text_line_file_url':get_url_path(text_line_file_image_url),
             'status':ri.status 
         })
 
