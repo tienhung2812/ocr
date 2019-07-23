@@ -209,7 +209,7 @@ class TextDetection:
                     cut_boxes = final_boxes
                 
                 #Save image
-                save_folder = '/croped/'
+                save_folder = 'croped/'
                 self.box_save_path = self.save_path + save_folder
 
                 if not os.path.exists(self.box_save_path):
@@ -225,7 +225,11 @@ class TextDetection:
                     image = self.apply_brightness_contrast(image)
                     cv2.imwrite(filename, image)
                     replace_filename= filename.replace("/code", "")
-                    cropped_image_file_list.append(replace_filename)
+                    cropped_image_file_list.append(
+                        {
+                            "url":replace_filename,
+                            "seq":i
+                        })
 
                 #print Box  
                 for i, box in enumerate(boxes):
@@ -257,8 +261,8 @@ class TextDetection:
                 cv2.imwrite(final_image_result_path,self.origcolor)
                 print(box_result_path)
                 with open(box_result_path, "w") as f:
-                    for i, box in enumerate(boxes):
+                    for i, box in enumerate(final_boxes):
                         line = ",".join(str(box[k]) for k in range(8))
-                        line += "," + str(scores[i]) + "\r\n"
+                        line += "," + str(scores[i])+","+ str(i) + "\r\n"
                         f.writelines(line)
                 return image_result_path, final_image_result_path, box_result_path, cropped_image_file_list

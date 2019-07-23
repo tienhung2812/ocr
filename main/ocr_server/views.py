@@ -117,6 +117,7 @@ def image_process(request):
             'cropped_file_url': ri.wraped_url.replace("/code", ""),
             'final_text_line_file_image_url':final_text_line_file_image_url.replace("/code", ""),
             'cropped_image_array': cropped_image_array,
+            'transaction_num': TRANSACTION_NUM,
             'text_line_file_url':text_line_file_image_url.replace("/code", ""),
             'status':ri.status 
         })
@@ -131,9 +132,18 @@ def image_process(request):
 
 def text_recognization(request):
     if request.method == 'POST':
-        tr = TextRecognizance(image_url=request.POST.get('url'))
+        tr = TextRecognizance(image_url=request.POST.get('url'),transaction_num = request.POST.get('transaction'),id_num = request.POST.get('id'))
 
         text_result = tr.detect_image()
         return JsonResponse(text_result)
     else:
         return HttpResponseRedirect("/")
+
+def text_combine(request):
+    if request.method == 'POST':
+        text_result = {"ok":"ok"}
+        print(request.POST)
+        return JsonResponse(text_result)
+    else:
+        return HttpResponseRedirect("/")
+
