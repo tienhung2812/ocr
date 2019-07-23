@@ -2,7 +2,80 @@
 import pandas as pd
 import numpy as np
 
+merged_str = """160,61,496,61,496,105,160,105,0.9995301,0
+112,205,464,205,464,235,112,235,0.9995153,1
+176,232,432,232,432,263,176,263,0.99949753,2
+64,260,512,260,512,290,64,290,0.99949694,3
+80,286,512,286,512,318,80,318,0.9994821,4
+80,314,512,314,512,345,80,345,0.999471,5
+144,342,432,342,432,372,144,372,0.9994646,6
+240,371,352,371,352,396,240,396,0.9994591,7
+16,420,464,420,464,454,16,454,0.99944884,8
+16,447,208,447,208,475,16,475,0.9994455,9
+16,473,544,473,544,509,16,509,0.99944395,10
+16,502,496,502,496,537,16,537,0.9994417,11
+16,529,192,529,192,556,16,556,0.9994399,12
+16,556,544,556,544,592,16,592,0.9994374,13
+16,583,432,583,432,616,16,616,0.9994326,14
+16,611,208,611,208,638,16,638,0.99942386,15
+16,638,544,638,544,671,16,671,0.99942017,16
+16,664,368,664,368,693,16,693,0.9994165,17
+16,691,176,691,176,716,16,716,0.99941456,18
+16,718,544,718,544,752,16,752,0.9994005,19
+16,772,576,772,576,810,16,810,0.9993974,20
+16,823,96,823,96,848,16,848,0.9993949,21
+432,836,560,836,560,861,432,861,0.9993944,22
+16,852,560,852,560,888,16,888,0.9993917,23
+0,876,560,876,560,941,0,941,0.99938464,24
+16,936,560,936,560,969,16,969,0.9993801,25
+0,985,560,985,560,1021,0,1021,0.9993754,26
+0,1014,352,1014,352,1041,0,1041,0.999371,27
+80,1067,464,1067,464,1099,80,1099,0.9993685,28
+144,1096,432,1096,432,1126,144,1126,0.9993643,29
+112,1122,448,1122,448,1152,112,1152,0.9993618,30"""
 
+default_str = """160,61,496,61,496,105,160,105,0.9995301,0
+112,205,464,205,464,235,112,235,0.9995153,1
+176,232,432,232,432,263,176,263,0.99949753,2
+64,260,512,260,512,290,64,290,0.99949694,3
+80,286,512,286,512,318,80,318,0.9994821,4
+80,314,512,314,512,345,80,345,0.999471,5
+144,342,432,342,432,372,144,372,0.9994646,6
+240,371,352,371,352,396,240,396,0.9994591,7
+16,420,464,420,464,454,16,454,0.99944884,8
+16,447,208,447,208,475,16,475,0.9994455,9
+16,473,144,473,144,501,16,501,0.99944395,10
+320,482,544,482,544,509,320,509,0.9994417,11
+16,502,496,502,496,537,16,537,0.9994399,12
+16,529,192,529,192,556,16,556,0.9994374,13
+16,556,128,556,128,582,16,582,0.9994326,14
+320,562,544,562,544,592,320,592,0.99942386,15
+16,583,432,583,432,616,16,616,0.99942017,16
+16,611,208,611,208,638,16,638,0.9994165,17
+16,638,208,638,208,665,16,665,0.99941456,18
+336,643,544,643,544,671,336,671,0.9994005,19
+16,664,368,664,368,693,16,693,0.9993974,20
+16,691,176,691,176,716,16,716,0.9993949,21
+16,718,208,718,208,744,16,744,0.9993944,22
+304,723,544,723,544,752,304,752,0.9993917,23
+16,772,192,772,192,798,16,798,0.99938464,24
+416,780,576,780,576,810,416,810,0.9993801,25
+16,823,96,823,96,848,16,848,0.9993754,26
+432,836,560,836,560,861,432,861,0.999371,27
+16,852,272,852,272,881,16,881,0.9993685,28
+448,862,560,862,560,888,448,888,0.9993643,29
+272,876,400,876,400,936,272,936,0.9993618,30
+16,879,208,879,208,905,16,905,0.9993568,31
+432,885,560,885,560,916,432,916,0.9993556,32
+0,903,96,903,96,929,0,929,0.99935395,33
+432,915,560,915,560,941,432,941,0.99934715,34
+16,936,112,936,112,955,16,955,0.99933726,35
+432,943,560,943,560,969,432,969,0.9993338,36
+0,985,560,985,560,1021,0,1021,0.99933237,37
+0,1014,352,1014,352,1041,0,1041,0.9993291,38
+80,1067,464,1067,464,1099,80,1099,0.9993192,39
+144,1096,432,1096,432,1126,144,1126,0.99931586,40
+112,1122,448,1122,448,1152,112,1152,0.99931335,41"""
 
 def getBoxes():
     file = open("sample.txt", "r") 
@@ -203,9 +276,10 @@ def mergeBoxes(img,boxes, printOut = True, deleteConflict = False):
     return np.array(a)
 
 def getCheckVar(i,box,merged_box):
+    i*=2
     return box[i],box[i+1],merged_box[i],merged_box[i+1]
 
-def checkIsInBoxes(box,merged_box):
+def checkIsInBoxes(box,merged_box,not_same_box = False):
     """
     a--b
     |  |
@@ -218,7 +292,15 @@ def checkIsInBoxes(box,merged_box):
     x1,y1: box pt
     x2,y2: merged_box pt
     """
+    if not_same_box:
+        is_same_box = True
+        for i in range(0,len(box)):
+            if box[i] != merged_box[i]:
+                is_same_box = False
+                break
 
+        if is_same_box:
+            return False
 
     # Init variable
     a = False
@@ -267,19 +349,98 @@ def removeConflictBoxes(boxes,merged_boxes):
     
     return np.array(result)
 
-import cv2
-boxes = getBoxes()
-boxes = sortBoxes(boxes)
-img = cv2.imread('original_image.png')
-img = drawBox(img,boxes)
-merge_box = mergeBoxes(img,boxes)
-img = drawBox(img,merge_box, color=(255,0,0), puttext = False)
 
-merge_box = mergeBoxes(img,boxes,deleteConflict=True)
-img = drawBox(img,merge_box, color=(255,0,0), puttext = False)
+def convert_str_to_boxes_array(default_str):
+    a = default_str.split('\n')
 
 
+    boxes = []
+    i = 0
+    j = 0
+    for row in a:
+        j=0
+        cont = row.split(',')
+        boxes.append([])
+        for col in cont:
+            t = None
+            if '.' in col:
+                t = float(col)
+            else:
+                t = int(col) 
+            boxes[i].append(t)
+            j+=1
+            if j==8:
+                break
+        i+=1
 
-cv2.imshow('image',img)
-cv2.waitKey(0)
+    return boxes
+
+def getPandasWithWrapped(default_boxes, merged_boxes, score = None):
+    input_index = ['x_tl','y_tl','x_tr','y_tr','x_bl','y_bl','x_br','y_br']
+    output_index = ['x_tl','y_tl','x_tr','y_tr','x_bl','y_bl','x_br','y_br', 'score','parrent']
+    # boxes_df = pd.DataFrame(default_boxes,columns=input_index)
+    # merged_boxes_df = pd.DataFrame(merged_boxes,columns=input_index)
+    
+    data = pd.DataFrame(columns=output_index)
+    box_have_child = []
+    child_box = []
+    score_i = 0
+    for mbid, merged_box in enumerate(merged_boxes):
+        have_score = True
+        for i, box in enumerate(default_boxes):
+            if (checkIsInBoxes(box,merged_box,not_same_box = True)):
+                cont = box
+                if score:
+                    cont.append(score[i])
+                else:
+                    cont.append(-1)
+                cont.append(mbid)
+                child_box.append(cont)
+
+                have_score = False
+                if mbid not in box_have_child:
+                    box_have_child.append(mbid)
+        box_score = -1
+        if score and have_score:
+            box_score = score[score_i]
+            score_i+=1
+        
+        # Add to data
+        cont = merged_box
+        cont.append(box_score)
+        cont.append(-1)
+        data.loc[mbid] = cont
+    
+    # Add child box to data
+    for i, box in enumerate(child_box):
+        locat = len(data)+i
+        data.loc[locat] = box
+
+    return data
+
+
+
+
+
+boxes = convert_str_to_boxes_array(default_str)
+merged_boxes = convert_str_to_boxes_array(merged_str)
+print(len(boxes))
+print(len(merged_boxes))
+result = getPandasWithWrapped(boxes, merged_boxes)
+
+# import cv2
+# boxes = getBoxes()
+# boxes = sortBoxes(boxes)
+# img = cv2.imread('original_image.png')
+# img = drawBox(img,boxes)
+# merge_box = mergeBoxes(img,boxes)
+# img = drawBox(img,merge_box, color=(255,0,0), puttext = False)
+
+# merge_box = mergeBoxes(img,boxes,deleteConflict=True)
+# img = drawBox(img,merge_box, color=(255,0,0), puttext = False)
+
+
+
+# cv2.imshow('image',img)
+# cv2.waitKey(0)
 

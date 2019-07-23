@@ -24,6 +24,9 @@
 		padding-top: 40px;
 		max-width: 570px;
 	}
+	span{
+		padding: 0 10px;
+	}
 </style>
 
 <body>
@@ -97,8 +100,8 @@
 				<div class="image" style="display: inline-block; ">
 					{% if cropped_image_array %}
 						{% for e in cropped_image_array %}
-							<div style="max-width: 570px; border-style: solid; margin: 2px; display: inline-block; padding: 0 5px" class="cropped_result">						
-								<img class="image_inside" style="max-width: 570px; border-style: solid; margin: 2px; border-color: lawngreen" src="{{e}}" />
+							<div style="border-style: solid; display: inline-block; " class="cropped_result">						
+								<img class="image_inside" id="cropped_image_{{e.seq}}" style="max-width: 570px; border-style: solid; border-color: lawngreen" src="{{e.url}}" />
 								<p class="result">
 									
 								</p>
@@ -126,24 +129,35 @@
 		if(i < cropped.length){
 			obj = cropped[i]
 			var source = obj.getElementsByClassName('image_inside')[0].src.replace(window.location.href,"");
+			var source_id = obj.getElementsByClassName('image_inside')[0].id.replace("cropped_image_","");
 			var resultdiv = obj.getElementsByClassName('result')[0];
 			resultdiv.style.textAlign = "center"
 			resultdiv.innerHTML = '<img style="max-width: 100%px"; src="http://smallenvelop.com/wp-content/uploads/2014/08/Preloader_41.gif" />'
 			$.post(window.location.href +"text_recognization",
 			{
 				url: source,
+				id:source_id,
+				transaction:'{{transaction_num}}',
 				csrfmiddlewaretoken: '{{ csrf_token }}'
 			},
 			function(data, status){
 				console.log("Data: " + data.text + "\nStatus: " + status);
 				var resultdiv = obj.getElementsByClassName('result')[0];
 				if(!isNaN(data.conf))
-					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><b>Conf: </b>'+data.conf+'</p>';
+					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><span><b>ID: </b>'+data.seq+'</span><span><b>Conf: </b>'+data.conf+'</span></p>';
 				else{
 					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><b>Conf: </b>'+0+'</p>';
 				}
 				i += 1;
 				next(i);
+			});
+		}else if(i==cropped.length){
+			$.post(window.location.href +"text_combine",
+			{
+				transaction:'{{transaction_num}}',
+				csrfmiddlewaretoken: '{{ csrf_token }}'
+			},function(data, status){
+				console.log("Data: " + data.text + "\nStatus: " + status);
 			});
 		}
 	}

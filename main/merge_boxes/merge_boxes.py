@@ -113,6 +113,62 @@ def evaluteCrossingBox(col1,col2):
     """[Case 2]
     """
 
+def getCheckVar(i,box,merged_box):
+    i*=2
+    return box[i],box[i+1],merged_box[i],merged_box[i+1]
+
+def checkIsInBoxes(box,merged_box,not_same_box = False):
+    """
+    a--b
+    |  |
+    d--c
+    
+    0--1
+    |  |
+    3--2
+
+    x1,y1: box pt
+    x2,y2: merged_box pt
+    """
+    if not_same_box:
+        is_same_box = True
+        # print("============")
+        # print(len(box))
+        # print(box)
+        # print(len(merged_box))
+        # print(merged_box)
+        for i in range(0,len(box)):
+            if box[i] != merged_box[i]:
+                is_same_box = False
+                break
+
+        if is_same_box:
+            return False
+
+    # Init variable
+    a = False
+    b = False
+    c = False
+    d = False
+
+    # Top left: i = 0, a
+    x1, y1, x2, y2 = getCheckVar(0,box,merged_box)
+    a = (x2 <= x1) and (y2 <= y1)
+
+    # Top right: i = 1, b
+    x1, y1, x2, y2 = getCheckVar(1,box,merged_box)
+    b = (x2 >= x1) and (y2 <= y1)
+
+    # Bottom right: i = 2, c
+    x1, y1, x2, y2 = getCheckVar(2,box,merged_box)
+    c = (x2 >= x1) and (y2 >= y1)
+
+    # Bottom left: i = 3, d
+    x1, y1, x2, y2 = getCheckVar(3,box,merged_box)
+    d = (x2 <= x1) and (y2 >= y1)
+
+    return (a and b and c and d)
+
 def mergeTwoBoxes(box1,box2):
     numpy_array = np.array([box1,box2])
     df = pd.DataFrame(data=numpy_array,dtype=np.int)
@@ -186,21 +242,24 @@ def mergeBoxes(img,boxes,HORIZONTAL_PERCENT = 0.52, printOut = True, deleteConfl
         result = a
 
     # Fully merge   
-    if run_fully_merge:
+    if run_fully_merge and deleteConflict:
+        print("======")
+        print("FULLY MERGE")
         print("Merged box: %d"%len(a))
         if len(a) > 0:
             fully_merge = False
             print("Boxes: %d"%len(boxes))
             print("Result: %d"%len(result))
-            new_a = result
-            while not fully_merge:
-                old_a = np.array(new_a)
-                new_a = mergeBoxes(img,old_a,HORIZONTAL_PERCENT = HORIZONTAL_PERCENT,printOut = True, deleteConflict=True,getArray = True, run_fully_merge=False)
-                print("old_a: %d" %len(old_a))
-                print("new_a: %d" %len(new_a))
-                if len(old_a) == len(new_a):
-                    fully_merge = True
-                    result = new_a
+            if len(boxes) != len(result):
+                new_a = result
+                while not fully_merge:
+                    old_a = np.array(new_a)
+                    new_a = mergeBoxes(img,old_a,HORIZONTAL_PERCENT = HORIZONTAL_PERCENT,printOut = printOut, deleteConflict=True,getArray = True, run_fully_merge=False)
+                    print("old_a: %d" %len(old_a))
+                    print("new_a: %d" %len(new_a))
+                    if len(old_a) == len(new_a):
+                        fully_merge = True
+                        result = new_a
         
         # while not fully_merge:
         #     old_a = np.array(result)
@@ -218,4 +277,47 @@ def mergeBoxes(img,boxes,HORIZONTAL_PERCENT = 0.52, printOut = True, deleteConfl
         # return result
 
  
+def getPandasWithWrapped(default_boxes, merged_boxes, score = []):
+    input_index = ['x_tl','y_tl','x_tr','y_tr','x_bl','y_bl','x_br','y_br']
+    output_index = ['x_tl','y_tl','x_tr','y_tr','x_bl','y_bl','x_br','y_br', 'score','parrent']
+    # boxes_df = pd.DataFrame(default_boxes,columns=input_index)
+    # merged_boxes_df = pd.DataFrame(merged_boxes,columns=input_index)
+    
+    data = pd.DataFrame(columns=output_index)
+    box_have_child = []
+    child_box = []
+    score_i = 0
+    for mbid, merged_box in enumerate(merged_boxes):
+        have_score = True
+        merged_box = merged_box[:8]
+        for i, box in enumerate(default_boxes):
+            box = box[:8]
+            if (checkIsInBoxes(box,merged_box,not_same_box = True)):
+                cont = box
+                if len(score)>0:
+                    cont.append(score[i])
+                else:
+                    cont.append(-1)
+                cont.append(mbid)
+                child_box.append(cont)
 
+                have_score = False
+                if mbid not in box_have_child:
+                    box_have_child.append(mbid)
+        box_score = -1
+        if len(score)>0 and have_score:
+            box_score = score[score_i]
+            score_i+=1
+        
+        # Add to data
+        cont = merged_box
+        cont.append(box_score)
+        cont.append(-1)
+        data.loc[mbid] = cont
+    
+    # Add child box to data
+    for i, box in enumerate(child_box):
+        locat = len(data)+i
+        data.loc[locat] = box
+
+    return data

@@ -1,22 +1,25 @@
 # coding=utf-8
+import calendar
 import os
 import shutil
 import sys
 import time
-import yaml
+
 import cv2
 import numpy as np
-import tensorflow as tf
 import pandas as pd
+import tensorflow as tf
+import yaml
 
-sys.path.append(os.getcwd())
+from image.transform import *
+from merge_boxes import merge_boxes
 from text_detection.nets import model_train as model
 from text_detection.utils.rpn_msr.proposal_layer import proposal_layer
 from text_detection.utils.text_connector.detectors import TextDetector
-from merge_boxes import merge_boxes
-from image.transform import *
-import calendar;
-import time;
+
+sys.path.append(os.getcwd())
+
+
 
 tf.app.flags.DEFINE_string('output_path', 'media/res/', '')
 tf.app.flags.DEFINE_string('gpu', '0', '')
@@ -24,14 +27,27 @@ tf.app.flags.DEFINE_string('checkpoint_path', 'text_detection/checkpoints_mlt/',
 FLAGS = tf.app.flags.FLAGS
 
 class TextDetection:
-    def __init__(self,image_path,cut_final_box=True):
+    def __init__(self,image_path,TRANSACTION_NUM,cut_final_box=True):
+        print("TEXT DETECTION")
         self.image_path = image_path
-        self.global_step = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
+        # self.global_step = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
+        self.global_step = self.get_global_step()
         readimage = cv2.imread(self.image_path,0)
         img, (rh, rw) = self.resize_image(readimage)
 
         self.cut_final_box = cut_final_box
+        self.TRANSACTION_NUM = TRANSACTION_NUM
 
+        path = os.path.dirname(os.path.dirname(image_path))
+        self.save_folder = '/text_detection/'
+
+        self.save_path = path+self.save_folder
+
+        if not os.path.exists(self.save_path):
+            os.makedirs(self.save_path)
+
+        
+        print(self.save_path)
         #Sharpening image
         kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
         self.orig = cv2.filter2D(img, -1, kernel)
@@ -60,14 +76,16 @@ class TextDetection:
         return re_im, (new_h / img_size[0], new_w / img_size[1])
 
     def get_global_step(self):
-        with tf.variable_scope("get_global_step", reuse=tf.AUTO_REUSE):
-            v = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
-        return v
+        try :
+            tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
+        except:
+            with tf.variable_scope(tf.get_variable_scope(), reuse=True):
+                tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
 
     def apply_thresholding(self,img):
         # img = cv2.imread('noisy2.png',0)
-        blur = cv2.GaussianBlur(img,(5,5),0)
-        ret, image = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)    
+        # blur = cv2.GaussianBlur(img,(3,3),0)
+        ret, image = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)    
         # ret, image = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
         return image
 
@@ -186,23 +204,35 @@ class TextDetection:
                 # print(type(final_boxes[0]))
                 cost_time = (time.time() - start)
                 print("cost time: {:.2f}s".format(cost_time))
-                cv2.imwrite('/code/media/original_image.png', self.orig)
+
+                cv2.imwrite(self.save_path + 'original_image.png', self.orig)
                 cropped_image_file_list = []
                 cut_boxes = boxes
                 if self.cut_final_box:
                     cut_boxes = final_boxes
+                
+                #Save image
+                save_folder = 'croped/'
+                self.box_save_path = self.save_path + save_folder
+
+                if not os.path.exists(self.box_save_path):
+                    os.makedirs(self.box_save_path)
                 for i, box in enumerate(cut_boxes):
                     
                     ts = calendar.timegm(time.gmtime())
 
-                    filename ='/code/media/'+'croped_'+str(i)+'_'+str(ts)+'.png'
+                    filename =self.box_save_path+'croped_'+str(i)+'_'+str(ts)+'.png'
 
                     image = four_point_transform(self.orig, box[:8].reshape(4, 2))
                     # image = self.apply_thresholding(image)
                     image = self.apply_brightness_contrast(image)
                     cv2.imwrite(filename, image)
                     replace_filename= filename.replace("/code", "")
-                    cropped_image_file_list.append(replace_filename)
+                    cropped_image_file_list.append(
+                        {
+                            "url":replace_filename,
+                            "seq":i
+                        })
 
                 #print Box  
                 for i, box in enumerate(boxes):
@@ -225,17 +255,18 @@ class TextDetection:
 
                 img = cv2.resize(img, None, None, fx=1.0 / rh, fy=1.0 / rw, interpolation=cv2.INTER_LINEAR)
 
-                image_result_path = os.path.join(FLAGS.output_path, os.path.basename(im_fn))
+                image_result_path = self.save_path +  os.path.basename(im_fn)
                 ts = calendar.timegm(time.gmtime())
-                final_image_result_path = '/code/media/final_'+str(ts)+ os.path.basename(im_fn)
+                final_image_result_path = self.save_path + 'final_'+str(ts)+ os.path.basename(im_fn)
                 
-                box_result_path = os.path.join(FLAGS.output_path, os.path.splitext(os.path.basename(im_fn))[0]) + ".txt"
+                box_result_path = self.save_path + os.path.splitext(os.path.basename(im_fn))[0] + ".txt"
                 cv2.imwrite(image_result_path, img[:, :, ::-1])
                 cv2.imwrite(final_image_result_path,self.origcolor)
-                print(box_result_path)
-                with open(box_result_path, "w") as f:
-                    for i, box in enumerate(boxes):
-                        line = ",".join(str(box[k]) for k in range(8))
-                        line += "," + str(scores[i]) + "\r\n"
-                        f.writelines(line)
+                csvfile = merge_boxes.getPandasWithWrapped(boxes.tolist(),final_boxes.tolist(),scores)
+                csvfile.to_csv(box_result_path, encoding='utf-8')
+                # with open(box_result_path, "w") as f:
+                #     for i, box in enumerate(final_boxes):
+                #         line = ",".join(str(box[k]) for k in range(8))
+                #         line += "," + str(scores[i])+","+ str(i) + "\r\n"
+                #         f.writelines(line)
                 return image_result_path, final_image_result_path, box_result_path, cropped_image_file_list

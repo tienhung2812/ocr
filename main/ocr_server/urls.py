@@ -21,4 +21,5 @@ urlpatterns = [
     path('method_process', views.index),
     path('', views.image_process, name='index'),
     path('text_recognization', views.text_recognization, name='text'),
+    path('text_combine', views.text_combine, name='combine'),
 ]
