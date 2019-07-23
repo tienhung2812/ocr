@@ -24,6 +24,9 @@
 		padding-top: 40px;
 		max-width: 570px;
 	}
+	span{
+		padding: 0 10px;
+	}
 </style>
 
 <body>
@@ -141,7 +144,7 @@
 				console.log("Data: " + data.text + "\nStatus: " + status);
 				var resultdiv = obj.getElementsByClassName('result')[0];
 				if(!isNaN(data.conf))
-					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><b>Conf: </b>'+data.conf+'</p>';
+					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><span><b>ID: </b>'+data.seq+'</span><span><b>Conf: </b>'+data.conf+'</span></p>';
 				else{
 					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><b>Conf: </b>'+0+'</p>';
 				}

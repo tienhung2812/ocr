@@ -259,10 +259,11 @@ class TextDetection:
                 box_result_path = self.save_path + os.path.splitext(os.path.basename(im_fn))[0] + ".txt"
                 cv2.imwrite(image_result_path, img[:, :, ::-1])
                 cv2.imwrite(final_image_result_path,self.origcolor)
-                print(box_result_path)
-                with open(box_result_path, "w") as f:
-                    for i, box in enumerate(final_boxes):
-                        line = ",".join(str(box[k]) for k in range(8))
-                        line += "," + str(scores[i])+","+ str(i) + "\r\n"
-                        f.writelines(line)
+                csvfile = merge_boxes.getPandasWithWrapped(boxes.tolist(),final_boxes.tolist(),scores)
+                csvfile.to_csv(box_result_path, encoding='utf-8')
+                # with open(box_result_path, "w") as f:
+                #     for i, box in enumerate(final_boxes):
+                #         line = ",".join(str(box[k]) for k in range(8))
+                #         line += "," + str(scores[i])+","+ str(i) + "\r\n"
+                #         f.writelines(line)
                 return image_result_path, final_image_result_path, box_result_path, cropped_image_file_list

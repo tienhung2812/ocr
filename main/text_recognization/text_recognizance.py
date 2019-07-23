@@ -35,28 +35,36 @@ class TextRecognizance:
             return df
         return  df[['word_num','conf','text']]
 
-    def get_str_conf(self,data):
+    def get_str_conf(self,data,id_num = None):
         # data = self.format_pandas(df)
 
         text = ' '.join(str(e) for e in data[data.text.notnull()].text)
         conf = data[data.text.notnull()]['conf'].mean()
         if type(conf)==float: 
             conf = 0
-        return {
-            "text":text,
-            "conf":conf
-        }
+
+        if id_num:
+            return {
+                "seq":id_num,
+                "text":text,
+                "conf":conf
+            }  
+        else:
+            return {
+                "text":text,
+                "conf":conf
+            }
 
     def save_result(self,result):
         with open(self.save_path, "w") as f:
-            f.writelines(str(result))
+            f.writelines(result.to_csv(index=True))
         # print thresh,ret
 
     def detect_image(self):
         image_path = '/code/'+self.image_url
         df = self.runtesseract(Image.open(image_path))
-        self.save_result(self.get_str_conf(df))
-        return self.get_str_conf(df)
+        self.save_result(df)
+        return self.get_str_conf(df,self.id_num)
 
     def detect_array(self):
         print('====== TEXT RECOGNIZE =====')
