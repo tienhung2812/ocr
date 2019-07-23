@@ -30,7 +30,8 @@ class TextDetection:
     def __init__(self,image_path,TRANSACTION_NUM,cut_final_box=True):
         print("TEXT DETECTION")
         self.image_path = image_path
-        self.global_step = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
+        # self.global_step = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
+        self.global_step = self.get_global_step()
         readimage = cv2.imread(self.image_path,0)
         img, (rh, rw) = self.resize_image(readimage)
 
@@ -75,9 +76,11 @@ class TextDetection:
         return re_im, (new_h / img_size[0], new_w / img_size[1])
 
     def get_global_step(self):
-        with tf.variable_scope("get_global_step", reuse=tf.AUTO_REUSE):
-            v = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
-        return v
+        try :
+            tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
+        except:
+            with tf.variable_scope(tf.get_variable_scope(), reuse=True):
+                tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
 
     def apply_thresholding(self,img):
         # img = cv2.imread('noisy2.png',0)
