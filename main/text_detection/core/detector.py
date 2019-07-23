@@ -21,7 +21,9 @@ from utils.find_real_path import *
 sys.path.append(os.getcwd())
 
 
-
+tf.app.flags.DEFINE_string('w', '', 'kernel')
+tf.app.flags.DEFINE_string('bind', '', 'Server address')
+tf.app.flags.DEFINE_integer('timeout', 30, 'Server timeout')
 tf.app.flags.DEFINE_string('output_path', 'media/res/', '')
 tf.app.flags.DEFINE_string('gpu', '0', '')
 tf.app.flags.DEFINE_string('checkpoint_path', 'text_detection/checkpoints_mlt/', '')
@@ -135,9 +137,6 @@ class TextDetection:
         return rotated
 
     def find(self):
-        if os.path.exists(FLAGS.output_path):
-            shutil.rmtree(FLAGS.output_path)
-        os.makedirs(FLAGS.output_path)
         os.environ['CUDA_VISIBLE_DEVICES'] = FLAGS.gpu
 
         with tf.get_default_graph().as_default():
