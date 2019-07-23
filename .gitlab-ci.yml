@@ -1,13 +1,14 @@
 before_script:
-  - apt-get update -qq
-  - apt-get install -qq git
-  - apt-get install python3 python3-pip -y
-    
+  - mkdir -p ~/.ssh
+  - echo -e "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+  - chmod 600 ~/.ssh/id_rsa
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
 deploy:
   type: deploy
   environment:
     name: prod
   script:
-    - pip3 install -r main/requirements.txt 
+    - ssh -i ~/.ssh/id_rsa ubuntu@thesis.tkhco.com.vn /home/ubuntu/thesis/hung/deploy.sh
   only:
     - master

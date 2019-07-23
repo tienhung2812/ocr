@@ -130,3 +130,5 @@ TEMPLATE_DIRS = (
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+SCHEDULE_DELETE_MEDIA = 10

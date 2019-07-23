@@ -27,3 +27,4 @@ Jinja2
 pyaml
 Cython
 tensorflow
+schedule
