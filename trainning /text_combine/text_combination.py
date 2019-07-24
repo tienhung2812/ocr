@@ -6,7 +6,7 @@ import pandas as pd
 
 from underthesea import word_tokenize
 
-MAX_WIDTH_MULTIPLY = 4
+MAX_WIDTH_MULTIPLY = 8
 
 class TextCombinator:
     def __init__(self,transaction_num,input_image):
@@ -101,21 +101,32 @@ class TextCombinator:
         return max_charater      
 
     def arrange_text(self,index,row_data,text_df):
-        spacedicator = '-'
+        spacedicator = ' '
         bounding_box_tl = int(row_data['x_tl'] - self.data['x_tl'].min())
         final_text = spacedicator*int(bounding_box_tl/MAX_WIDTH_MULTIPLY)
 
         added_index = []
-        
+        previous_space = 0
         for index, row in text_df.iterrows():
             if row['conf']>0:
-                added_index.append(index)
+                added_index.append((index,previous_space,row['text']))
+                # print(added_index)
                 if len(added_index) > 1:
-                    current_space = int((row['left'] - text_df.iloc[added_index[added_index-2]]['left'])/MAX_WIDTH_MULTIPLY)
+                    # print(previous_space)
+                    previous_len = added_index[len(added_index)-2][1]
+                    current_space = int((row['left'] - previous_len)/MAX_WIDTH_MULTIPLY)
+
+                    # previous_charater_len = int(len(added_index[len(added_index)-2][2])/MAX_WIDTH_MULTIPLY)
+                    # if current_space > previous_charater_len:
+                    #     current_space -= int(previous_charater_len)
                 else:
-                    current_space = int(row['left']/MAX_WIDTH_MULTIPLY)              
-                final_text+= spacedicator*current_space+'g'
-        print(bounding_box_tl,index,final_text)
+                    current_space = int(row['left']/MAX_WIDTH_MULTIPLY)  
+                    # current_space = int((row['left'] - text_df.iloc[added_index[added_index-2]]['left'])/MAX_WIDTH_MULTIPLY)
+                # else:
+                #     current_space = int(row['left']/MAX_WIDTH_MULTIPLY)          
+                previous_space = current_space
+                final_text+= spacedicator*current_space+row['text']
+        print(final_text)
         return
 
 
@@ -134,7 +145,7 @@ class TextCombinator:
                 text_df = self.get_text_file_pandas(index)
                 result = self.arrange_text(index,row,text_df)
                 # print(result)
-        # print(self.get_text_file_pandas(11))        
+        print(self.get_text_file_pandas(11))        
         # img = self.get_image_file(current_id)
         # self.draw_rect(img,text_df)
 
