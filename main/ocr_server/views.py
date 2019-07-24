@@ -15,6 +15,7 @@ from django.template import loader
 from image.process import ReceiptImage
 from text_detection.core.detector import TextDetection
 from text_recognization.text_recognizance import TextRecognizance
+from text_combination.text_combine import TextCombinator
 from utils.find_real_path import *
 
 def processImage(file, method = 0, lang='vie', output_type = 'str', full_table = False, config='--oem 1'):
@@ -142,8 +143,11 @@ def text_recognization(request):
 
 def text_combine(request):
     if request.method == 'POST':
-        text_result = {"ok":"ok"}
-        print(request.POST)
+        text_result = {"ok":False}
+        transaction_num = request.POST.get('transaction')
+        if len(transaction_num) > 0:
+            tc = TextCombinator(transaction_num)
+            text_result = {"ok":True}
         return JsonResponse(text_result)
     else:
         return HttpResponseRedirect("/")
