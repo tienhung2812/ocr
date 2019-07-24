@@ -145,8 +145,9 @@ def text_combine(request):
     if request.method == 'POST':
         text_result = {"ok":False}
         transaction_num = request.POST.get('transaction')
+        input_image = request.POST.get('input_image')
         if len(transaction_num) > 0:
-            tc = TextCombinator(transaction_num)
+            tc = TextCombinator(transaction_num,input_image)
             text_result = {"ok":True}
         return JsonResponse(text_result)
     else:

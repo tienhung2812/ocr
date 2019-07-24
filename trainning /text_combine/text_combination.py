@@ -4,17 +4,20 @@ import cv2
 import numpy as np
 import pandas as pd
 
+from underthesea import word_tokenize
+
+MAX_WIDTH_MULTIPLY = 4
 
 class TextCombinator:
-    def __init__(self,transaction_num):
+    def __init__(self,transaction_num,input_image):
         # Init the transaction num  
         self.transaction_num = int(transaction_num)
 
         #Get the folder
         path = '/home/hung/ocr/main/media'
         path += '/'+str(self.transaction_num)
-        print(path)
-        
+        image_path = '/home/hung/ocr/main' + input_image
+
         # Init variable
         
         # Bounding box
@@ -39,9 +42,13 @@ class TextCombinator:
             if file_name.isdigit() and file_extension == '.txt':
                 text_id = int(file_name)
                 self.data.loc[text_id,'text_recognization_file'] = os.path.join(text_recognization_path, text)
-
-        # print(self.data)
+        
+        self.image = cv2.imread(image_path,0)
+        self.image_h, self.image_w = self.image.shape
+        self.max_width = self.find_max_width()
+        self.max_charater = self.find_max_charater_per_row()
         self.final_text = ''
+
 
     def find_file_with_extension(self,folder,ext,full_path = False):
         for the_file in os.listdir(folder):
@@ -65,19 +72,76 @@ class TextCombinator:
             if row['conf'] > 0:
                 cv2.rectangle(image,(row['left'],row['top']),(row['left']+row['width'],row['top']+row['height']),(0,255,0),1)
 
-    def combine(self):
-        current_id = 9
+    def text_word_tokenrize(self,text_df):
+        text = ''
+        for index, row in text_df.iterrows():
+            if row['conf']>0:
+                if len(text)>0:
+                    text+=' '
+                text+= row['text']
 
-        text_df = self.get_text_file_pandas(current_id)
-        print(text_df)
-        img = self.get_image_file(current_id)
+        return word_tokenize(text, format="text")
 
-        self.draw_rect(img,text_df)
+    def find_max_width(self):
+        # max_width = 0
+        
+        # for index, row in self.data.iterrows():
+        #     if (row['x_tr'] - row['x_tl']) > max_width:
+        #         max_width = row['x_tr'] - row['x_tl']
+        # print(max_width)
+        return self.data['x_tr'].max() - self.data['x_tl'].min()
 
-        cv2.imshow('default image',img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+    def find_max_charater_per_row(self):
+        max_charater = 0
+        for index, row in self.data.iterrows():
+            if row['parrent'] <0 :
+                count = len(self.text_word_tokenrize(self.get_text_file_pandas(index)))
+                if count > max_charater:
+                    max_charater = count
+        return max_charater      
+
+    def arrange_text(self,index,row_data,text_df):
+        spacedicator = '-'
+        bounding_box_tl = int(row_data['x_tl'] - self.data['x_tl'].min())
+        final_text = spacedicator*int(bounding_box_tl/MAX_WIDTH_MULTIPLY)
+
+        added_index = []
+        
+        for index, row in text_df.iterrows():
+            if row['conf']>0:
+                added_index.append(index)
+                if len(added_index) > 1:
+                    current_space = int((row['left'] - text_df.iloc[added_index[added_index-2]]['left'])/MAX_WIDTH_MULTIPLY)
+                else:
+                    current_space = int(row['left']/MAX_WIDTH_MULTIPLY)              
+                final_text+= spacedicator*current_space+'g'
+        print(bounding_box_tl,index,final_text)
         return
 
-tc = TextCombinator(1563935718)
+
+    def combine(self):
+        # tokenrize_data = pd.DataFrame()
+        # tokenrize_data['tokenrize'] = np.nan
+        # for index, row in self.data.iterrows():
+        #     if row['parrent'] <0 :
+        #         text_df = self.get_text_file_pandas(index)
+        #         tokenrize = np.array(self.text_word_tokenrize(text_df))
+        #         tokenrize_data.loc[index,'tokenrize'] =[tokenrize]
+
+
+        for index, row in self.data.iterrows():
+            if row['parrent'] <0 :
+                text_df = self.get_text_file_pandas(index)
+                result = self.arrange_text(index,row,text_df)
+                # print(result)
+        # print(self.get_text_file_pandas(11))        
+        # img = self.get_image_file(current_id)
+        # self.draw_rect(img,text_df)
+
+        # cv2.imshow('default image',img)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+        return
+
+tc = TextCombinator(1563962408,'/media/1563962408/text_detection/final_1563962410wraped_45.jpg')
 tc.combine()

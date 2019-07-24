@@ -154,6 +154,7 @@
 		}else if(i==cropped.length){
 			$.post(window.location.href +"text_combine",
 			{
+				input_image: '{{final_text_line_file_image_url}}',
 				transaction:'{{transaction_num}}',
 				csrfmiddlewaretoken: '{{ csrf_token }}'
 			},function(data, status){
