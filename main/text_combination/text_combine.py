@@ -86,7 +86,7 @@ class TextCombinator:
             if row['conf']>0:
                 if len(text)>0:
                     text+=' '
-                text+= row['text']
+                text+= str(row['text'])
 
         return word_tokenize(text, format="text")
 
@@ -126,7 +126,7 @@ class TextCombinator:
                 spaces = self.how_many_space(previous_row,row,pixel_per_space)
                 final_text+= spacedicator*spaces
             
-            final_text += row['text']
+            final_text += str(row['text'])
             previous_row = row
         # print(filtered_text_df)
         return final_text
@@ -152,7 +152,7 @@ class TextCombinator:
         
         for index, row in text_df.iterrows():
             if row['conf'] > 0:
-                pixel_per_charater = int(row['width'] / len(row['text']))
+                pixel_per_charater = int(row['width'] / len(str(row['text'])))
                 if pixel_per_charater > largest_pixel_per_charater:
                     largest_pixel_per_charater = pixel_per_charater
                     # text = row['text']

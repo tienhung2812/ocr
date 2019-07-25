@@ -189,5 +189,5 @@ class TextCombinator:
 
         return combine_text
 
-tc = TextCombinator(1564023425,'/media/1564023425/text_detection/final_1564023428wraped_3.jpeg')
+tc = TextCombinator(1564026181,'/media/1564026181/text_detection/final_1564026186wraped_X51008099046.jpg')
 print(tc.combine())
