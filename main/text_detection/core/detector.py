@@ -92,7 +92,7 @@ class TextDetection:
         # ret, image = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
         return image
 
-    def apply_brightness_contrast(self,input_img, brightness = 0, contrast = 35):
+    def apply_brightness_contrast(self,input_img, brightness = 0, contrast = 25):
 
         if brightness != 0:
             if brightness > 0:

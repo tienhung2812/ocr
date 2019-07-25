@@ -146,6 +146,7 @@ def text_combine(request):
         text_result = {"ok":False}
         transaction_num = request.POST.get('transaction')
         input_image = request.POST.get('input_image')
+        print(request.POST)
         if len(transaction_num) > 0:
             tc = TextCombinator(transaction_num,input_image)
             text = tc.combine()
