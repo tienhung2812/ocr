@@ -111,7 +111,13 @@
 				</div>
 
 			</div>
+			<div class="col-12">
+				<h3>8. Merged Text Recognization</h3>
+				<div class="image">
+					<p id="merged_text" style="white-space: pre;"></p>
+				</div>
 
+			</div>
 
 			
 		</div>
@@ -159,6 +165,10 @@
 				csrfmiddlewaretoken: '{{ csrf_token }}'
 			},function(data, status){
 				console.log("Data: " + data.text + "\nStatus: " + status);
+				if (data.ok){
+					merged_text_dev = document.getElementById("merged_text");
+					merged_text_dev.innerHTML = data.text
+				}
 			});
 		}
 	}

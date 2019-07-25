@@ -7,7 +7,8 @@ import pandas as pd
 from underthesea import word_tokenize
 
 MAX_WIDTH_MULTIPLY = 8
-
+NUM_SPACE_MARK_AS_TAB = 1
+SPACE_OVER_CHARATER = 2 
 class TextCombinator:
     def __init__(self,transaction_num,input_image):
         # Init the transaction num  
@@ -47,6 +48,7 @@ class TextCombinator:
         self.image_h, self.image_w = self.image.shape
         self.max_width = self.find_max_width()
         self.max_charater = self.find_max_charater_per_row()
+        self.largest_pixel_charater = 0
         self.final_text = ''
 
 
@@ -70,7 +72,7 @@ class TextCombinator:
     def draw_rect(self,image, text_df):
         for index, row in text_df.iterrows():
             if row['conf'] > 0:
-                cv2.rectangle(image,(row['left'],row['top']),(row['left']+row['width'],row['top']+row['height']),(0,255,0),1)
+                cv2.rectangle(image,(row['left'],row['top']),(row['left']+row['width'],row['top']+row['height']),(0,255,0),2)
 
     def text_word_tokenrize(self,text_df):
         text = ''
@@ -100,35 +102,66 @@ class TextCombinator:
                     max_charater = count
         return max_charater      
 
+    def filter_low_conf(self,text_df):
+        return text_df.query('conf>0')
+
     def arrange_text(self,index,row_data,text_df):
         spacedicator = ' '
         bounding_box_tl = int(row_data['x_tl'] - self.data['x_tl'].min())
-        final_text = spacedicator*int(bounding_box_tl/MAX_WIDTH_MULTIPLY)
+        # final_text = spacedicator*int(bounding_box_tl/MAX_WIDTH_MULTIPLY)
+        final_text = ''
 
-        added_index = []
-        previous_space = 0
+        filtered_text_df = self.filter_low_conf(text_df)
+        pixel_per_space = self.find_largest_pixel_of_a_charater(text_df)
+        # previous_index = -1
+        previous_row = None
+        for index, row in filtered_text_df.iterrows():
+            if previous_row is not None:
+                spaces = self.how_many_space(previous_row,row,pixel_per_space)
+                final_text+= spacedicator*spaces
+            
+            final_text += row['text']
+            previous_row = row
+        # print(filtered_text_df)
+        return final_text
+
+    def how_many_space(self,row1,row2, pixel_per_space):
+        # Return how much space between two word
+        
+        x_tr_row1 = row1['left'] + row1['width']
+
+        pixel_between_row1_row2 = row2['left'] - x_tr_row1
+
+        pixel_as_tab = pixel_per_space*NUM_SPACE_MARK_AS_TAB
+
+        if pixel_between_row1_row2 <= pixel_as_tab:
+            return 1
+        else:
+            return int(pixel_between_row1_row2/pixel_as_tab)
+
+    def find_largest_pixel_of_a_charater(self,text_df):
+        largest_pixel_per_charater = 0
+        # text = ''
+        # width = 0
+        
         for index, row in text_df.iterrows():
-            if row['conf']>0:
-                added_index.append((index,previous_space,row['text']))
-                # print(added_index)
-                if len(added_index) > 1:
-                    # print(previous_space)
-                    previous_len = added_index[len(added_index)-2][1]
-                    current_space = int((row['left'] - previous_len)/MAX_WIDTH_MULTIPLY)
+            if row['conf'] > 0:
+                pixel_per_charater = int(row['width'] / len(row['text']))
+                if pixel_per_charater > largest_pixel_per_charater:
+                    largest_pixel_per_charater = pixel_per_charater
+                    # text = row['text']
+                    # width = row['width']                    
+        # print(text,width,largest_pixel_per_charater)
+        return largest_pixel_per_charater
+                
+    def wrapping_image_text(self,index):
+        text_df = self.get_text_file_pandas(index)
+        img = self.get_image_file(index,1)
+        self.draw_rect(img,text_df)
 
-                    # previous_charater_len = int(len(added_index[len(added_index)-2][2])/MAX_WIDTH_MULTIPLY)
-                    # if current_space > previous_charater_len:
-                    #     current_space -= int(previous_charater_len)
-                else:
-                    current_space = int(row['left']/MAX_WIDTH_MULTIPLY)  
-                    # current_space = int((row['left'] - text_df.iloc[added_index[added_index-2]]['left'])/MAX_WIDTH_MULTIPLY)
-                # else:
-                #     current_space = int(row['left']/MAX_WIDTH_MULTIPLY)          
-                previous_space = current_space
-                final_text+= spacedicator*current_space+row['text']
-        print(final_text)
-        return
-
+        cv2.imshow('default image',img)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
 
     def combine(self):
         # tokenrize_data = pd.DataFrame()
@@ -139,20 +172,22 @@ class TextCombinator:
         #         tokenrize = np.array(self.text_word_tokenrize(text_df))
         #         tokenrize_data.loc[index,'tokenrize'] =[tokenrize]
 
-
+        combine_text = ''
         for index, row in self.data.iterrows():
             if row['parrent'] <0 :
                 text_df = self.get_text_file_pandas(index)
+                # print(text_df)
+                
+                # self.wrapping_image_text(index)
+
                 result = self.arrange_text(index,row,text_df)
                 # print(result)
-        print(self.get_text_file_pandas(11))        
-        # img = self.get_image_file(current_id)
-        # self.draw_rect(img,text_df)
+                combine_text += (result+'\n')
+                
 
-        # cv2.imshow('default image',img)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
-        return
+        
 
-tc = TextCombinator(1563962408,'/media/1563962408/text_detection/final_1563962410wraped_45.jpg')
-tc.combine()
+        return combine_text
+
+tc = TextCombinator(1564023425,'/media/1564023425/text_detection/final_1564023428wraped_3.jpeg')
+print(tc.combine())
