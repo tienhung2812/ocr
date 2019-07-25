@@ -1,5 +1,5 @@
 FROM ubuntu
-RUN apt-get update && apt-get install python3 python3-pip tesseract-ocr tesseract-ocr-vie libmagickwand-dev -y
+RUN apt-get update && apt-get install python3 python3-pip tesseract-ocr tesseract-ocr-vie libmagickwand-dev libmysqlclient-dev -y
 ENV PYTHONUNBUFFERED 1
 # Set the locale
 ENV LANG C.UTF-8
