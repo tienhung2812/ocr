@@ -119,9 +119,17 @@ class TextDetection:
 
     def box_sort(self,boxes):
         numpy_array = np.array(boxes)
-        df = pd.DataFrame(data=numpy_array, dtype=np.int)
-        df = df.sort_values(by=[1,0])
-        return df.to_numpy()
+        if len(boxes)>0:
+            if len(boxes[0]) == 8:
+                input_index = ['x_tl','y_tl','x_tr','y_tr','x_bl','y_bl','x_br','y_br']
+            else:
+                input_index = ['x_tl','y_tl','x_tr','y_tr','x_bl','y_bl','x_br','y_br','score']
+            df = pd.DataFrame(data=numpy_array, dtype=np.int, columns=input_index)
+            df = df.sort_values(by=['y_tl','x_tl'])
+        
+            return df.to_numpy()
+        else:
+            return boxes
 
     def image_skewer(self, img, angle=1):
         if angle < -45:
