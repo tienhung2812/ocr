@@ -45,7 +45,10 @@
 
 						<button type="submit">Process</button>
 					</form>
-
+					
+					<div style="padding: 30px 0">
+						<p>Status: <b><span id='status'>Not Done</span></b></p>
+					</div>
 				</div>
 			</div>
 
@@ -133,6 +136,9 @@
 
 	function next(i){
 		if(i < cropped.length){
+			var status =  document.getElementById("status");
+			status.innerHTML = 'Processing...'
+
 			obj = cropped[i]
 			var source = obj.getElementsByClassName('image_inside')[0].src.replace(window.location.href,"");
 			var source_id = obj.getElementsByClassName('image_inside')[0].id.replace("cropped_image_","");
@@ -143,6 +149,7 @@
 			{
 				url: source,
 				id:source_id,
+				final_image : '{{final_text_line_file_image_url}}',
 				transaction:'{{transaction_num}}',
 				csrfmiddlewaretoken: '{{ csrf_token }}'
 			},
@@ -168,6 +175,9 @@
 				if (data.ok){
 					merged_text_dev = document.getElementById("merged_text");
 					merged_text_dev.innerHTML = data.text
+
+					var status =  document.getElementById("status");
+					status.innerHTML = 'Done'
 				}
 			});
 		}
