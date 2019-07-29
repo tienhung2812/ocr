@@ -134,7 +134,7 @@ def image_process(request):
 
 def text_recognization(request):
     if request.method == 'POST':
-        tr = TextRecognizance(image_url=request.POST.get('url'),transaction_num = request.POST.get('transaction'),id_num = request.POST.get('id'))
+        tr = TextRecognizance(image_url=request.POST.get('url'),transaction_num = request.POST.get('transaction'),id_num = request.POST.get('id'), final_image = request.POST.get('final_image',None))
 
         text_result = tr.detect_image()
         return JsonResponse(text_result)
