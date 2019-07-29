@@ -96,18 +96,25 @@ class TextRecognizance:
         data_file = data_path+'/'+data_file[0]
 
         data = pd.read_csv(data_file,index_col=0)
+        x_tl = data['x_tl'].min()
+        y_tl = data['y_tl'].min()
+        x_br = data['x_br'].max()
+        y_br = data['y_br'].max()
+
+        width = x_br - x_tl
+        height = y_br - y_tl
 
         image_file_name = 'original_image.png'
-        return data.loc[image_id]
+        return data.loc[image_id] , width, height
 
     def append_receipt_data(self,text):
         if self.final_image:
             path = 'receipt_sentence_classificaion_data.csv'
             df = pd.read_csv(path)# Loading a csv file with headers 
 
-            row_data = self.get_image_data()
-            img = cv2.imread( os.getcwd() +  self.final_image,0)
-            height, width = img.shape
+            row_data, width, height = self.get_image_data()
+            # img = cv2.imread( os.getcwd() +  self.final_image,0)
+            # height, width = img.shape
 
             cropped_h = float(row_data['y_bl']-row_data['y_tl'])
             cropped_w = float(row_data['x_tr']-row_data['x_tl'])
