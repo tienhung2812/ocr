@@ -62,3 +62,6 @@ python3 main/converter.py -h
 ```
 python online-sample/opencv-text-recognition/text_recognition.py --east online-sample/opencv-text-recognition/frozen_east_text_detection.pb --image stock/don-thuoc.png -w 320 -e 320 --padding 1
 ```
+
+## LSTM Training
+https://github.com/dineshsonachalam/Intent-classification
