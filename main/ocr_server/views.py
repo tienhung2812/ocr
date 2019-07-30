@@ -162,7 +162,7 @@ def update_data_api(request):
 
         id_num = request.POST.get('id')
         text_result['id_num'] = id_num
-        update_data(request.POST.get('transaction'),request.POST.get('id'),request.POST.get('text'),request.POST.get('cate'))
+        update_data(request.POST.get('transaction'),request.POST.get('id'),request.POST.get('text'),request.POST.get('cate'), request.POST.get('ok_input'))
         return JsonResponse(text_result)
     else:
         return HttpResponseRedirect("/")
