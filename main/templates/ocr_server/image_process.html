@@ -157,7 +157,7 @@
 				console.log("Data: " + data.text + "\nStatus: " + status);
 				var resultdiv = obj.getElementsByClassName('result')[0];
 				if(!isNaN(data.conf))
-					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><span><b>ID: </b>'+data.seq+'</span><span><b>Conf: </b>'+data.conf+'</span></p>';
+					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><span><b>ID: </b>'+data.seq+'</span><span><b>Conf: </b>'+data.conf+'</span><br><span><b>Type: </b>'+data.cate+'</span><span><b>Conf: </b>'+data.cate_conf+'</span></p>';
 				else{
 					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><b>Conf: </b>'+0+'</p>';
 				}

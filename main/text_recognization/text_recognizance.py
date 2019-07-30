@@ -10,7 +10,7 @@ import numpy as np
 import os
 import cv2
 from utils.find_real_path import *
-
+from text_classification.classifier import Classifier
 
 
 class TextRecognizance:
@@ -42,7 +42,7 @@ class TextRecognizance:
             return df
         return  df[['word_num','conf','text']]
 
-    def get_str_conf(self,data,id_num = None):
+    def get_str_conf(self,data,cate, cate_conf = 0,id_num = None):
         # data = self.format_pandas(df)
 
         text = ' '.join(str(e) for e in data[data.text.notnull()].text)
@@ -52,6 +52,8 @@ class TextRecognizance:
 
         if id_num:
             return {
+                "cate":cate,
+                "cate_conf": str(cate_conf),
                 "seq":id_num,
                 "text":text,
                 "conf":conf
@@ -67,12 +69,18 @@ class TextRecognizance:
             f.writelines(result.to_csv(index=True))
         # print thresh,ret
 
+    def predict_type(self,text):
+        classifier = Classifier(text)
+        cate, cate_conf = classifier.predict()
+        return cate, cate_conf
+
     def detect_image(self):
         image_path = os.getcwd()+'/'+self.image_url
         df = self.runtesseract(Image.open(image_path))
         self.save_result(df)
         self.append_receipt_data(self.get_str_conf(df,self.id_num)['text'])
-        return self.get_str_conf(df,self.id_num)
+        cate, cate_conf = self.predict_type(self.get_str_conf(df,self.id_num)['text'])
+        return self.get_str_conf(df,id_num = self.id_num,cate = cate, cate_conf = cate_conf)
 
     def detect_array(self):
         print('====== TEXT RECOGNIZE =====')

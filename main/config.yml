@@ -12,3 +12,8 @@ TEXT_COMBINE:
   MAX_WIDTH_MULTIPLY: 8
   NUM_SPACE_MARK_AS_TAB: 1
   SPACE_OVER_CHARATER: 2 
+TEXT_CLASSIFICATION:
+  JSON_PATH: text_classification/model/model_sequence_grouped.json
+  M5_PATH: text_classification/model/model_sequence_grouped.h5
+  TOKENIZER_PATH: text_classification/model/tokenizer_sequence_grouped.pickle
+  MAX_WORD_COUNT: 450
