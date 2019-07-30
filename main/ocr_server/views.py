@@ -16,6 +16,7 @@ from image.process import ReceiptImage
 from text_detection.core.detector import TextDetection
 from text_recognization.text_recognizance import TextRecognizance
 from text_combination.text_combine import TextCombinator
+from text_recognization.update_data import update_data
 from utils.find_real_path import *
 
 def processImage(file, method = 0, lang='vie', output_type = 'str', full_table = False, config='--oem 1'):
@@ -146,7 +147,7 @@ def text_combine(request):
         text_result = {"ok":False}
         transaction_num = request.POST.get('transaction')
         input_image = request.POST.get('input_image')
-        print(request.POST)
+        # print(request.POST)
         if len(transaction_num) > 0:
             tc = TextCombinator(transaction_num,input_image)
             text = tc.combine()
@@ -155,3 +156,13 @@ def text_combine(request):
     else:
         return HttpResponseRedirect("/")
 
+def update_data_api(request):
+    if request.method == 'POST':
+        text_result = {"ok":False}
+
+        id_num = request.POST.get('id')
+        text_result['id_num'] = id_num
+        update_data(request.POST.get('transaction'),request.POST.get('id'),request.POST.get('text'),request.POST.get('cate'), request.POST.get('ok_input'))
+        return JsonResponse(text_result)
+    else:
+        return HttpResponseRedirect("/")

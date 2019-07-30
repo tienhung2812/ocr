@@ -34,7 +34,7 @@ class ReceiptImage:
         self.wraped_url = path +self.save_folder+ 'wraped_'+filename
 
         with open('config.yml', 'rb') as f:
-            self.conf = yaml.load(f.read())        
+            self.conf = yaml.safe_load(f.read())        
         
 
     def showImage(self, image=None, image_type = cv.IMREAD_UNCHANGED):

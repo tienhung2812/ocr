@@ -10,8 +10,8 @@ import numpy as np
 import os
 import cv2
 from utils.find_real_path import *
-
-
+from text_classification.classifier import Classifier
+import json
 
 class TextRecognizance:
     def __init__(self,image_array=None,transaction_num = None, id_num = None,image_url = None, final_image = None, language = 'vie+eng',config='--oem 1 --psm 7'):
@@ -42,7 +42,7 @@ class TextRecognizance:
             return df
         return  df[['word_num','conf','text']]
 
-    def get_str_conf(self,data,id_num = None):
+    def get_str_conf(self,data,cate, cate_conf = 0,id_num = None):
         # data = self.format_pandas(df)
 
         text = ' '.join(str(e) for e in data[data.text.notnull()].text)
@@ -52,6 +52,8 @@ class TextRecognizance:
 
         if id_num:
             return {
+                "cate":cate,
+                "cate_conf": str(cate_conf),
                 "seq":id_num,
                 "text":text,
                 "conf":conf
@@ -67,12 +69,21 @@ class TextRecognizance:
             f.writelines(result.to_csv(index=True))
         # print thresh,ret
 
+    def predict_type(self,text):
+        if len(text) > 0:
+            classifier = Classifier()
+            cate, cate_conf = classifier.predict(text)
+            return cate, cate_conf
+        return '',0
+
     def detect_image(self):
         image_path = os.getcwd()+'/'+self.image_url
         df = self.runtesseract(Image.open(image_path))
         self.save_result(df)
-        self.append_receipt_data(self.get_str_conf(df,self.id_num)['text'])
-        return self.get_str_conf(df,self.id_num)
+        cate, cate_conf = self.predict_type(self.get_str_conf(df,self.id_num)['text'])
+        self.append_receipt_data(self.get_str_conf(df,self.id_num)['text'],cate, cate_conf)
+
+        return self.get_str_conf(df,id_num = self.id_num,cate = cate, cate_conf = cate_conf)
 
     def detect_array(self):
         print('====== TEXT RECOGNIZE =====')
@@ -107,7 +118,7 @@ class TextRecognizance:
         image_file_name = 'original_image.png'
         return data.loc[image_id] , width, height
 
-    def append_receipt_data(self,text):
+    def append_receipt_data(self,text,cate,cate_conf):
         if self.final_image:
             path = 'receipt_sentence_classificaion_data.csv'
             df = pd.read_csv(path)# Loading a csv file with headers 
@@ -137,4 +148,28 @@ class TextRecognizance:
             }
             df = df.append(data, ignore_index=True)
             df.to_csv(path, index = False,  encoding='utf-8')
+
+
+            #JSON DATA
+            json_path = os.getcwd() + '/media/'+self.transaction_num + '/text_detection/data.json'
+
+            json_data = {
+                'sentence': text,
+                'cate': cate,
+                'cate_conf': str(cate_conf)
+            }
+
+            if os.path.exists(json_path):
+                current_data = None
+                with open(json_path) as f:
+                    current_data = json.load(f)
+                    
+                current_data[self.id_num] = json_data
+                with open(json_path, 'w') as outfile:
+                    json.dump(current_data, outfile, ensure_ascii=False)
+            else:
+                with open(json_path, 'w') as outfile:
+                    json_str = {}
+                    json_str[self.id_num] = json_data
+                    json.dump(json_str, outfile , ensure_ascii=False)
 # pytesseract.image_to_string(img, lang='eng+vie',config='--oem 1 --psm 7')

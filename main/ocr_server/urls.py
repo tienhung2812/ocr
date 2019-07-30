@@ -22,4 +22,5 @@ urlpatterns = [
     path('', views.image_process, name='index'),
     path('text_recognization', views.text_recognization, name='text'),
     path('text_combine', views.text_combine, name='combine'),
+    path('update_data', views.update_data_api, name='update_data'),
 ]

@@ -8,7 +8,7 @@ class ImageCroper:
         # load parameters
         import os
         with open('config.yml', 'rb') as f:
-            self.conf = yaml.load(f.read())
+            self.conf = yaml.safe_load(f.read())
 
         # load image
         self.orig = image.copy()

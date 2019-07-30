@@ -20,11 +20,13 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <style>
-	.col-6,.col{
+	.col-6,
+	.col {
 		padding-top: 40px;
 		max-width: 570px;
 	}
-	span{
+
+	.should-padding {
 		padding: 0 10px;
 	}
 </style>
@@ -37,7 +39,7 @@
 				<div class="form">
 					<form method="post" enctype="multipart/form-data">
 						{% csrf_token %}
-						
+
 						<div class="form-group">
 							<label for="exampleFormControlFile1">Image Input</label>
 							<input type="file" class="form-control-file" id="exampleFormControlFile1" name="myfile">
@@ -45,9 +47,20 @@
 
 						<button type="submit">Process</button>
 					</form>
-					
+
 					<div style="padding: 30px 0">
 						<p>Status: <b><span id='status'>Not Done</span></b></p>
+					</div>
+					<div style="padding: 10px 0">
+						<p><b>Cate info</b><br>
+							There are 6 categories:<br>
+							<b>brand_name: </b> Receipt brand_name<br>
+							<b>info: </b> phone, address, bla bla<br>
+							<b>index: </b> SL Mặt hàng Thành tiền bla bla<br>
+							<b>content: </b> Áo thun 1 100,000 100,000 bla bla<br>
+							<b>total: </b>Tổng cộng: 500,000, Chiết khấu 0.05% bla bla<br>
+							<b>thank_you: </b>Cám ơn bla bla bla<br>
+						</p>
 					</div>
 				</div>
 			</div>
@@ -102,15 +115,16 @@
 				<h3>7. Cropped Image</h3>
 				<div class="image" style="display: inline-block; ">
 					{% if cropped_image_array %}
-						{% for e in cropped_image_array %}
-							<div style="border-style: solid; display: inline-block; " class="cropped_result">						
-								<img class="image_inside" id="cropped_image_{{e.seq}}" style="max-width: 570px; border-style: solid; border-color: lawngreen" src="{{e.url}}" />
-								<p class="result">
-									
-								</p>
-							</div>
-						{% endfor %}
-					 {% endif %}
+					{% for e in cropped_image_array %}
+					<div style="border-style: solid; display: inline-block; " class="cropped_result">
+						<img class="image_inside" id="cropped_image_{{e.seq}}"
+							style="max-width: 570px; border-style: solid; border-color: lawngreen" src="{{e.url}}" />
+						<p class="result">
+
+						</p>
+					</div>
+					{% endfor %}
+					{% endif %}
 				</div>
 
 			</div>
@@ -122,105 +136,179 @@
 
 			</div>
 
-			
+
 		</div>
 	</div>
 
 
-	
-</body>
-<script type="text/javascript"> 
-	var cropped = document.getElementsByClassName("cropped_result");
 
+</body>
+<script type="text/javascript">
+	var cropped_result = null;
+	var cropped = document.getElementsByClassName("cropped_result");
+	var raw_text_div = null
+	var raw_cate_div = null
 	var i = 0;
 
-	function next(i){
-		if(i < cropped.length){
-			var status =  document.getElementById("status");
+	function next(i) {
+		if (i < cropped.length) {
+			var status = document.getElementById("status");
 			status.innerHTML = 'Processing...'
 
 			obj = cropped[i]
-			var source = obj.getElementsByClassName('image_inside')[0].src.replace(window.location.href,"");
-			var source_id = obj.getElementsByClassName('image_inside')[0].id.replace("cropped_image_","");
+			var source = obj.getElementsByClassName('image_inside')[0].src.replace(window.location.href, "");
+			var source_id = obj.getElementsByClassName('image_inside')[0].id.replace("cropped_image_", "");
 			var resultdiv = obj.getElementsByClassName('result')[0];
 			resultdiv.style.textAlign = "center"
 			resultdiv.innerHTML = '<img style="max-width: 100%px"; src="http://smallenvelop.com/wp-content/uploads/2014/08/Preloader_41.gif" />'
-			$.post(window.location.href +"text_recognization",
-			{
-				url: source,
-				id:source_id,
-				final_image : '{{final_text_line_file_image_url}}',
-				transaction:'{{transaction_num}}',
-				csrfmiddlewaretoken: '{{ csrf_token }}'
-			},
-			function(data, status){
-				console.log("Data: " + data.text + "\nStatus: " + status);
-				var resultdiv = obj.getElementsByClassName('result')[0];
-				if(!isNaN(data.conf))
-					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><span><b>ID: </b>'+data.seq+'</span><span><b>Conf: </b>'+data.conf+'</span></p>';
-				else{
-					resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><b>Conf: </b>'+0+'</p>';
-				}
-				i += 1;
-				next(i);
-			});
-		}else if(i==cropped.length){
-			$.post(window.location.href +"text_combine",
-			{
-				input_image: '{{final_text_line_file_image_url}}',
-				transaction:'{{transaction_num}}',
-				csrfmiddlewaretoken: '{{ csrf_token }}'
-			},function(data, status){
-				console.log("Data: " + data.text + "\nStatus: " + status);
-				if (data.ok){
-					merged_text_dev = document.getElementById("merged_text");
-					merged_text_dev.innerHTML = data.text
+			$.post(window.location.href + "text_recognization",
+				{
+					url: source,
+					id: source_id,
+					final_image: '{{final_text_line_file_image_url}}',
+					transaction: '{{transaction_num}}',
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				},
+				function (data, status) {
+					console.log("Data: " + data.text + "\nStatus: " + status);
+					var resultdiv = obj.getElementsByClassName('result')[0];
+					if (!isNaN(data.conf))
+						resultdiv.innerHTML = '<button type="button" class="edit_btn" onclick="edit_btn(this)">Edit</button>\
+											<button type="button" class="save_btn" onclick="save_btn(this)" disabled>Save</button>\
+											<p class="should-padding"><b>Text: </b><span class="data_text">'+ data.text + '</span></p>\
+											<p><span class="should-padding"><b>ID: </b><span>'+ data.seq + '</span></span>\
+											<span class="should-padding"><b>Conf: </b><span>'+ data.conf + '</span></span><br>\
+											<span class="should-padding"><b>Type: </b><span class="data_cate">'+ data.cate + '</span></span>\
+											<span class="should-padding"><b>Conf: </b><span>'+ data.cate_conf + '</span></span></p>\
+											<select class="ok_input" onchange="enable_save_btn(this)" disabled>\
+												<option value="yes" selected="">yes</option>\
+												<option value="no">no</option>\
+											</select>';
+					else {
+						resultdiv.innerHTML = '<p><b>Text: </b>' + data.text + '</p><p><b>Conf: </b>' + 0 + '</p>';
+					}
+					i += 1;
+					next(i);
+				});
+		} else if (i == cropped.length) {
+			$.post(window.location.href + "text_combine",
+				{
+					input_image: '{{final_text_line_file_image_url}}',
+					transaction: '{{transaction_num}}',
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				}, function (data, status) {
+					console.log("Data: " + data.text + "\nStatus: " + status);
+					if (data.ok) {
+						merged_text_dev = document.getElementById("merged_text");
+						merged_text_dev.innerHTML = data.text
 
-					var status =  document.getElementById("status");
-					status.innerHTML = 'Done'
-				}
-			});
+						var status = document.getElementById("status");
+						status.innerHTML = 'Done'
+					}
+				});
 		}
 	}
 
 	next(0);
 
-	// for (var i = 0; i < cropped.length; i++) { 
-	// 	obj = cropped[i]
-	// 	var source = obj.getElementsByClassName('image_inside')[0].src.replace(window.location.href,"");
-	// 	var resultdiv = obj.getElementsByClassName('result')[0];
-	// 	resultdiv.style.textAlign = "center"
-	// 	resultdiv.innerHTML = '<img style="max-width: 100%px"; src="http://smallenvelop.com/wp-content/uploads/2014/08/Preloader_41.gif" />'
-    // 	$.post(window.location.href +"text_recognization",
-	// 	{
-	// 		url: source,
-	// 		csrfmiddlewaretoken: '{{ csrf_token }}'
-	// 	},
-	// 	function(data, status){
-	// 		next(function(){
-	// 			console.log("Data: " + data.text + "\nStatus: " + status);
-	// 			var resultdiv = obj.getElementsByClassName('result')[0];
-	// 			resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p><p><b>Conf: </b>'+data.conf+'</p>'
-	// 		});
-	// 	});
-	// }
+	function enable_save_btn(div){
+		console.log(div)
+		cropped_result = $(div).parent('p.result');
 
-	// $('.cropped_result').each(function(i, obj) {
-	// 	var source = obj.getElementsByClassName('image_inside')[0].src.replace(window.location.href,"");
-	// 	var resultdiv = obj.getElementsByClassName('result')[0];
-	// 	resultdiv.style.textAlign = "center"
-	// 	resultdiv.innerHTML = '<img style="max-width: 100%px"; src="http://smallenvelop.com/wp-content/uploads/2014/08/Preloader_41.gif" />'
-    	// $.post(window.location.href +"text_recognization",
-		// {
-		// 	url: source,
-		// 	csrfmiddlewaretoken: '{{ csrf_token }}'
-		// },
-		// function(data, status){
-		// 	console.log("Data: " + data.text + "\nStatus: " + status);
-		// 	var resultdiv = obj.getElementsByClassName('result')[0];
-		// 	resultdiv.innerHTML = '<p><b>Text: </b>'+data.text+'</p>\
-		// 							<p><b>Conf: </b>'+data.conf+'</p>'
-		// });
-	// });
- </script>
+		var save_btn = $(cropped_result).find('button.save_btn')[0];
+		save_btn.disabled = false;
+
+	}
+
+	function get_cate_inner_html(cate) {
+		var array = ['brand_name', 'info', 'index', 'content', 'total', 'thank_you']
+		option = '<select class="cate_input">'
+		for (i = 0; i < array.length; i++) {
+			if (array[i] != cate) {
+				option += '<option value="' + array[i] + '">' + array[i] + '</option>'
+			} else {
+				option += '<option value="' + array[i] + '" selected>' + array[i] + '</option>'
+			}
+		}
+
+		option += '</select>'
+
+		return option
+	}
+
+	function edit_btn(div) {
+		cropped_result = $(div).parent('p.result');
+
+		var list_texts = $(cropped_result).find('span.data_text');
+		var list_cate = $(cropped_result).find('span.data_cate');
+
+		raw_text_div = list_texts[0]
+		raw_cate_div = list_cate[0]
+		text_text = raw_text_div.textContent
+		type_text = raw_cate_div.textContent
+		raw_text_div.innerHTML = '<input type="text" class="text_input" value="' + text_text + '">'
+		raw_cate_div.innerHTML = get_cate_inner_html(type_text)
+
+		var save_btn = $(cropped_result).find('button.save_btn')[0];
+		save_btn.disabled = false;
+
+		var ok_input = $(cropped_result).find('select.ok_input')[0];
+		ok_input.disabled = false;
+		div.disabled = true;
+
+	}
+
+	function save_btn(div) {
+		cropped_result = $(div).parent('p.result');
+
+		var list_texts = $(cropped_result).find('input.text_input');
+		var list_cate = $(cropped_result).find('select.cate_input');
+		var ok_list =  $(cropped_result).find('select.ok_input');
+		raw_text_div = list_texts[0]
+		raw_cate_div = list_cate[0]
+		raw_ok_div = ok_list[0]
+		var strText = raw_text_div.value;
+		var strCate = raw_cate_div.options[raw_cate_div.selectedIndex].value;
+		var strOk = raw_ok_div.options[raw_ok_div.selectedIndex].value;
+		source_id = $(cropped_result).parent('div.cropped_result').find('img.image_inside')[0].id.replace("cropped_image_", "");
+
+		div.disabled = true;
+
+
+		$.post(window.location.href + "update_data",
+			{
+				id: source_id,
+				text: strText,
+				cate: strCate,
+				ok_input:strOk,
+				input_image: '{{final_text_line_file_image_url}}',
+				transaction: '{{transaction_num}}',
+				csrfmiddlewaretoken: '{{ csrf_token }}'
+			}, function (data, status) {
+				console.log("Data: " + data.id_num + "\nStatus: " + status);
+				source_id = data.id_num
+				cropped_result = $('#cropped_image_' + source_id).parent('div.cropped_result').find('p.result')[0];
+				var list_texts = $(cropped_result).find('input.text_input');
+				var list_cate = $(cropped_result).find('select.cate_input');
+				raw_text_div = list_texts[0]
+				raw_cate_div = list_cate[0]
+				var strText = raw_text_div.value;
+				var strCate = raw_cate_div.options[raw_cate_div.selectedIndex].value;
+
+				var list_texts = $(cropped_result).find('span.data_text');
+				var list_cate = $(cropped_result).find('span.data_cate');
+
+				raw_text_div = list_texts[0]
+				raw_cate_div = list_cate[0]
+				raw_text_div.innerHTML = '<span class="data_text">' + strText + '</span>'
+				raw_cate_div.innerHTML = '<span class="data_cate">' + strCate + '</span>'
+
+				var edit_btn = $(cropped_result).find('button.edit_btn')[0];
+				edit_btn.disabled = false;
+			});
+
+	}
+
+</script>
+
 </html>
