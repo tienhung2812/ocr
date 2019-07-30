@@ -56,7 +56,7 @@ class TextCombinator:
         self.final_text = ''
 
         with open('config.yml', 'rb') as f:
-            self.conf = yaml.load(f.read())
+            self.conf = yaml.safe_load(f.read())
 
 
     def find_file_with_extension(self,folder,ext,full_path = False):

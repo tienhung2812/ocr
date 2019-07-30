@@ -59,7 +59,7 @@ class TextDetection:
         self.origcolor, (rh, rw) = self.resize_image(colorReadimage)
 
         with open('config.yml', 'rb') as f:
-            self.conf = yaml.load(f.read())
+            self.conf = yaml.safe_load(f.read())
 
     def resize_image(self,img):
         img_size = img.shape

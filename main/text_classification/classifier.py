@@ -6,14 +6,20 @@ import os
 import pickle
 import yaml
 
-class Classifier:
-    def __init__(self,text):
-        with open('config.yml', 'rb') as f:
-            self.conf = yaml.load(f.read())  
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
-        JSON_PATH = self.conf['TEXT_CLASSIFICATION']['JSON_PATH']
-        M5_PATH = self.conf['TEXT_CLASSIFICATION']['M5_PATH']
-        TOKENIZER_PATH = self.conf['TEXT_CLASSIFICATION']['TOKENIZER_PATH']
+class Classifier(metaclass=Singleton):
+    def __init__(self):
+        with open('config.yml', 'rb') as f:
+            self.conf = yaml.safe_load(f.read())  
+        JSON_PATH = 'text_classification/model/model_sequence_grouped.json'
+        M5_PATH = 'text_classification/model/model_sequence_grouped.h5'
+        TOKENIZER_PATH = 'text_classification/model/tokenizer_sequence_grouped.pickle'
         # load json and create model
         json_file = open(JSON_PATH, 'r')
         loaded_model_json = json_file.read()
@@ -27,17 +33,16 @@ class Classifier:
         with open(TOKENIZER_PATH, 'rb') as handle:
             self.tokenizer = pickle.load(handle)
 
-        self.text = text
         self.total_possible_outcomes = ['brand_name', 'info', 'index', 'content', 'total', 'thank_you']
 
-    def predict(self):
-        tokens = self.tokenizer.texts_to_sequences([self.text])
+    def predict(self,text):
+        tokens = self.tokenizer.texts_to_sequences([text])
         tokens = pad_sequences(tokens, maxlen=self.conf['TEXT_CLASSIFICATION']['MAX_WORD_COUNT'])
         prediction = self.loaded_model.predict(np.array(tokens))
         i,j = np.where(prediction == prediction.max()) #calculates the index of the maximum element of the array across all axis
         # i->rows, j->columns
         i = int(i)
         j = int(j)
-        print("Text: ",self.text)
+        print("Text: ",text)
         print("Result:",self.total_possible_outcomes[j])
         return self.total_possible_outcomes[j],prediction[0][j]

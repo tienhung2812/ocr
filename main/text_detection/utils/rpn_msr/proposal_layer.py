@@ -35,7 +35,7 @@ def proposal_layer(rpn_cls_prob_reshape, rpn_bbox_pred, im_info, _feat_stride=[1
     # apply NMS with threshold 0.7 to remaining proposals
     # take after_nms_topN proposals after NMS
     # return the top proposals (-> RoIs top, scores top)
-    #layer_params = yaml.load(self.param_str_)
+    #layer_params = yaml.safe_load(self.param_str_)
     """
 
     _anchors = generate_anchors(scales=np.array(anchor_scales))  # 生成基本的9个anchor
