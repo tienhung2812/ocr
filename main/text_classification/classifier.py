@@ -17,9 +17,9 @@ class Classifier(metaclass=Singleton):
     def __init__(self):
         with open('config.yml', 'rb') as f:
             self.conf = yaml.safe_load(f.read())  
-        JSON_PATH = 'text_classification/model/model_sequence_grouped.json'
-        M5_PATH = 'text_classification/model/model_sequence_grouped.h5'
-        TOKENIZER_PATH = 'text_classification/model/tokenizer_sequence_grouped.pickle'
+        JSON_PATH = 'text_classification/model/model.json'
+        M5_PATH = 'text_classification/model/model.h5'
+        TOKENIZER_PATH = 'text_classification/model/tokenizer.pickle'
         # load json and create model
         json_file = open(JSON_PATH, 'r')
         loaded_model_json = json_file.read()
