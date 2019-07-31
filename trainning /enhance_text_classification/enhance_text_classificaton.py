@@ -1,14 +1,10 @@
 import os
-import re
 import json
-
 import cv2
 import numpy as np
 import pandas as pd
-import yaml
+
 from underthesea import word_tokenize
-from pattern.en import spelling
-from utils.find_real_path import *
 
 MAX_WIDTH_MULTIPLY = 8
 NUM_SPACE_MARK_AS_TAB = 1
@@ -19,11 +15,10 @@ class TextCombinator:
         self.transaction_num = int(transaction_num)
 
         #Get the folder
-        # path = '/home/hung/ocr/main/media'
-        # path += '/'+str(self.transaction_num)
-        # image_path = '/home/hung/ocr/main' + input_image
-        path = get_real_path('media/'+transaction_num)
-        image_path = get_real_path(input_image)
+        path = '/home/hung/ocr/main/media'
+        path += '/'+str(self.transaction_num)
+        image_path = '/home/hung/ocr/main' + input_image
+
         # Init variable
         
         # Bounding box
@@ -55,9 +50,6 @@ class TextCombinator:
         self.max_charater = self.find_max_charater_per_row()
         self.largest_pixel_charater = 0
         self.final_text = ''
-
-        with open('config.yml', 'rb') as f:
-            self.conf = yaml.safe_load(f.read())
 
 
     def find_file_with_extension(self,folder,ext,full_path = False):
@@ -113,10 +105,6 @@ class TextCombinator:
     def filter_low_conf(self,text_df):
         return text_df.query('conf>0')
 
-    def reduce_lengthening(self,text):
-        pattern = re.compile(r"(.)\1{2,}")
-        return pattern.sub(r"\1\1", text)
-
     def arrange_text(self,index,row_data,text_df):
         spacedicator = ' '
         bounding_box_tl = int(row_data['x_tl'] - self.data['x_tl'].min())
@@ -132,7 +120,7 @@ class TextCombinator:
                 spaces = self.how_many_space(previous_row,row,pixel_per_space)
                 final_text+= spacedicator*spaces
             
-            final_text += self.reduce_lengthening(str(row['text']))
+            final_text += str(row['text'])
             previous_row = row
         # print(filtered_text_df)
         return final_text
@@ -144,7 +132,7 @@ class TextCombinator:
 
         pixel_between_row1_row2 = row2['left'] - x_tr_row1
 
-        pixel_as_tab = pixel_per_space*self.conf['TEXT_COMBINE']['NUM_SPACE_MARK_AS_TAB']
+        pixel_as_tab = pixel_per_space*NUM_SPACE_MARK_AS_TAB
 
         if pixel_between_row1_row2 <= pixel_as_tab:
             return 1
@@ -176,14 +164,6 @@ class TextCombinator:
         cv2.destroyAllWindows()
 
     def combine(self):
-        # tokenrize_data = pd.DataFrame()
-        # tokenrize_data['tokenrize'] = np.nan
-        # for index, row in self.data.iterrows():
-        #     if row['parrent'] <0 :
-        #         text_df = self.get_text_file_pandas(index)
-        #         tokenrize = np.array(self.text_word_tokenrize(text_df))
-        #         tokenrize_data.loc[index,'tokenrize'] =[tokenrize]
-
         combine_text = ''
         for index, row in self.data.iterrows():
             if row['parrent'] <0 :
@@ -195,15 +175,11 @@ class TextCombinator:
                 result = self.arrange_text(index,row,text_df)
                 # print(result)
                 combine_text += (result+'\n')
-                
-
-        
-
         return combine_text
 
     def prepare_category_data(self):
         category = ['brand_name', 'info', 'index', 'content', 'total', 'thank_you']
-        data_json_path = os.getcwd()+'/media/'+str(self.transaction_num)+'/text_detection/data.json'
+        data_json_path = '../../main/media/'+str(self.transaction_num)+'/text_detection/data.json'
         if os.path.exists(data_json_path):
             with open(data_json_path) as f:
                 current_data = json.load(f)
@@ -242,4 +218,8 @@ class TextCombinator:
         else:
             return None
 
+        
+tc = TextCombinator(1564548580,'/media/1564548580/text_detection/final_1564548583wraped_46.png')
+# print(tc.combine())
 
+print(tc.group_by_cate())

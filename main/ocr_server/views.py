@@ -151,7 +151,8 @@ def text_combine(request):
         if len(transaction_num) > 0:
             tc = TextCombinator(transaction_num,input_image)
             text = tc.combine()
-            text_result = {"ok":True,"text":text}
+            cate_data = tc.group_by_cate()
+            text_result = {"ok":True,"text":text,"cate_data":cate_data}
         return JsonResponse(text_result)
     else:
         return HttpResponseRedirect("/")
