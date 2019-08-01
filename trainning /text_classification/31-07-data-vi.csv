@@ -1,4 +1,5 @@
 sentence,brand_name,info,index,content,total,thank_you
+DT: 0903915144,0,1,0,0,0,0
 FC GOOD COFEE,1,0,0,0,0,0
 "ĐC: 126 Lai Hùng Cường, Vĩnh Lọc B,",0,1,0,0,0,0
 "Bình Chánh, TpHCM",0,1,0,0,0,0
@@ -56,6 +57,7 @@ TÊN HÀNG SL ĐGIÁ T.TIỀN,0,0,1,0,0,0
 "Kem Vanila 1 22,000 22,000",0,0,0,1,0,0
 "Kem Sầu Riêng 1 22,000 22,000",0,0,0,1,0,0
 "Kem Dừa 1 22,000 22,000",0,0,0,1,0,0
+DT: 0903144,0,1,0,0,0,0
 "Nước Ép Ổi 1 28,000 28,000",0,0,0,0,1,0
 "Nước Ép Thơm 1 28,000 28,000",0,0,0,1,0,0
 "T.CONG 8 489,000",0,0,0,0,1,0
@@ -91,6 +93,7 @@ Số PTT: 00000066 Ngày: 13/01/15 - 11720,0,1,0,0,0,0
 Ca: 1 - Thu ngan: cashier,0,1,0,0,0,0
 Măt hàng SL. Dongid Thanh tien,0,0,1,0,0,0
 "nhan bo oil{ 4x 35,000 (10%) 31/500",0,0,0,1,0,0
+DT: 09033d4,0,1,0,0,0,0
 "nhan buom oil1 2x 35,000 (10%) 63,000",0,0,0,1,0,0
 "nhẫn hoa oil nấm 1x 55,000 (10%) 49,500",0,0,0,1,0,0
 "nhãn nơ đai 1x 55,000-- (10%) 49,500",0,0,0,1,0,0
@@ -111,6 +114,7 @@ Ten menu Don gia So luong Tien,0,0,1,0,0,0
 "Tien ban 735,000",0,0,0,0,1,0
 "Ten khong thue 735,000",0,0,0,0,1,0
 "Tien dich vu 36,000",0,0,0,0,1,0
+dT: 0903915144,0,1,0,0,0,0
 Tong Cong 711.000,0,0,0,0,1,0
 "Tien 771,000",0,0,0,0,1,0
 MERCI!,0,0,0,0,0,1
@@ -127,6 +131,7 @@ Bánh trắng,0,0,0,1,0,0
 "35,000 35.000",0,0,0,0,1,0
 -Hẽn xảo.,0,0,0,1,0,0
 "_Ò 12000 12,000",0,0,0,0,1,0
+dt: 0444654,0,1,0,0,0,0
 „„j5/000 _ _ 15.000,0,0,0,1,0,0
 """BĂp non xảo ˆ",0,0,0,0,1,0
 tr __ 15.000.,0,0,0,1,0,0
@@ -140,6 +145,7 @@ Thanh toán. F,0,0,0,0,1,0
 (Cam on và Vi Suý khách,0,0,0,0,0,1
 LIKE CAFE,1,0,0,0,0,0
 "Số 10 Khúc Hạo, Ba Đình, Hà Nội",0,1,0,0,0,0
+DT: 4462164665498,0,1,0,0,0,0
 HOA ĐƠN THANH TOÁN.,0,1,0,0,0,0
 Bàn01 ` 19/01/2014 8:49:59H ˆ,0,1,0,0,0,0
 STT Thực đơn ĐVT Đơn Giá SL Thành Tiền,0,0,1,0,0,0
@@ -179,6 +185,7 @@ HÓA ĐƠN THANH TOÁN,0,1,0,0,0,0
 Ngày vào 23112015 Gi@ vào: 124727,0,1,0,0,0,0
 Ngày: — 23/12015 Giờ 1424727,0,1,0,0,0,0
 Ban: TRET1,0,1,0,0,0,0
+DT: 51c44458,0,1,0,0,0,0
 CA PHÉ SỮA ĐÁ 20 35000 70000,0,0,0,1,0,0
 CA PHE ĐEN 1.0 25.000 25.000,0,0,0,1,0,0
 T.CONG 3.0 95.000,0,0,0,0,1,0
@@ -373,273 +380,8 @@ Càng ghẹ rang muối,0,0,0,1,0,0
 Mì xảo bò.,0,0,0,1,0,0
 "1,00 50000 0 50.000",0,0,0,1,0,0
 Tổng cộng 435.000,0,0,0,0,1,0
-Bar Cafe 70,1,0,0,0,0,0
-Boa Café & Donuts,1,0,0,0,0,0
-Coffee Hàn Giang,1,0,0,0,0,0
-Coffee O2,1,0,0,0,0,0
-Coffee Shop 333,1,0,0,0,0,0
-Coffee Shop 78,1,0,0,0,0,0
-Công Ty Cổ Phần Trung Nguyên-Cn,1,0,0,0,0,0
-Cơ Sở Chế Biến Cà Phê Minh Quang,1,0,0,0,0,0
-Chill Out Cafe,1,0,0,0,0,0
-Dịch Vụ Rửa Xe-Cà Phê Motor,1,0,0,0,0,0
-Dieu Thu Coffee Shop,1,0,0,0,0,0
-Doco Donuts & Coffee,1,0,0,0,0,0
-Đại Lý Nước Uống Thiên Nhiên-Cà Phê-Giải Khát,1,0,0,0,0,0
-Event Cafe,1,0,0,0,0,0
-Hd Cafe,1,0,0,0,0,0
-Heaven Cafenjour,1,0,0,0,0,0
-Quán Cà Phê 4U Foryou,1,0,0,0,0,0
-Quán Cà Phê 71,1,0,0,0,0,0
-Quán Cà Phê 37,1,0,0,0,0,0
-Quán Cà Phê Amimi,1,0,0,0,0,0
-Quán Cà Phê An Nam,1,0,0,0,0,0
-Rok Coffee And Leather,1,0,0,0,0,0
-Sau Luong Coffee Shop,1,0,0,0,0,0
-Sinh Vien Coffee Shop,1,0,0,0,0,0
-Skycoffee,1,0,0,0,0,0
-Son Fashion Shop & Wifi Book Cafe,1,0,0,0,0,0
-Tiệm Cà Phê 32 Phan Châu Trinh,1,0,0,0,0,0
-Tiệm Cà Phê Tấn Toàn,1,0,0,0,0,0
-Tinh Tra Coffee Shop,1,0,0,0,0,0
-Ngọc Vân ,1,0,0,0,0,0
-Phì Lũ ,1,0,0,0,0,0
-Thái Ngư ,1,0,0,0,0,0
-HƯƠNG VIỆT,1,0,0,0,0,0
-Sao Đỏ,1,0,0,0,0,0
-Apsara,1,0,0,0,0,0
-Sen Xanh  Nguyễn Hữu,1,0,0,0,0,0
-Thanh Thủy,1,0,0,0,0,0
-Cơm Niêu Tre Làng Ngà  Nguyễn Tri,1,0,0,0,0,0
-Kim Đô,1,0,0,0,0,0
-Rainbow,1,0,0,0,0,0
-Đèn Lồng,1,0,0,0,0,0
-Ý Mr-Pizza,1,0,0,0,0,0
-Phì Lũ,1,0,0,0,0,0
-Khách Sạn Lý Trường Thành,1,0,0,0,0,0
-Thanh Nhân,1,0,0,0,0,0
-Ngọc Vân,1,0,0,0,0,0
-Hồng Phúc-Ngọc Vân,1,0,0,0,0,0
-Đại Thống,1,0,0,0,0,0
-Cơm Niêu Cọi Nguồn,1,0,0,0,0,0
-Hướng Dương,1,0,0,0,0,0
-Bảo Cầm,1,0,0,0,0,0
-Hải Phố,1,0,0,0,0,0
-Hải Hồ,1,0,0,0,0,0
-Thùy Dương,1,0,0,0,0,0
-Nhà Đỏ,1,0,0,0,0,0
-Quốc Sang,1,0,0,0,0,0
-Thành Thái Ngư,1,0,0,0,0,0
-Vạn Phúc,1,0,0,0,0,0
-Hồ Tây,1,0,0,0,0,0
-"Trần Ii 352, Hải",1,0,0,0,0,0
-Đông Tây,1,0,0,0,0,0
-Ngọc Trân,1,0,0,0,0,0
-Bia Tiệp,1,0,0,0,0,0
-A.Dens,1,0,0,0,0,0
-Thanh Long,1,0,0,0,0,0
-Cơm Hến ,1,0,0,0,0,0
-Hoàng Lê 31-33-35 Tôn Thất,1,0,0,0,0,0
-Trùng Dương  Điện Biên,1,0,0,0,0,0
-Bảo Nam Trân,1,0,0,0,0,0
-Cá Mập Xanh 132-134 Lê Đình,1,0,0,0,0,0
-Mr Vite,1,0,0,0,0,0
-Karaoke Belle,1,0,0,0,0,0
-Hồng Ngọc,1,0,0,0,0,0
-Ba Quy,1,0,0,0,0,0
-Hàn Quốc,1,0,0,0,0,0
-Hương Việt,1,0,0,0,0,0
-Hải Nam,1,0,0,0,0,0
-Pizza,1,0,0,0,0,0
-Indochine,1,0,0,0,0,0
-The Cool Spot,1,0,0,0,0,0
-Ngũ Sắc,1,0,0,0,0,0
-Kingsdon,1,0,0,0,0,0
-Út Lan,1,0,0,0,0,0
-Cơm Niêu Ngô Đồng,1,0,0,0,0,0
-Song Hỷ,1,0,0,0,0,0
-Hải Yến,1,0,0,0,0,0
-Chay Thúy,1,0,0,0,0,0
-Pha Lê,1,0,0,0,0,0
-Phương Nam,1,0,0,0,0,0
-Vạn Tường,1,0,0,0,0,0
-Hoa Anh Đào,1,0,0,0,0,0
-Hừng Đông,1,0,0,0,0,0
-Eve Pub,1,0,0,0,0,0
-Nhật Bản Kachou Fugetsu,1,0,0,0,0,0
-Sea & Mountain  Nguyễn Văn,1,0,0,0,0,0
-Chay Thanh Tâm,1,0,0,0,0,0
-Nhà Hàng-Cơ Sở,1,0,0,0,0,0
-Năm Đào,1,0,0,0,0,0
-Steak House,1,0,0,0,0,0
-Trúc Gia Viên,1,0,0,0,0,0
-Tư Hề,1,0,0,0,0,0
-Bốn Mùa,1,0,0,0,0,0
-Red Sky,1,0,0,0,0,0
-Kingsdom,1,0,0,0,0,0
-Biển Rừng,1,0,0,0,0,0
-Phố Vui,1,0,0,0,0,0
-Huy Hoàng,1,0,0,0,0,0
-Hương Lan  Phan Đăng,1,0,0,0,0,0
-Chay Sinh An,1,0,0,0,0,0
-Ca Nhạc Không Gian Xưa,1,0,0,0,0,0
-Sơn Trà,1,0,0,0,0,0
-Clb Golf & Restaurant,1,0,0,0,0,0
-Knb Hotel & Restaurant Supply Co. Ltd,1,0,0,0,0,0
-Samdi Restaurant,1,0,0,0,0,0
-SL THỨC UỐNG SL ĐGía T.TIỀN ,0,0,1,0,0,0
-HÀNG sl Đơn Giá ,0,0,1,0,0,0
-sl Món hàng SL ĐGía ,0,0,1,0,0,0
-ĐỒ ĂN SL Đơn Giá Thành Tiền ,0,0,1,0,0,0
-Sl THỨC UỐNG SL ĐGía T.Tiền ,0,0,1,0,0,0
-sl TÊN sl Đơn Giá ,0,0,1,0,0,0
-Sl Món hàng SL Đơn Giá Thành Tiền ,0,0,1,0,0,0
-sl Mặt hàng SL Đ.Giá ,0,0,1,0,0,0
-sl  MÓN HÀNg Sl Đơn Giá Thành Tiền ,0,0,1,0,0,0
- MÓN HÀNg Sl ĐGía Thành Tiền ,0,0,1,0,0,0
- MÓN HÀNg Sl Đ.Giá ,0,0,1,0,0,0
-Sl  MÓN HÀNg sl DGia Thành Tiền ,0,0,1,0,0,0
-Sl Tên hàng sl Đơn Giá ,0,0,1,0,0,0
- MÓN HÀNg SL DGia ,0,0,1,0,0,0
- MÓN HÀNg sl ĐGía T.TIỀN ,0,0,1,0,0,0
-Món hàng sl ĐGía T.Tiền ,0,0,1,0,0,0
- MÓN HÀNg Sl ĐGía ,0,0,1,0,0,0
-Tên hàng SL Đ.Giá ,0,0,1,0,0,0
-sl TÊN HÀNG SL DGia T.TIỀN ,0,0,1,0,0,0
-TÊN HÀNG Sl Đơn Giá ,0,0,1,0,0,0
-Món hàng Sl ĐGía T.TIỀN ,0,0,1,0,0,0
-ĐỒ ĂN sl Đ.Giá Thành Tiền ,0,0,1,0,0,0
-SL TÊN Sl Đ.Giá ,0,0,1,0,0,0
-Mặt hàng SL Đ.Giá T.Tiền ,0,0,1,0,0,0
- MÓN HÀNg Sl Đ.Giá ,0,0,1,0,0,0
-Mặt hàng SL Đơn Giá ,0,0,1,0,0,0
-Sl TÊN Sl DGia T.TIỀN ,0,0,1,0,0,0
-Sl Tên hàng Sl Đơn Giá Thành Tiền ,0,0,1,0,0,0
-Sl HÀNG Sl Đơn Giá ,0,0,1,0,0,0
-SL  MÓN HÀNg SL DGia ,0,0,1,0,0,0
-Mặt hàng SL DGia T.TIỀN ,0,0,1,0,0,0
-Mặt hàng sl Đơn Giá T.Tiền ,0,0,1,0,0,0
-Sl  MÓN HÀNg sl ĐGía ,0,0,1,0,0,0
-THỨC UỐNG sl Đơn Giá T.Tiền ,0,0,1,0,0,0
-Tên hàng Sl Đơn Giá T.Tiền ,0,0,1,0,0,0
-SL TÊN sl DGia Thành Tiền ,0,0,1,0,0,0
-Sl TÊN sl Đ.Giá T.TIỀN ,0,0,1,0,0,0
-SL Mặt hàng Sl DGia Thành Tiền ,0,0,1,0,0,0
-TÊN SL DGia T.Tiền ,0,0,1,0,0,0
-sl ĐỒ ĂN SL Đơn Giá ,0,0,1,0,0,0
-SL  MÓN HÀNg sl ĐGía ,0,0,1,0,0,0
-THỨC UỐNG SL Đ.Giá Thành Tiền ,0,0,1,0,0,0
-sl Mặt hàng Sl DGia Thành Tiền ,0,0,1,0,0,0
-SL THỨC UỐNG Sl DGia ,0,0,1,0,0,0
-Sl  MÓN HÀNg sl Đ.Giá T.Tiền ,0,0,1,0,0,0
-SL Món hàng sl DGia ,0,0,1,0,0,0
-Sl TÊN SL ĐGía ,0,0,1,0,0,0
-HÀNG sl DGia Thành Tiền ,0,0,1,0,0,0
-Sl  MÓN HÀNg SL Đ.Giá Thành Tiền ,0,0,1,0,0,0
-Sl THỨC UỐNG sl DGia ,0,0,1,0,0,0
-sl ĐỒ ĂN SL DGia ,0,0,1,0,0,0
-sl Mặt hàng Sl ĐGía ,0,0,1,0,0,0
-HÀNG Sl ĐGía Thành Tiền ,0,0,1,0,0,0
-sl HÀNG sl Đ.Giá ,0,0,1,0,0,0
-TÊN HÀNG Sl Đơn Giá ,0,0,1,0,0,0
-sl Mặt hàng sl DGia T.Tiền ,0,0,1,0,0,0
-SL TÊN HÀNG sl ĐGía ,0,0,1,0,0,0
-Sl Tên hàng SL DGia Thành Tiền ,0,0,1,0,0,0
-Sl TÊN SL ĐGía ,0,0,1,0,0,0
-HÀNG Sl ĐGía ,0,0,1,0,0,0
-THỨC UỐNG SL Đ.Giá T.TIỀN ,0,0,1,0,0,0
-SL Món hàng SL ĐGía T.TIỀN ,0,0,1,0,0,0
-sl ĐỒ ĂN sl ĐGía ,0,0,1,0,0,0
-sl THỨC UỐNG SL Đơn Giá Thành Tiền ,0,0,1,0,0,0
-Sl  MÓN HÀNg sl Đ.Giá ,0,0,1,0,0,0
-THỨC UỐNG SL Đ.Giá ,0,0,1,0,0,0
-TÊN HÀNG sl Đơn Giá ,0,0,1,0,0,0
-SL THỨC UỐNG sl Đ.Giá T.TIỀN ,0,0,1,0,0,0
-Tên hàng SL Đ.Giá T.TIỀN ,0,0,1,0,0,0
-ĐỒ ĂN sl DGia T.TIỀN ,0,0,1,0,0,0
- MÓN HÀNg SL DGia ,0,0,1,0,0,0
-TÊN HÀNG SL Đ.Giá T.Tiền ,0,0,1,0,0,0
-HÀNG SL Đơn Giá ,0,0,1,0,0,0
-SL HÀNG sl DGia ,0,0,1,0,0,0
-sl TÊN SL DGia ,0,0,1,0,0,0
-SL THỨC UỐNG Sl DGia ,0,0,1,0,0,0
-Sl TÊN SL DGia ,0,0,1,0,0,0
-ĐỒ ĂN sl ĐGía ,0,0,1,0,0,0
-HÀNG SL ĐGía ,0,0,1,0,0,0
-SL THỨC UỐNG sl Đ.Giá ,0,0,1,0,0,0
-SL THỨC UỐNG Sl ĐGía T.Tiền ,0,0,1,0,0,0
-Sl TÊN HÀNG SL ĐGía T.Tiền ,0,0,1,0,0,0
-sl Món hàng Sl ĐGía Thành Tiền ,0,0,1,0,0,0
-Sl TÊN HÀNG Sl Đơn Giá ,0,0,1,0,0,0
-Sl TÊN Sl DGia ,0,0,1,0,0,0
-Món hàng SL ĐGía ,0,0,1,0,0,0
-TÊN Sl Đ.Giá T.Tiền ,0,0,1,0,0,0
-Sl Món hàng Sl DGia ,0,0,1,0,0,0
-Món hàng SL DGia ,0,0,1,0,0,0
-SL THỨC UỐNG sl DGia Thành Tiền ,0,0,1,0,0,0
-sl  MÓN HÀNg sl DGia ,0,0,1,0,0,0
-TÊN HÀNG sl Đơn Giá T.Tiền ,0,0,1,0,0,0
-sl Tên hàng sl DGia ,0,0,1,0,0,0
-HÀNG Sl Đ.Giá ,0,0,1,0,0,0
-sl TÊN HÀNG Sl Đ.Giá ,0,0,1,0,0,0
-Sl  MÓN HÀNg sl Đ.Giá Thành Tiền ,0,0,1,0,0,0
-SL Tên hàng sl Đơn Giá T.Tiền ,0,0,1,0,0,0
-TÊN HÀNG sl ĐGía ,0,0,1,0,0,0
-TÊN Sl Đ.Giá Thành Tiền ,0,0,1,0,0,0
-sl TÊN Sl Đ.Giá T.TIỀN ,0,0,1,0,0,0
-CAM ƠN QUÝ KHÁCH .HEN GAP LAI ,0,0,0,0,0,1
-CAM ƠN QUÝ KHÁCH .HEN GAP LAI ,0,0,0,0,0,1
-HEN GAP LAI ,0,0,0,0,0,1
-Thank you .HẸN GẶP LẠI ,0,0,0,0,0,1
-CAM ƠN QUÝ KHÁCH .,0,0,0,0,0,1
-Cam on .,0,0,0,0,0,1
-CAM ON .HEN GAP LAI ,0,0,0,0,0,1
-Hẹn gặp lại ,0,0,0,0,0,1
-Cam on .HẸN GẶP LẠI ,0,0,0,0,0,1
-CAM ON .,0,0,0,0,0,1
-CAM ƠN QUÝ KHÁCH .,0,0,0,0,0,1
-Cám ơn quý khách .,0,0,0,0,0,1
-Thank you .HEN GAP LAI ,0,0,0,0,0,1
-Cam on .HẸN GẶP LẠI ,0,0,0,0,0,1
-Cám ơn quý khách .HẸN GẶP LẠI ,0,0,0,0,0,1
-CAM ON .,0,0,0,0,0,1
-Thank you .,0,0,0,0,0,1
-CAM ƠN QUÝ KHÁCH .HẸN GẶP LẠI ,0,0,0,0,0,1
-Cam on .HEN GAP LAI ,0,0,0,0,0,1
-HẸN GẶP LẠI ,0,0,0,0,0,1
-CAM ƠN QUÝ KHÁCH .Hẹn gặp lại ,0,0,0,0,0,1
-Cam on .Hẹn gặp lại ,0,0,0,0,0,1
-HEN GAP LAI ,0,0,0,0,0,1
-Thank you .,0,0,0,0,0,1
-Cám ơn quý khách .,0,0,0,0,0,1
-CAM ƠN QUÝ KHÁCH .HẸN GẶP LẠI ,0,0,0,0,0,1
-Thank you .,0,0,0,0,0,1
-HEN GAP LAI ,0,0,0,0,0,1
-CAM ON .HẸN GẶP LẠI ,0,0,0,0,0,1
-HEN GAP LAI ,0,0,0,0,0,1
-Cám ơn quý khách .HẸN GẶP LẠI ,0,0,0,0,0,1
-CAM ƠN QUÝ KHÁCH .HEN GAP LAI ,0,0,0,0,0,1
-Hẹn gặp lại ,0,0,0,0,0,1
-Cám ơn quý khách .Hẹn gặp lại ,0,0,0,0,0,1
-CAM ON .HẸN GẶP LẠI ,0,0,0,0,0,1
-HEN GAP LAI ,0,0,0,0,0,1
-Cám ơn quý khách .HEN GAP LAI ,0,0,0,0,0,1
-CAM ƠN QUÝ KHÁCH .HEN GAP LAI ,0,0,0,0,0,1
-Cảm Ơn Quý khách : Hen Gap Lal!,0,0,0,0,0,1
-Cam on .HẸN GẶP LẠI ,0,0,0,0,0,1
-Cam on .,0,0,0,0,0,1
-Thank you .,0,0,0,0,0,1
-Cam on .HẸN GẶP LẠI ,0,0,0,0,0,1
-CAM ƠN QUÝ KHÁCH .,0,0,0,0,0,1
-CAM ƠN QUÝ KHÁCH .,0,0,0,0,0,1
-HEN GAP LAI ,0,0,0,0,0,1
-Hẹn gặp lại ,0,0,0,0,0,1
-Cám ơn quý khách .,0,0,0,0,0,1
 Ngày: 14/012018 Giờ: 17:25:30,0,1,0,0,0,0
 Khang - Cều Giây - HN,0,1,0,0,0,0
-Cảm Ơn Quý khách : Hen Gap Lal!,0,0,0,0,0,1
-Cảm Ơn Quý khách : Hen Gap Lai!,0,0,0,0,0,1
-Cảm Ơn Quý khách : Hẹn Gap Lal!,0,0,0,0,0,1
 Service Charge : RM 0.00,0,0,0,0,1,0
 PHIẾU THANH TOÁN,0,1,0,0,0,0
 Giảm 10%: 10.000,0,0,0,0,1,0

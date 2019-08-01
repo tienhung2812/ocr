@@ -29,6 +29,10 @@
 	.should-padding {
 		padding: 0 10px;
 	}
+
+	p.cate-content-wrapper{
+		white-space: initial;
+	}
 </style>
 
 <body>
@@ -135,6 +139,13 @@
 				</div>
 
 			</div>
+			<div class="col-12">
+				<h3>9. Merged Category Recognization</h3>
+				<div class="image">
+					<p id="merged_category" style="white-space: pre;"></p>
+				</div>
+
+			</div>
 
 
 		</div>
@@ -201,7 +212,10 @@
 					if (data.ok) {
 						merged_text_dev = document.getElementById("merged_text");
 						merged_text_dev.innerHTML = data.text
-
+						merged_cate_div = document.getElementById("merged_category");
+						if (data.cate_data != null){
+							merged_cate_div.innerHTML = get_merged_cate_data(data.cate_data)
+						}
 						var status = document.getElementById("status");
 						status.innerHTML = 'Done'
 					}
@@ -307,6 +321,31 @@
 				edit_btn.disabled = false;
 			});
 
+	}
+
+	function arrange_cate_json_data(cate_data){
+		result = ''
+		for(var key in cate_data){
+			data = cate_data[key]
+			result+= '<div class="cate-content col-3"><p class="cate-content-wrapper">'+key+':<br>'
+			for (var cate_key in data)
+				result+= '<b><span class="cate-content-key">'+cate_key+':</span></b><span class="cate-content-data">'+data[cate_key]+'</span><br>'
+			result+='</p></div>'
+		}
+		return result
+	}
+
+	function get_merged_cate_data(data){
+		array = ['brand_name', 'info', 'index', 'content', 'total', 'thank_you']
+		result=''
+		for(i=0;i<array.length;i++){
+			col = array[i]
+			result+= '<div id="'+col+'-div">\
+						<p id="'+col+'">\
+						<b>'+col+': </b><br>\
+						<div class="div-cate-content container"><div class="row">'+arrange_cate_json_data(data[col])+'</div></div></div>'
+		}
+		return result
 	}
 
 </script>
