@@ -233,7 +233,7 @@ class TextDetection:
 
                     image = four_point_transform(self.orig, box[:8].reshape(4, 2))
                     # image = self.apply_thresholding(image)
-                    image = self.apply_brightness_contrast(image)
+                    # image = self.apply_brightness_contrast(image)
                     cv2.imwrite(filename, image)
                     replace_filename= get_url_path(filename)
                     cropped_image_file_list.append(

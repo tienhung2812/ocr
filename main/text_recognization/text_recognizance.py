@@ -10,7 +10,7 @@ import numpy as np
 import os
 import cv2
 from utils.find_real_path import *
-from text_classification.classifier import Classifier, InfoClassifier, TotalClassifier
+from text_classification import Classifier, InfoClassifier, TotalClassifier
 import json
 
 class TextRecognizance:
