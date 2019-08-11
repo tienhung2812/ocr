@@ -10,7 +10,7 @@ import numpy as np
 import os
 import cv2
 from utils.find_real_path import *
-from text_classification.classifier import Classifier
+from text_classification.classifier import Classifier, InfoClassifier, TotalClassifier
 import json
 
 class TextRecognizance:
@@ -73,6 +73,15 @@ class TextRecognizance:
         if len(text) > 0:
             classifier = Classifier()
             cate, cate_conf = classifier.predict(text)
+
+            if cate == 'info':
+                info_classifier = InfoClassifier()
+                info_cate, info_cate_conf = info_classifier.predict(text)
+                cate += ', '+info_cate
+            elif cate == 'total':
+                total_classifier = TotalClassifier()
+                total_cate, total_cate_conf = total_classifier.predict(text)
+                cate += ', '+total_cate
             return cate, cate_conf
         return '',0
 
