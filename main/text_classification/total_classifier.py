@@ -13,13 +13,14 @@ class Singleton(type):
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
-class Classifier(metaclass=Singleton):
+
+class TotalClassifier(metaclass=Singleton):
     def __init__(self):
         with open('config.yml', 'rb') as f:
             self.conf = yaml.safe_load(f.read())  
-        JSON_PATH = 'text_classification/model/train_vi_11_08/model.json'
-        M5_PATH = 'text_classification/model/train_vi_11_08/model.h5'
-        TOKENIZER_PATH = 'text_classification/model/train_vi_11_08/tokenizer.pickle'
+        JSON_PATH = 'text_classification/total_model/total_model.json'
+        M5_PATH = 'text_classification/total_model/total_model.h5'
+        TOKENIZER_PATH = 'text_classification/total_model/total_tokenizer.pickle'
         # load json and create model
         json_file = open(JSON_PATH, 'r')
         loaded_model_json = json_file.read()
@@ -33,7 +34,7 @@ class Classifier(metaclass=Singleton):
         with open(TOKENIZER_PATH, 'rb') as handle:
             self.tokenizer = pickle.load(handle)
 
-        self.total_possible_outcomes = ['brand_name', 'info', 'index', 'content', 'total', 'thank_you']
+        self.total_possible_outcomes = ["rate","repay","tax","total","pay","text_money","discount"]
 
     def predict(self,text):
         tokens = self.tokenizer.texts_to_sequences([text])
@@ -46,5 +47,3 @@ class Classifier(metaclass=Singleton):
         print("Text: ",text)
         print("Result:",self.total_possible_outcomes[j])
         return self.total_possible_outcomes[j],prediction[0][j]
-
-
