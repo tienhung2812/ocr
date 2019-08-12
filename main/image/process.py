@@ -140,12 +140,12 @@ class ReceiptImage:
 
         # gray = cv.cvtColor(self.warped, cv.COLOR_BGR2GRAY)
 
-        # sharpen image
-        sharpen = cv.GaussianBlur(self.warped, (0,0), 3)
-        sharpen = cv.addWeighted(self.warped, 1.5, sharpen, -0.5, 0)
+        # # sharpen image
+        # sharpen = cv.GaussianBlur(self.warped, (0,0), 3)
+        # sharpen = cv.addWeighted(self.warped, 1.5, sharpen, -0.5, 0)
 
-        # apply adaptive threshold to get black and white effect
-        self.warped = cv.adaptiveThreshold(sharpen, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 21, 15)
+        # # apply adaptive threshold to get black and white effect
+        # self.warped = cv.adaptiveThreshold(sharpen, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 21, 15)
     
         self.saveImage()
 

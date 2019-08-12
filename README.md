@@ -7,6 +7,12 @@ https://hung-ocr.herokuapp.com
 ## LSTM Training
 You can find the LSTM classification usage in [here](trainning/text_classification)
 
+# For looking more abount the flow of the project
+```
+main/main.py
+```  
+
+
 ## Installation
 You can run ```python3 setup-linux.py``` or follow instruction below:
 

@@ -43,6 +43,6 @@ class InfoClassifier(metaclass=Singleton):
         # i->rows, j->columns
         i = int(i)
         j = int(j)
-        print("Text: ",text)
-        print("Result:",self.total_possible_outcomes[j])
+        # print("Text: ",text)
+        # print("Result:",self.total_possible_outcomes[j])
         return self.total_possible_outcomes[j],prediction[0][j]
