@@ -74,14 +74,14 @@ class TextRecognizance:
             classifier = Classifier()
             cate, cate_conf = classifier.predict(text)
 
-            if cate == 'info':
-                info_classifier = InfoClassifier()
-                info_cate, info_cate_conf = info_classifier.predict(text)
-                cate += ', '+info_cate
-            elif cate == 'total':
-                total_classifier = TotalClassifier()
-                total_cate, total_cate_conf = total_classifier.predict(text)
-                cate += ', '+total_cate
+            # if cate == 'info':
+            #     info_classifier = InfoClassifier()
+            #     info_cate, info_cate_conf = info_classifier.predict(text)
+            #     cate += ', '+info_cate
+            # elif cate == 'total':
+            #     total_classifier = TotalClassifier()
+            #     total_cate, total_cate_conf = total_classifier.predict(text)
+            #     cate += ', '+total_cate
             return cate, cate_conf
         return '',0
 
