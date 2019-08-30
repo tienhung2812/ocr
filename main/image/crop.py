@@ -41,6 +41,7 @@ class ImageCroper:
         # this is to recognize white on white
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(morph_param,morph_param))
         self.dilated = cv2.dilate(self.image, kernel)
+        ret, self.dilated = cv2.threshold(self.dilated,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU) 
 
         # Find edge
         edges = cv2.Canny(self.dilated, 0, canny_param, apertureSize=3)
