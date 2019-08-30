@@ -32,6 +32,10 @@ FLAGS = tf.app.flags.FLAGS
 class TextDetection:
     def __init__(self,image_path,TRANSACTION_NUM,cut_final_box=True):
         print("TEXT DETECTION")
+
+        with open('config.yml', 'rb') as f:
+            self.conf = yaml.safe_load(f.read())
+
         self.image_path = image_path
         # self.global_step = tf.get_variable('global_step', [], initializer=tf.constant_initializer(0), trainable=False)
         self.global_step = self.get_global_step()
@@ -58,17 +62,17 @@ class TextDetection:
         colorReadimage = cv2.imread(self.image_path)
         self.origcolor, (rh, rw) = self.resize_image(colorReadimage)
 
-        with open('config.yml', 'rb') as f:
-            self.conf = yaml.safe_load(f.read())
+        
 
     def resize_image(self,img):
         img_size = img.shape
         im_size_min = np.min(img_size[0:2])
         im_size_max = np.max(img_size[0:2])
-
-        im_scale = float(600) / float(im_size_min)
+        
+        raw_im_scale = self.conf['TEXT_DETECTION']['IM_SCALE']
+        im_scale = float(raw_im_scale) / float(im_size_min)
         if np.round(im_scale * im_size_max) > 1200:
-            im_scale = float(1200) / float(im_size_max)
+            im_scale = (float(raw_im_scale)*2) / float(im_size_max)
         new_h = int(img_size[0] * im_scale)
         new_w = int(img_size[1] * im_scale)
 
@@ -194,7 +198,7 @@ class TextDetection:
                 scores = textsegs[:, 0]
                 textsegs = textsegs[:, 1:5]
 
-                textdetector = TextDetector(DETECT_MODE='H')
+                textdetector = TextDetector(DETECT_MODE='O')
                 boxes = textdetector.detect(textsegs, scores[:, np.newaxis], img.shape[:2])
                 boxes = np.array(boxes, dtype=np.int)
                 boxes = self.box_sort(boxes)

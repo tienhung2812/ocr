@@ -173,10 +173,10 @@ def mergeTwoBoxes(box1,box2):
     numpy_array = np.array([box1,box2])
     df = pd.DataFrame(data=numpy_array,dtype=np.int)
 
-    left = df[0].min()
-    right = df[2].max()
-    top = df[1].min()
-    bottom = df[5].max()
+    left = min(df[0].min(),df[6].min())
+    right = max(df[2].max(),df[4].max())
+    top = min(df[1].min(),df[3].min())
+    bottom = max(df[5].max(), df[7].max())
     return left,top,right,top,right,bottom,left,bottom
 
 
