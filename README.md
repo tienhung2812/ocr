@@ -1,16 +1,39 @@
-# OCR
-Vietnamese ocr for convert Scanned PDF to data
+# Digitizing Receipt
+Vietnamese Receipt OCR Scanner=
+
+## Presiquitive
+- Docker
+- docker-compose 
+
+# Run the server
+```
+docker-compose up
+```
+and go to [localhost:8000](http://localhost:8000)
 
 # Online Server
 https://hung-ocr.herokuapp.com
 
-## LSTM Training
+
+## Training
+### Presiquitive
+- jupyter-notebook
+- keras
+- tensorflow
+
+## LSTM Intent Classification Training
 You can find the LSTM classification usage in [here](trainning/text_classification)
 
-# For looking more abount the flow of the project
+The best train at [here](trainning/text_classification/Train vi final.ipynb)
+
+## For running the code without server
+### Presiquitive
+Install python3 libs in [requirements.txt](main/requirements.txt)  
+### Run
 ```
 main/main.py
 ```  
+
 
 
 ## Installation
@@ -32,15 +55,16 @@ sudo apt-get install tesseract-ocr-vie
 
 - Install Python requirements
 ```
-pip3 install -r requirements.txt
+pip3 install -r main/requirements.txt
 ```
 
-## Run with docker
-```
-docker-compose up
-```
+# Flow chart
+![alt text](graph/flowchart.png "Flow chart")
 
-## **Step 1:** Convert Scanned PDF to xml
+
+
+<!-- 
+## **Step 1:** Convert Scanned PDF to xml (deprecated)
 [Folder](main/converter)  
 [Document](main/converter/README.md)  
 Usage:
@@ -65,9 +89,5 @@ python3 main/converter.py -m 2 -i ../stock/don-thuoc.png -o test.html -ot xml
 or to have more setting:  
 ```
 python3 main/converter.py -h
-```
+``` -->
 
-## Online Example 
-```
-python online-sample/opencv-text-recognition/text_recognition.py --east online-sample/opencv-text-recognition/frozen_east_text_detection.pb --image stock/don-thuoc.png -w 320 -e 320 --padding 1
-```
