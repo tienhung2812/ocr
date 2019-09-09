@@ -186,7 +186,7 @@ class TextDetection:
                 img, (rh, rw) = self.resize_image(im)
                 
                 # Skew image
-                img = self.image_skewer(img)
+                # img = self.image_skewer(img)
 
                 h, w, c = img.shape
                 im_info = np.array([h, w, c]).reshape([1, 3])

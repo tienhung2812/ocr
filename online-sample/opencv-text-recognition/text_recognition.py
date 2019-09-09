@@ -174,11 +174,11 @@ for ((startX, startY, endX, endY), text) in results:
 	# the text region of the input image
 	text = "".join([c if ord(c) < 128 else "" for c in text]).strip()
 	output = orig.copy()
-	cv2.rectangle(output, (startX, startY), (endX, endY),
+	cv2.rectangle(orig, (startX, startY), (endX, endY),
 		(0, 0, 255), 2)
 	cv2.putText(output, text, (startX, startY - 20),
 		cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
 
 	# show the output image
-	cv2.imshow("Text Detection", output)
-	cv2.waitKey(0)
+cv2.imshow("Text Detection", orig)
+cv2.waitKey(0)

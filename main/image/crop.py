@@ -66,7 +66,7 @@ class ImageCroper:
         final_rect = self.getLargestRect(rects)
 
         # draw the contour 
-        cv2.drawContours(self.drawed, rects,-1,(0,255,0),1)
+        cv2.drawContours(self.drawed, rects,-1,(0,255,0),5)
 
         return final_rect
     

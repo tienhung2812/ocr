@@ -119,7 +119,7 @@ class ReceiptImage:
         print("PROCESS IMAGE")
         print(self.url)
         print(os.path.isfile(self.url))
-        self.image = cv.imread(self.url, 0)
+        self.image = cv.imread(self.url)
         ic = ImageCroper(self.image)
         rect = ic.findPaper()
 
