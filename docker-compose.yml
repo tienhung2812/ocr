@@ -4,11 +4,12 @@ services:
   backend:
     container_name: ocr_server
     build: main
-    command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python3 manage.py runserver 0.0.0.0:8000 --settings=manage_with_debug"
     volumes:
       - ./main:/code
     ports:
       - "8000:8000"
+      - "5678:5678"
   # rnn:
   #   container_name: rnn
   #   build: online-sample/rnn-tutorial-rnnlm

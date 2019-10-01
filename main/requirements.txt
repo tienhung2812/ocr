@@ -55,9 +55,11 @@ Pillow==5.4.1
 portend==2.5
 protobuf==3.9.1
 psycopg2==2.7.7
+ptvsd==4.3.2
 pyaml==19.4.1
 pycrypto==2.6.1
 pycryptodome==3.8.2
+pygobject==3.26.1
 PyJWT==1.7.1
 pytesseract==0.2.7
 python-crfsuite==0.9.6
