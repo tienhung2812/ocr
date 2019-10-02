@@ -5,8 +5,8 @@ services:
     container_name: ocr_server
     build: main
     command: bash -c "python3 manage.py runserver 0.0.0.0:8000 --settings=manage_with_debug"
-    volumes:
-      - ./main:/code
+    # volumes:
+    #   - ./main:/code
     ports:
       - "8000:8000"
       - "5678:5678"
