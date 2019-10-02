@@ -13,7 +13,6 @@ checkpoints_*/
 .idea/
 *.py[cod]
 *.c[cod]
-*.so
 *.swp
 *.pb
 *.ckpt
