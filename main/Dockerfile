@@ -17,8 +17,8 @@ RUN mv /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xmlout
 RUN chmod 700 gdrive.sh
 RUN curl gdrive.sh | bash -s https://drive.google.com/file/d/1HcZuB_MHqsKhKEKpfF1pEU85CYy4OlWO/view
 
-RUN mv checkpoints_mlt.zip  /code/text_detection/
-RUN unzip /code/text_detection/checkpoints_mlt.zip -d /code/text_detection/
+RUN mv /code/checkpoints_mlt.zip  /code/text_detection/
+RUN unzip -o /code/text_detection/checkpoints_mlt.zip -d /code/text_detection/
 
 
 # COMPILE 
